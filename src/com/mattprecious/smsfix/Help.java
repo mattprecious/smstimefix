@@ -19,12 +19,18 @@ package com.mattprecious.smsfix;
 import android.app.Activity;
 import android.os.Bundle;
 
+/**
+ * 
+ * @author Matthew Precious
+ *
+ */
 public class Help extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.help);
+		// TODO: update the help page to reflect the new UI
 	}
 
 }
