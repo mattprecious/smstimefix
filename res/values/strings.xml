@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<string name="app_name">SMS Time Fix</string>
+	
+	<string name="status">Status</string>
+	
+    <string name="active">Active</string>
+    <string name="active_summary_on">
+    	Monitor incoming messages
+    </string>
+    <string name="active_summary_off">
+    	Do nothing
+    </string>
+    
+    <string name="settings">Settings</string>
+    
+    <string name="offset_method">Offset Method</string>
+    <string name="offset_method_summary">Method for adjusting time stamps</string>
+    
+    <string name="offset">Offset</string>
+    <string name="offset_summary">
+    	How many hours to adjust incoming messages
+    </string>
+    
+    <string name="cdma">CDMA Option</string>
+    <string name="cdma_summary">
+    	Only adjust when SMS time is after phone\'s time
+    </string>
+    
+    <string name="set">Set</string>
+    <string name="cancel">Cancel</string>
+    
+    <string name="menu_help">Help</string>
+	<string name="help_title">Help</string>
+	<string name="help">In this quick F.A.Q., I\'ve tried to explain everything you may need to know about the application.
+		
+		\n\n<b>Q: What is the offset?</b>
+		\n<b>A:</b> The offset is the number of hours that you want incoming messages to be shifted by. For example, if a message received at 5:00 PM is being displayed as 1:00PM, then you need to set the offset to <b>4</b> to add four hours to your incoming messages.
+		\n<b>NOTE:</b> The offset can be negative!
+		
+		\n\n<b>Q: What is this \'last resort\'?</b>
+		\n<b>A:</b> Use this method if the default behavior of this application doesn\'t solve your problem. This will use the phone\'s clock as the time for all incoming messages as opposed to the the time provided by the message.
+		
+		\n\n<b>Q: Why is that considered a last resort?</b>
+		\n<b>A:</b> The default Android functionality is to use the time the message says it was sent. There are many situations where this behavior is helpful, e.g., your phone is turned off or you have no reception. When your phone regains a connection, any messages that were sent during this blackout will display the time that they left the sender\'s phone. If you remove this functionality, all of your messages will show the time they were received by your phone.
+		
+		\n\n<b>Q: I\'m still confused!</b>
+		\n<b>Q: It\'s broken!</b>
+		\n<b>Q: This doesn\'t solve anything!</b>
+		\n<b>Q: This solves everything!</b>
+		\n<b>A:</b> I would love to hear from you! Please visit my website http://mattprecious.com to contact me.
+	</string>
+    
+    <string name="menu_about">About</string>
+	<string name="about_title">About</string>
+	<string name="about"><b>SMS Time Fix</b>
+		\nVersion 2.0
+		
+		\n\n<b>Written by:</b>
+		\nMatthew Precious
+		\nhttp://mattprecious.com
+		
+		\n\nPlease contact me if there are any problems or if you would like to request a new feature. I\'d also love to hear if everything is working! Your feedback is very important to me.
+	</string>
+</resources>

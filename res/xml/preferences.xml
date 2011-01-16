@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	android:key="preferences">
+
+	<PreferenceCategory
+		android:title="@string/status">
+		
+		<CheckBoxPreference
+			android:key="active"
+			android:title="@string/active"
+			android:summaryOn="@string/active_summary_on"
+			android:summaryOff="@string/active_summary_off" />
+	
+	</PreferenceCategory>
+	
+	<PreferenceCategory
+		android:title="Settings">
+		
+			<ListPreference
+				android:key="offset_method"
+				android:dependency="active"
+				android:title="@string/offset_method"
+				android:summary="@string/offset_method_summary"
+				android:entries="@array/offset_options_text"
+				android:entryValues="@array/offset_options_values"
+				android:defaultValue="automatic" />
+				
+			<EditTextPreference
+				android:key="offset"
+				android:dependency="active"
+				android:title="@string/offset"
+				android:summary="@string/offset_summary"
+				android:defaultValue="0" />
+				
+			<CheckBoxPreference
+				android:key="cdma"
+				android:dependency="active"
+				android:title="@string/cdma"
+				android:summary="@string/cdma_summary"
+				android:defaultValue="0" />
+								
+	</PreferenceCategory>
+</PreferenceScreen>
