@@ -26,13 +26,18 @@ import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/**
+ * SMS Time Fix main activity window
+ * 
+ * @author Matthew Precious
+ *
+ */
 public class SMSFix extends PreferenceActivity {
 	
-	private SharedPreferences	settings;
+	private SharedPreferences	settings;		
 	private ListPreference		offsetMethod;
 	private EditTextPreference	editOffset;
 	private CheckBoxPreference	cdmaBox;
@@ -51,26 +56,33 @@ public class SMSFix extends PreferenceActivity {
 		editOffset		= (EditTextPreference)	findPreference("offset");
 		cdmaBox			= (CheckBoxPreference)	findPreference("cdma");
 		
+		// use the global status variable to set the appearance of the "Active" checkbox
 		settings.edit()
 			.putBoolean("active", FixService.running)
 			.commit();
 		
+		// register a listener for changes
 		settings.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
 			
 			@Override
 			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+				// if "Active" has changed, start or stop the service
 				if (key.equals("active")) {
 					toggleService(sharedPreferences.getBoolean(key, false));
 				}
 				
+				// update offset and CDMA to reflect the new status or method change
 				toggleOffset();
 				toggleCDMA();
 			}
 		});
 		
+		// set the offset field to be a decimal numver
+		// TODO: change this to hours and minutes. received an email where the user had a 20 minute offset, so decimals will not work
 		editOffset.getEditText()
 			.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		
+		// set the initial status of the offset and CDMA
 		toggleOffset();
 		toggleCDMA();
 	}
@@ -108,6 +120,11 @@ public class SMSFix extends PreferenceActivity {
         return super.onMenuItemSelected(featureId, item);
     }
 	
+    /**
+     * Enable or disable the fixing service.
+     * 
+     * @param active
+     */
 	public void toggleService(boolean active) {
 		if (active) {
 	        startService(new Intent(this, FixService.class));
@@ -116,10 +133,19 @@ public class SMSFix extends PreferenceActivity {
 		}
 	}
 	
+	/**
+	 * Toggle whether or not the "Offset" option should be enabled.
+	 *   If the method is manual and the service is active.
+	 * 
+	 */
 	public void toggleOffset() {
 		editOffset.setEnabled(offsetMethod.getValue().equals("manual") && offsetMethod.isEnabled());
 	}
 	
+	/**
+	 * Toggle whether or not the "CDMA' option should be enabled.
+	 *   If the method is phone and the service is active.
+	 */
 	public void toggleCDMA() {
 		cdmaBox.setEnabled(!offsetMethod.getValue().equals("phone") && offsetMethod.isEnabled());
 	}
