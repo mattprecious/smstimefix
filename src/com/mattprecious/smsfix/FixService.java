@@ -50,13 +50,13 @@ public class FixService extends Service {
 	private SharedPreferences settings;
 	private Editor editor;
 	
-	// The content://mms-sms URI does not notify when a thread is deleted, so instead
+	// The content://sms URI does not notify when a thread is deleted, so instead
 	//  we use the content://mms-sms/conversations URI for observing.
 	//  This provider, however, does not play nice when looking for and editing
-	//  the existing messages. So, we use the original content://mms-sms URI
+	//  the existing messages. So, we use the original content://sms URI
 	//  for our editing
 	private Uri observingURI = Uri.parse("content://mms-sms/conversations");
-	private Uri editingURI = Uri.parse("content://mms-sms");
+	private Uri editingURI = Uri.parse("content://sms");
 	private Cursor observingCursor;
 	private Cursor editingCursor;
 	private FixServiceObserver observer = new FixServiceObserver();
