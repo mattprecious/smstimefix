@@ -50,9 +50,16 @@ public class FixService extends Service {
 	private SharedPreferences settings;
 	private Editor editor;
 	
-	private Uri URI = Uri.parse("content://sms");
+	// The content://mms-sms URI does not notify when a thread is deleted, so instead
+	//  we use the content://mms-sms/conversations URI for observing.
+	//  This provider, however, does not play nice when looking for and editing
+	//  the existing messages. So, we use the original content://mms-sms URI
+	//  for our editing
+	private Uri observingURI = Uri.parse("content://mms-sms/conversations");
+	private Uri editingURI = Uri.parse("content://mms-sms");
+	private Cursor observingCursor;
+	private Cursor editingCursor;
 	private FixServiceObserver observer = new FixServiceObserver();
-	private Cursor c;
 	
 	public static long lastSMSId = 0;			// the ID of the last message we've altered
 	public static boolean running = false;		// is the service running?
@@ -79,10 +86,11 @@ public class FixService extends Service {
 		// set up the query we'll be observing
 		// we only need the ID and the date
 		String[] columns = {"_id", "date"};
-		c = getContentResolver().query(URI, columns, "type=?", new String[]{"1"}, "_id DESC");
+		observingCursor = getContentResolver().query(observingURI, null, null, null, null);
+		editingCursor = getContentResolver().query(editingURI, columns, "type=?", new String[]{"1"}, "_id DESC");
 		
 		// register the observer
-		c.registerContentObserver(observer);
+		observingCursor.registerContentObserver(observer);
 		
 		// get the current last message ID
 		lastSMSId = getLastMessageId();
@@ -113,28 +121,28 @@ public class FixService extends Service {
         long ret = -1;
         
         // if there are any messages at our cursor
-        if (c.getCount() > 0) {
+        if (editingCursor.getCount() > 0) {
         	// get the first one
-	        c.moveToFirst();
+	        editingCursor.moveToFirst();
 	        
 	        // grab its ID
-	        ret = c.getLong(c.getColumnIndex("_id"));
+	        ret = editingCursor.getLong(editingCursor.getColumnIndex("_id"));
         }
         
         return ret;
 	}
-	
+
 	/**
 	 * Updates the time stamp on any messages that have come in
 	 */
 	private void fixLastMessage() {
 		// if there are any messages
-        if (c.getCount() > 0) {
+        if (editingCursor.getCount() > 0) {
         	// move to the first one
-	        c.moveToFirst();
+	        editingCursor.moveToFirst();
 	        
 	        // get the message's ID
-	        long id = c.getLong(c.getColumnIndex("_id"));
+	        long id = editingCursor.getLong(editingCursor.getColumnIndex("_id"));
 	        
 	        // keep the current last changed ID
 	        long oldLastChanged = lastSMSId;
@@ -145,19 +153,19 @@ public class FixService extends Service {
 	        // while the new ID is still greater than the last altered message
 	        // loop just in case messages come in quick succession
 	        while (id > oldLastChanged) {
-	        	// alter the timestamp
+	        	// alter the time stamp
 	        	alterMessage(id);
 		        
 	        	// base case, handle there being no more messages and break out
-		        if (c.isLast()) {
+		        if (editingCursor.isLast()) {
 		        	break;
 		        }
 		        
 		        // move to the next message
-	        	c.moveToNext();
+	        	editingCursor.moveToNext();
 	        	
 	        	// grab its ID
-	        	id = c.getLong(c.getColumnIndex("_id"));
+	        	id = editingCursor.getLong(editingCursor.getColumnIndex("_id"));
 	        }
         } else {
         	// there aren't any messages, reset the id counter
@@ -200,7 +208,7 @@ public class FixService extends Service {
         	date = new Date();
         } else {
         	// grab the date assigned to the message
-        	date = new Date(c.getLong(c.getColumnIndex("date")));
+        	date = new Date(editingCursor.getLong(editingCursor.getColumnIndex("date")));
         	
         	// if the user has asked for the CDMA fix, make sure the message time is greater
         	//  than the phone time, giving a 5 second grace period
@@ -212,7 +220,7 @@ public class FixService extends Service {
         // update the message with the new time stamp
         ContentValues values = new ContentValues();
         values.put("date", date.getTime());
-        getContentResolver().update(URI, values, "_id = " + id, null);
+        getContentResolver().update(editingURI, values, "_id = " + id, null);
 	}
 	
 	/**
@@ -235,8 +243,8 @@ public class FixService extends Service {
 			// TODO: make this boolean actually work...
 			if (!selfChange) {
 				Log.i(getClass().getSimpleName(), "SMS database altered, checking...!");
-				// requery the databse to get the latest messages
-				c.requery();
+				// requery the database to get the latest messages
+				editingCursor.requery();
 				
 				// fix them
 				fixLastMessage();
