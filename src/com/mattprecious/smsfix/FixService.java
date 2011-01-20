@@ -204,7 +204,7 @@ public class FixService extends Service {
         Log.i(getClass().getSimpleName(), "Adjusting timestamp for message: " + id);
 	
         //can deal with the date directly as an integer, no need to keep converting back and forth
-        int intdate;
+        long intdate;
 
         // if the user wants to use the phone's time, use the current date
         if (settings.getString("offset_method", "automatic").equals("phone")) {
