@@ -202,27 +202,28 @@ public class FixService extends Service {
      */
     private void alterMessage(long id) {
         Log.i(getClass().getSimpleName(), "Adjusting timestamp for message: " + id);
-
-        Date date;
+	
+        //can deal with the date directly as an integer, no need to keep converting back and forth
+        long longdate;
 
         // if the user wants to use the phone's time, use the current date
         if (settings.getString("offset_method", "automatic").equals("phone")) {
-            date = new Date();
+            longdate = (new Date()).getTime();
         } else {
             // grab the date assigned to the message
-            date = new Date(editingCursor.getLong(editingCursor.getColumnIndex("date")));
-
+            longdate = editingCursor.getLong(editingCursor.getColumnIndex("date"));
             // if the user has asked for the CDMA fix, make sure the message
             // time is greater than the phone time, giving a 5 second grace
             // period
-            if (!settings.getBoolean("cdma", false) || (date.getTime() - (new Date()).getTime() > 5000)) {
-                date.setTime(date.getTime() + getOffset());
+            if (!settings.getBoolean("cdma", false) || (longdate - (new Date()).getTime() > 5000)) {
+                longdate = longdate + getOffset();
             }
         }
 
+
         // update the message with the new time stamp
         ContentValues values = new ContentValues();
-        values.put("date", date.getTime());
+        values.put("date", longdate);
         getContentResolver().update(editingURI, values, "_id = " + id, null);
     }
 
