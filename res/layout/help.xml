@@ -1,12 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RelativeLayout
+<ScrollView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 	
-	<TextView
+	<RelativeLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="@string/help" />
-	
-</RelativeLayout>
+		android:layout_height="match_parent">
+		
+		<TextView
+			style="@style/Help.Heading"
+			android:id="@+id/help_h1"
+			android:text="@string/help_h1" />
+			
+		<TextView
+			style="@style/Help.Body"
+			android:id="@+id/help_b1"
+			android:layout_below="@id/help_h1"
+			android:text="@string/help_b1" />
+			
+		<TextView
+			style="@style/Help.Heading.Sub"
+			android:id="@+id/help_h2"
+			android:layout_below="@id/help_b1"
+			android:text="@string/help_h2" />
+			
+		<TextView
+			style="@style/Help.Body.Sub"
+			android:id="@+id/help_b2"
+			android:layout_below="@id/help_h2"
+			android:text="@string/help_b2" />
+			
+		<TextView
+			style="@style/Help.Heading.Sub"
+			android:id="@+id/help_h3"
+			android:layout_below="@id/help_b2"
+			android:text="@string/help_h3" />
+			
+		<TextView
+			style="@style/Help.Body.Sub"
+			android:id="@+id/help_b3"
+			android:layout_below="@id/help_h3"
+			android:text="@string/help_b3" />
+			
+		<TextView
+			style="@style/Help.Heading.Sub"
+			android:id="@+id/help_h4"
+			android:layout_below="@id/help_b3"
+			android:text="@string/help_h4" />
+			
+		<TextView
+			style="@style/Help.Body.Sub"
+			android:id="@+id/help_b4"
+			android:layout_below="@id/help_h4"
+			android:text="@string/help_b4" />
+			
+		<TextView
+			style="@style/Help.Heading"
+			android:id="@+id/help_h5"
+			android:layout_below="@id/help_b4"
+			android:text="@string/help_h5" />
+			
+		<TextView
+			style="@style/Help.Body"
+			android:id="@+id/help_b5"
+			android:layout_below="@id/help_h5"
+			android:text="@string/help_b5" />
+			
+		<TextView
+			style="@style/Help.Heading"
+			android:id="@+id/help_h6"
+			android:layout_below="@id/help_b5"
+			android:layout_marginTop="25dp"
+			android:text="@string/help_h6" />
+			
+		<TextView
+			style="@style/Help.Body"
+			android:id="@+id/help_b6"
+			android:layout_below="@id/help_h6"
+			android:text="@string/help_b6" />
+			
+		<TextView
+			style="@style/Help.Heading"
+			android:id="@+id/help_h7"
+			android:layout_below="@id/help_b6"
+			android:text="@string/help_h7" />
+			
+		<TextView
+			style="@style/Help.Body"
+			android:id="@+id/help_b7"
+			android:layout_below="@id/help_h7"
+			android:text="@string/help_b7" />
+		
+	</RelativeLayout>
+</ScrollView>

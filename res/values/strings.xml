@@ -24,7 +24,7 @@
     
     <string name="cdma">CDMA Option</string>
     <string name="cdma_summary">
-    	Only adjust when SMS time is after phone\'s time
+    	Only adjust when SMS time is in the future.
     </string>
     
     <string name="set">Set</string>
@@ -32,34 +32,77 @@
     
     <string name="menu_help">Help</string>
 	<string name="help_title">Help</string>
-	<string name="help">In this quick F.A.Q., I\'ve tried to explain everything you may need to know about the application.
-		
-		\n\n<b>Q: What is the offset?</b>
-		\n<b>A:</b> The offset is the number of hours that you want incoming messages to be shifted by. For example, if a message received at 5:00 PM is being displayed as 1:00PM, then you need to set the offset to <b>4</b> to add four hours to your incoming messages.
+	
+	<string name="help_h1">
+		Offset Method 
+	</string>
+	<string name="help_b1">
+		This setting determines how the times of incoming messages will be altered. There are three methods available to choose from:
+	</string>
+	
+	<string name="help_h2">
+		Automatic
+	</string>
+	<string name="help_b2">
+		This method will dynamically determine how to offset your messages by using your current time zone as the offset value. If you are GMT-5:00 then your messages will be offset by 5 hours.
+	</string>
+	
+	<string name="help_h3">
+		Manual
+	</string>
+	<string name="help_b3">
+		This method allows you to specify the number of hours to offset incoming messages.
+	</string>
+	
+	<string name="help_h4">
+		Phone\'s Time
+	</string>
+	<string name="help_b4">
+		This method uses the phone\'s current time as the sent time for all incoming messages. Keep in mind, however, that this method ignores when a message was actually sent, and instead uses when it was received by your phone.
+	</string>
+	
+	<string name="help_h5">
+		Offset
+	</string>
+	<string name="help_b5">
+		The offset is the number of hours that you want incoming messages to be shifted by. For example, if a message received at 5:00 PM is being displayed as 1:00PM, then you need to set the offset to <b>4</b> to add four hours to your incoming messages.
 		\n<b>NOTE:</b> The offset can be negative!
+	</string>
+	
+	<string name="help_h6">
+		CDMA Fix
+	</string>
+	<string name="help_b6">
+		This is a setting for CDMA users with roaming problems. This will only alter the time of an incoming message if the time on the message is in the future.
+	</string>
 		
-		\n\n<b>Q: What is this \'last resort\'?</b>
-		\n<b>A:</b> Use this method if the default behavior of this application doesn\'t solve your problem. This will use the phone\'s clock as the time for all incoming messages as opposed to the the time provided by the message.
-		
-		\n\n<b>Q: Why is that considered a last resort?</b>
-		\n<b>A:</b> The default Android functionality is to use the time the message says it was sent. There are many situations where this behavior is helpful, e.g., your phone is turned off or you have no reception. When your phone regains a connection, any messages that were sent during this blackout will display the time that they left the sender\'s phone. If you remove this functionality, all of your messages will show the time they were received by your phone.
-		
-		\n\n<b>Q: I\'m still confused!</b>
-		\n<b>Q: It\'s broken!</b>
-		\n<b>Q: This doesn\'t solve anything!</b>
-		\n<b>Q: This solves everything!</b>
-		\n<b>A:</b> I would love to hear from you! Please visit my website http://mattprecious.com to contact me.
+	<string name="help_h7">
+		I\'m still confused!
+		\nIt\'s broken!
+		\nThis doesn\'t solve anything!
+		\nThis solves everything!
+	</string>
+	<string name="help_b7">
+		I would love to hear from you! Please visit my website http://mattprecious.com to contact me.
 	</string>
     
     <string name="menu_about">About</string>
 	<string name="about_title">About</string>
-	<string name="about"><b>SMS Time Fix</b>
-		\nVersion 2.0
+	
+	<string name="about_version">
+		Version 2.1
+	</string>
+	
+	<string name="about_by">
+		Written by:
+	</string>
 		
-		\n\n<b>Written by:</b>
-		\nMatthew Precious
+	<string name="about_contact">
+		Matthew Precious
 		\nhttp://mattprecious.com
+	</string>
 		
-		\n\nPlease contact me if there are any problems or if you would like to request a new feature. I\'d also love to hear if everything is working! Your feedback is very important to me.
+	<string name="about_blurb">
+		Please contact me if there are any problems or if you would like to request a new feature. I\'d also love to hear if everything is working! Your feedback is very important to me. Every update I release is due to user feedback.
 	</string>
 </resources>
