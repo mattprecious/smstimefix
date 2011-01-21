@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Help -->
+    <style name="Help" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:autoLink">all</item>
+    </style>
+    
+	<style name="Help.Heading">
+		<item name="android:layout_marginTop">15dip</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:textColor">#FF7700</item>
+	</style>
+	
+	<style name="Help.Body">
+	
+	</style>
+	
+	<style name="Help.Heading.Sub">
+		<item name="android:layout_marginLeft">10dip</item>
+	</style>
+	
+	<style name="Help.Body.Sub">
+		<item name="android:layout_marginLeft">10dip</item>
+	</style>
+	
+	<!-- About -->
+	<style name="About" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:autoLink">all</item>
+    </style>
+    
+    <style name="About.Title">
+    	<item name="android:textColor">#FF7700</item>
+    	<item name="android:textSize">40dip</item>
+    </style>
+    
+    <style name="About.Version">
+    	<item name="android:gravity">right</item>
+    </style>
+    
+    <style name="About.By">
+    	<item name="android:layout_marginTop">20dip</item>
+    </style>
+    
+    <style name="About.Blurb">
+    	<item name="android:layout_marginTop">30dip</item>
+    </style>
+</resources>
