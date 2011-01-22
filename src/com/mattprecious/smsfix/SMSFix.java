@@ -42,12 +42,12 @@ public class SMSFix extends PreferenceActivity {
     private EditTextPreference editOffsetHours;
     private EditTextPreference editOffsetMinutes;
     private CheckBoxPreference cdmaBox;
-    
+
     private OnSharedPreferenceChangeListener prefListener;
-    
+
     static final int MENU_HELP_ID = 0;
     static final int MENU_ABOUT_ID = 1;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,9 +57,9 @@ public class SMSFix extends PreferenceActivity {
         settings = ((PreferenceScreen) findPreference("preferences")).getSharedPreferences();
         offsetMethod = (ListPreference) findPreference("offset_method");
         editOffsetHours = (EditTextPreference) findPreference("offset_hours");
-        editOffsetMinutes= (EditTextPreference) findPreference("offset_minutes");
+        editOffsetMinutes = (EditTextPreference) findPreference("offset_minutes");
         cdmaBox = (CheckBoxPreference) findPreference("cdma");
-        
+
         // register a listener for changes
         prefListener = new OnSharedPreferenceChangeListener() {
 
@@ -76,12 +76,14 @@ public class SMSFix extends PreferenceActivity {
                 toggleCDMA();
             }
         };
-        
+
         settings.registerOnSharedPreferenceChangeListener(prefListener);
 
         // set the offset field to be a decimal number
-        editOffsetHours.getEditText().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        editOffsetMinutes.getEditText().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        editOffsetHours.getEditText().setInputType(
+                InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        editOffsetMinutes.getEditText().setInputType(
+                InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         // set the initial status of the offset and CDMA
         toggleOffset();
