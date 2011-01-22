@@ -26,10 +26,17 @@
 				android:defaultValue="automatic" />
 				
 			<EditTextPreference
-				android:key="offset"
+				android:key="offset_hours"
 				android:dependency="active"
-				android:title="@string/offset"
-				android:summary="@string/offset_summary"
+				android:title="@string/offset_hours"
+				android:summary="@string/offset_hours_summary"
+				android:defaultValue="0" />
+				
+			<EditTextPreference
+				android:key="offset_minutes"
+				android:dependency="active"
+				android:title="@string/offset_minutes"
+				android:summary="@string/offset_minutes_summary"
 				android:defaultValue="0" />
 				
 			<CheckBoxPreference

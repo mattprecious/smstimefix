@@ -17,9 +17,14 @@
     <string name="offset_method">Offset Method</string>
     <string name="offset_method_summary">Method for adjusting time stamps</string>
     
-    <string name="offset">Offset</string>
-    <string name="offset_summary">
+    <string name="offset_hours">Offset Hours</string>
+    <string name="offset_hours_summary">
     	How many hours to adjust incoming messages
+    </string>
+    
+    <string name="offset_minutes">Offset Minutes</string>
+    <string name="offset_minutes_summary">
+    	How many minutes to adjust incoming messages
     </string>
     
     <string name="cdma">CDMA Option</string>
