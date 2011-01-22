@@ -30,7 +30,6 @@ public class Help extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.help);
-        // TODO: update the help page to reflect the new UI
     }
 
 }
