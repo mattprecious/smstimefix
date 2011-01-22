@@ -30,7 +30,6 @@ public class About extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about);
-        // TODO: redo the about page to take advantage of its own activity
     }
 
 }
