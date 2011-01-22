@@ -39,12 +39,15 @@ public class SMSFix extends PreferenceActivity {
 
     private SharedPreferences settings;
     private ListPreference offsetMethod;
-    private EditTextPreference editOffset;
+    private EditTextPreference editOffsetHours;
+    private EditTextPreference editOffsetMinutes;
     private CheckBoxPreference cdmaBox;
-
+    
+    private OnSharedPreferenceChangeListener prefListener;
+    
     static final int MENU_HELP_ID = 0;
     static final int MENU_ABOUT_ID = 1;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,15 +56,12 @@ public class SMSFix extends PreferenceActivity {
 
         settings = ((PreferenceScreen) findPreference("preferences")).getSharedPreferences();
         offsetMethod = (ListPreference) findPreference("offset_method");
-        editOffset = (EditTextPreference) findPreference("offset");
+        editOffsetHours = (EditTextPreference) findPreference("offset_hours");
+        editOffsetMinutes= (EditTextPreference) findPreference("offset_minutes");
         cdmaBox = (CheckBoxPreference) findPreference("cdma");
-
-        // use the global status variable to set the appearance of the "Active"
-        // checkbox
-        settings.edit().putBoolean("active", FixService.running).commit();
-
+        
         // register a listener for changes
-        settings.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
+        prefListener = new OnSharedPreferenceChangeListener() {
 
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -75,12 +75,13 @@ public class SMSFix extends PreferenceActivity {
                 toggleOffset();
                 toggleCDMA();
             }
-        });
+        };
+        
+        settings.registerOnSharedPreferenceChangeListener(prefListener);
 
-        // set the offset field to be a decimal numver
-        // TODO: change this to hours and minutes. received an email where the
-        // user had a 20 minute offset, so decimals will not work
-        editOffset.getEditText().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        // set the offset field to be a decimal number
+        editOffsetHours.getEditText().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        editOffsetMinutes.getEditText().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         // set the initial status of the offset and CDMA
         toggleOffset();
@@ -137,7 +138,8 @@ public class SMSFix extends PreferenceActivity {
      * 
      */
     public void toggleOffset() {
-        editOffset.setEnabled(offsetMethod.getValue().equals("manual") && offsetMethod.isEnabled());
+        editOffsetHours.setEnabled(offsetMethod.getValue().equals("manual") && settings.getBoolean("active", false));
+        editOffsetMinutes.setEnabled(offsetMethod.getValue().equals("manual") && settings.getBoolean("active", false));
     }
 
     /**
@@ -145,7 +147,7 @@ public class SMSFix extends PreferenceActivity {
      * If the method is phone and the service is active.
      */
     public void toggleCDMA() {
-        cdmaBox.setEnabled(!offsetMethod.getValue().equals("phone") && offsetMethod.isEnabled());
+        cdmaBox.setEnabled(!offsetMethod.getValue().equals("phone") && settings.getBoolean("active", false));
     }
 
 }

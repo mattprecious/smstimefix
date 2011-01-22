@@ -23,7 +23,6 @@ import android.app.Service;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -46,7 +45,6 @@ import android.util.Log;
  */
 public class FixService extends Service {
     private SharedPreferences settings;
-    private Editor editor;
 
     // The content://sms URI does not notify when a thread is deleted, so
     // instead we use the content://mms-sms/conversations URI for observing.
@@ -59,9 +57,8 @@ public class FixService extends Service {
     private Cursor editingCursor;
     private FixServiceObserver observer = new FixServiceObserver();
 
-    public static long lastSMSId = 0; // the ID of the last message we've
+    public long lastSMSId = 0; // the ID of the last message we've
                                       // altered
-    public static boolean running = false; // is the service running?
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -72,15 +69,7 @@ public class FixService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        // we're running
-        running = true;
-
         settings = PreferenceManager.getDefaultSharedPreferences(this);
-        editor = settings.edit();
-
-        // update the preference
-        editor.putBoolean("active", true);
-        editor.commit();
 
         // set up the query we'll be observing
         // we only need the ID and the date
@@ -100,13 +89,6 @@ public class FixService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        // no longer running
-        running = false;
-
-        // update the preference
-        editor.putBoolean("active", false);
-        editor.commit();
 
         Log.i(getClass().getSimpleName(), "SMS messages are no longer being monitored. Good-bye.");
     }
@@ -186,7 +168,8 @@ public class FixService extends Service {
             offset = TimeZone.getDefault().getRawOffset() * -1;
             // otherwise, use the offset the user has specified
         } else {
-            offset = Integer.parseInt(settings.getString("offset", "0")) * 3600000;
+            offset = Integer.parseInt(settings.getString("offset_hours", "0")) * 3600000;
+            offset += Integer.parseInt(settings.getString("offset_minutes", "0")) * 60000;
         }
 
         return offset;
