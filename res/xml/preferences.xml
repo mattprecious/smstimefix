@@ -40,6 +40,13 @@
 				android:defaultValue="0" />
 				
 			<CheckBoxPreference
+				android:key="notify"
+				android:dependency="active"
+				android:title="@string/notify"
+				android:summary="@string/notify_summary"
+				android:defaultValue="0" />
+				
+			<CheckBoxPreference
 				android:key="cdma"
 				android:dependency="active"
 				android:title="@string/cdma"

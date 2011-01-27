@@ -27,6 +27,14 @@
     	How many minutes to adjust incoming messages
     </string>
     
+    <string name="notify">Running Notification</string>
+    <string name="notify_summary">
+    	Add a running indicator to the notification bar
+    </string>
+    <string name="notify_message">
+    	SMSFix service running
+    </string>
+    
     <string name="cdma">CDMA Option</string>
     <string name="cdma_summary">
     	Only adjust when SMS time is in the future.

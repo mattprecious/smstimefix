@@ -19,8 +19,12 @@ package com.mattprecious.smsfix;
 import java.util.Date;
 import java.util.TimeZone;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
@@ -56,6 +60,10 @@ public class FixService extends Service {
     private Cursor observingCursor;
     private Cursor editingCursor;
     private FixServiceObserver observer = new FixServiceObserver();
+    
+    // notification variables
+    private static NotificationManager nm;
+    private static Notification notif;
 
     public long lastSMSId = 0; // the ID of the last message we've
                                       // altered
@@ -69,6 +77,12 @@ public class FixService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        // set up everything we need for the running notification
+        nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notif = new Notification (R.drawable.icon, null, 0);
+        notif.setLatestEventInfo(getApplicationContext(), getString(R.string.notify_message), null, PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(), SMSFix.class), PendingIntent.FLAG_CANCEL_CURRENT));
+        notif.flags |= Notification.FLAG_ONGOING_EVENT;
+        
         settings = PreferenceManager.getDefaultSharedPreferences(this);
 
         // set up the query we'll be observing
@@ -83,6 +97,11 @@ public class FixService extends Service {
         // get the current last message ID
         lastSMSId = getLastMessageId();
 
+        // start the running notification
+        if (settings.getBoolean("notify", false)) {
+            startNotify();
+        }
+        
         Log.i(getClass().getSimpleName(), "SMS messages now being monitored");
     }
 
@@ -90,6 +109,11 @@ public class FixService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
+        // stop the notification
+        if (settings.getBoolean("notify", false)) {
+            stopNotify();
+        }
+        
         Log.i(getClass().getSimpleName(), "SMS messages are no longer being monitored. Good-bye.");
     }
 
@@ -206,6 +230,20 @@ public class FixService extends Service {
         ContentValues values = new ContentValues();
         values.put("date", longdate);
         getContentResolver().update(editingURI, values, "_id = " + id, null);
+    }
+    
+    /**
+     * Start the running notification
+     */
+    public static void startNotify() {
+        nm.notify(R.drawable.icon, notif);
+    }
+    
+    /**
+     * Stop the running notification
+     */
+    public static void stopNotify() {
+        nm.cancel(R.drawable.icon);
     }
 
     /**
