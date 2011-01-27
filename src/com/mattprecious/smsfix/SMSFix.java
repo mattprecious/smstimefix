@@ -38,6 +38,7 @@ import android.view.MenuItem;
 public class SMSFix extends PreferenceActivity {
 
     private SharedPreferences settings;
+    private CheckBoxPreference activeBox;
     private ListPreference offsetMethod;
     private EditTextPreference editOffsetHours;
     private EditTextPreference editOffsetMinutes;
@@ -55,6 +56,7 @@ public class SMSFix extends PreferenceActivity {
         addPreferencesFromResource(R.xml.preferences);
 
         settings = ((PreferenceScreen) findPreference("preferences")).getSharedPreferences();
+        activeBox = (CheckBoxPreference) findPreference("active");
         offsetMethod = (ListPreference) findPreference("offset_method");
         editOffsetHours = (EditTextPreference) findPreference("offset_hours");
         editOffsetMinutes = (EditTextPreference) findPreference("offset_minutes");
@@ -78,8 +80,11 @@ public class SMSFix extends PreferenceActivity {
                 toggleCDMA();
             }
         };
-
+        
         settings.registerOnSharedPreferenceChangeListener(prefListener);
+        
+        // show the true value of active
+        activeBox.setChecked(FixService.isRunning());
 
         // set the offset field to be a decimal number
         editOffsetHours.getEditText().setInputType(
