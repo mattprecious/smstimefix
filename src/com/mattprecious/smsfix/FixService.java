@@ -64,6 +64,8 @@ public class FixService extends Service {
     // notification variables
     private static NotificationManager nm;
     private static Notification notif;
+    
+    private static boolean running = false;
 
     public long lastSMSId = 0; // the ID of the last message we've
                                       // altered
@@ -76,6 +78,8 @@ public class FixService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        
+        running = true;
 
         // set up everything we need for the running notification
         nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -115,6 +119,15 @@ public class FixService extends Service {
         }
         
         Log.i(getClass().getSimpleName(), "SMS messages are no longer being monitored. Good-bye.");
+    }
+    
+    /**
+     * Returns true if the service is running
+     * 
+     * @return boolean
+     */
+    public static boolean isRunning() {
+        return running;
     }
 
     /**
