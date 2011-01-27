@@ -164,7 +164,7 @@ public class FixService extends Service {
 
         // if the user wants us to auto-determine the offset use the negative of
         // their GMT offset
-        if (settings.getString("offset_method", "automatic").equals("automatic")) {
+        if (settings.getString("offset_method", "manual").equals("automatic")) {
             offset = TimeZone.getDefault().getRawOffset() * -1;
             // otherwise, use the offset the user has specified
         } else {
@@ -188,7 +188,7 @@ public class FixService extends Service {
         long longdate;
 
         // if the user wants to use the phone's time, use the current date
-        if (settings.getString("offset_method", "automatic").equals("phone")) {
+        if (settings.getString("offset_method", "manual").equals("phone")) {
             longdate = (new Date()).getTime();
         } else {
             // grab the date assigned to the message
