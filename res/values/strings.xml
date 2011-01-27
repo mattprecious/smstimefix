@@ -46,7 +46,7 @@
 	</string>
 	
 	<string name="help_h2">
-		Automatic
+		Automatic (Time Zone)
 	</string>
 	<string name="help_b2">
 		This method will dynamically determine how to offset your messages by using your current time zone as the offset value. If you are GMT-5:00 then your messages will be offset by 5 hours.
