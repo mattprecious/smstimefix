@@ -68,6 +68,8 @@ public class SMSFix extends PreferenceActivity {
                 // if "Active" has changed, start or stop the service
                 if (key.equals("active")) {
                     toggleService(sharedPreferences.getBoolean(key, false));
+                } else if (key.equals("notify")) {
+                    toggleNotify(sharedPreferences.getBoolean(key, false));
                 }
 
                 // update offset and CDMA to reflect the new status or method
@@ -131,6 +133,18 @@ public class SMSFix extends PreferenceActivity {
             startService(new Intent(this, FixService.class));
         } else {
             stopService(new Intent(this, FixService.class));
+        }
+    }
+    
+    /**
+     * Enable or disable the running notification
+     * @param notify
+     */
+    public void toggleNotify(boolean notify) {
+        if (notify) {
+            FixService.startNotify();
+        } else {
+            FixService.stopNotify();
         }
     }
 
