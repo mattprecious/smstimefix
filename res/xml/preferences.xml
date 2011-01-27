@@ -23,7 +23,7 @@
 				android:summary="@string/offset_method_summary"
 				android:entries="@array/offset_options_text"
 				android:entryValues="@array/offset_options_values"
-				android:defaultValue="automatic" />
+				android:defaultValue="manual" />
 				
 			<EditTextPreference
 				android:key="offset_hours"
