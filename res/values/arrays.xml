@@ -1,10 +1,12 @@
 <resources>
-	<string-array name="offset_options_text"><item>Automatic</item>
+	<string-array name="offset_options_text">
+		<item>Automatic (Time Zone)</item>
 		<item>Manual</item>
 		<item>Phone\'s Time</item>
 	</string-array>
 	
-	<string-array name="offset_options_values"><item>automatic</item>
+	<string-array name="offset_options_values">
+		<item>automatic</item>
 		<item>manual</item>
 		<item>phone</item>
 	</string-array>
