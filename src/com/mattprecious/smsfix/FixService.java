@@ -249,14 +249,18 @@ public class FixService extends Service {
      * Start the running notification
      */
     public static void startNotify() {
-        nm.notify(R.drawable.icon, notif);
+        if (nm != null) {
+            nm.notify(R.drawable.icon, notif);
+        }
     }
     
     /**
      * Stop the running notification
      */
     public static void stopNotify() {
-        nm.cancel(R.drawable.icon);
+        if (nm != null) {
+            nm.cancel(R.drawable.icon);
+        }
     }
 
     /**
