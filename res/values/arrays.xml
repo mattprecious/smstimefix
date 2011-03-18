@@ -1,7 +1,7 @@
 <resources>
 	<string-array name="offset_options_text">
-		<item>Subtract Time Zone</item>
-		<item>Add Time Zone</item>
+		<item>Time Zone</item>
+		<item>Negative Time Zone</item>
 		<item>Add Manual Offset</item>
 		<item>Use Phone\'s Time</item>
 	</string-array>
