@@ -91,6 +91,18 @@
 			android:id="@+id/help_b7"
 			android:layout_below="@id/help_h7"
 			android:text="@string/help_b7" />
+			
+		<TextView
+			style="@style/Help.Heading"
+			android:id="@+id/help_h8"
+			android:layout_below="@id/help_b7"
+			android:text="@string/help_h8" />
+			
+		<TextView
+			style="@style/Help.Body"
+			android:id="@+id/help_b8"
+			android:layout_below="@id/help_h8"
+			android:text="@string/help_b8" />
 		
 	</RelativeLayout>
 </ScrollView>

@@ -61,41 +61,48 @@
 	</string>
 	
 	<string name="help_h3">
-		Add Manual Offset
+		Add Time Zone
 	</string>
 	<string name="help_b3">
-		This method allows you to specify the number of hours to offset incoming messages.
+		Same as above, but adds time time zone instead.
 	</string>
 	
 	<string name="help_h4">
-		Use Phone\'s Time
+		Add Manual Offset
 	</string>
 	<string name="help_b4">
-		This method uses the phone\'s current time as the sent time for all incoming messages. Keep in mind, however, that this method ignores when a message was actually sent, and instead uses when it was received by your phone.
+		This method allows you to specify the number of hours to offset incoming messages.
 	</string>
 	
 	<string name="help_h5">
-		Offset
+		Use Phone\'s Time
 	</string>
 	<string name="help_b5">
+		This method uses the phone\'s current time as the sent time for all incoming messages. Keep in mind, however, that this method ignores when a message was actually sent, and instead uses when it was received by your phone.
+	</string>
+	
+	<string name="help_h6">
+		Offset
+	</string>
+	<string name="help_b6">
 		The offset is the number of hours that you want incoming messages to be shifted by. For example, if a message received at 5:00 PM is being displayed as 1:00PM, then you need to set the offset to <b>4</b> to add four hours to your incoming messages.
 		\n<b>NOTE:</b> The offset can be negative!
 	</string>
 	
-	<string name="help_h6">
+	<string name="help_h7">
 		CDMA Fix
 	</string>
-	<string name="help_b6">
+	<string name="help_b7">
 		This is a setting for CDMA users with roaming problems. This will only alter the time of an incoming message if the time on the message is in the future.
 	</string>
 		
-	<string name="help_h7">
+	<string name="help_h8">
 		I\'m still confused!
 		\nIt\'s broken!
 		\nThis doesn\'t solve anything!
 		\nThis solves everything!
 	</string>
-	<string name="help_b7">
+	<string name="help_b8">
 		I would love to hear from you! Please visit my website http://mattprecious.com to contact me.
 	</string>
     
