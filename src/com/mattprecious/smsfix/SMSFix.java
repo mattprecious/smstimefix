@@ -168,7 +168,7 @@ public class SMSFix extends PreferenceActivity {
      * If the method is phone and the service is active.
      */
     public void toggleCDMA() {
-        cdmaBox.setEnabled(!offsetMethod.getValue().equals("phone") && settings.getBoolean("active", false));
+        cdmaBox.setEnabled(settings.getBoolean("active", false));
     }
 
 }
