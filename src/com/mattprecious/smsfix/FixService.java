@@ -203,6 +203,12 @@ public class FixService extends Service {
         // their GMT offset
         if (settings.getString("offset_method", "manual").equals("automatic")) {
             offset = TimeZone.getDefault().getRawOffset() * -1;
+            
+            // account for DST
+            if (TimeZone.getDefault().useDaylightTime() && TimeZone.getDefault().inDaylightTime(new Date())) {
+                offset -= 3600000;
+            }
+            
             // otherwise, use the offset the user has specified
         } else {
             offset = Integer.parseInt(settings.getString("offset_hours", "0")) * 3600000;
