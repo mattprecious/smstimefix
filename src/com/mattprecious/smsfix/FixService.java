@@ -201,8 +201,12 @@ public class FixService extends Service {
 
         // if the user wants us to auto-determine the offset use the negative of
         // their GMT offset
-        if (settings.getString("offset_method", "manual").equals("automatic")) {
-            offset = TimeZone.getDefault().getRawOffset() * -1;
+        String method = settings.getString("offset_method", "manual");
+        if (method.equals("automatic") || method.equals("neg_automatic")) {
+            offset = TimeZone.getDefault().getRawOffset();
+            if (method.equals("automatic")) {
+                offset *= -1;
+            }
             
             // account for DST
             if (TimeZone.getDefault().useDaylightTime() && TimeZone.getDefault().inDaylightTime(new Date())) {
