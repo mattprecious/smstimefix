@@ -1,8 +1,8 @@
 <resources>
 	<string-array name="offset_options_text">
-		<item>Automatic (Time Zone)</item>
-		<item>Manual</item>
-		<item>Phone\'s Time</item>
+		<item>Subtract Time Zone</item>
+		<item>Add Manual Offset</item>
+		<item>Use Phone\'s Time</item>
 	</string-array>
 	
 	<string-array name="offset_options_values">
