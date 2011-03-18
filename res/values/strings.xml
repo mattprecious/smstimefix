@@ -35,7 +35,7 @@
     	SMSFix service running
     </string>
     
-    <string name="cdma">CDMA Option</string>
+    <string name="cdma">Future Only</string>
     <string name="cdma_summary">
     	Only adjust when SMS time is in the future.
     </string>
