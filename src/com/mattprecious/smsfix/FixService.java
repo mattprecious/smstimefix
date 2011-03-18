@@ -144,7 +144,7 @@ public class FixService extends Service {
             editingCursor.moveToFirst();
 
             // grab its ID
-            ret = editingCursor.getLong(editingCursor.getColumnIndex("_id"));
+            ret = editingCursor.getLong(editingCursor.getColumnIndexOrThrow("_id"));
         }
 
         return ret;
@@ -160,7 +160,7 @@ public class FixService extends Service {
             editingCursor.moveToFirst();
 
             // get the message's ID
-            long id = editingCursor.getLong(editingCursor.getColumnIndex("_id"));
+            long id = editingCursor.getLong(editingCursor.getColumnIndexOrThrow("_id"));
 
             // keep the current last changed ID
             long oldLastChanged = lastSMSId;
@@ -183,7 +183,7 @@ public class FixService extends Service {
                 editingCursor.moveToNext();
 
                 // grab its ID
-                id = editingCursor.getLong(editingCursor.getColumnIndex("_id"));
+                id = editingCursor.getLong(editingCursor.getColumnIndexOrThrow("_id"));
             }
         } else {
             // there aren't any messages, reset the id counter
@@ -232,7 +232,7 @@ public class FixService extends Service {
         Log.i(getClass().getSimpleName(), "Adjusting timestamp for message: " + id);
 	
         // grab the date assigned to the message
-        long longdate = editingCursor.getLong(editingCursor.getColumnIndex("date"));
+        long longdate = editingCursor.getLong(editingCursor.getColumnIndexOrThrow("date"));
         
         // if the user has asked for the Future Only option, make sure the message
         // time is greater than the phone time, giving a 5 second grace
