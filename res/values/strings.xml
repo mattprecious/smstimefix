@@ -47,24 +47,24 @@
 	<string name="help_title">Help</string>
 	
 	<string name="help_h1">
-		Offset Method 
+		Adjustment Method 
 	</string>
 	<string name="help_b1">
-		This setting determines how the times of incoming messages will be altered. There are three methods available to choose from:
+		This setting determines how the times of incoming messages will be altered. There are four methods available to choose from:
 	</string>
 	
 	<string name="help_h2">
-		Subtract Time Zone
+		Time Zone
 	</string>
 	<string name="help_b2">
-		This method will dynamically determine how to offset your messages by using your current time zone as the offset value. If you are GMT-5:00 then your messages will be offset by 5 hours.
+		This method will dynamically determine how to offset your messages by using your current time zone as the offset value. If you are GMT-5:00 then 5 hours will be added to your messages.
 	</string>
 	
 	<string name="help_h3">
-		Add Time Zone
+		Negative Time Zone
 	</string>
 	<string name="help_b3">
-		Same as above, but adds time time zone instead.
+		Same as above, but changes the time in the opposite direction. So, if you are GMT-5:00 then 5 hours will be subtracted from your messages.
 	</string>
 	
 	<string name="help_h4">
