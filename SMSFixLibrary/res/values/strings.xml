@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<!-- changes to this value must also be changed in the other projects -->
+	<string name="app_name">SMS Time Fix</string>
+	
+	<string name="status">Status</string>
+	
+    <string name="active">Active</string>
+    <string name="active_summary_on">
+    	Monitor incoming messages
+    </string>
+    <string name="active_summary_off">
+    	Do nothing
+    </string>
+    
+    <string name="settings">Settings</string>
+    
+    <string name="offset_method">Adjustment Method</string>
+    <string name="offset_method_summary">Method for adjusting time stamps</string>
+    
+    <string name="offset_hours">Offset Hours</string>
+    <string name="offset_hours_summary">
+    	How many hours to adjust incoming messages
+    </string>
+    
+    <string name="offset_minutes">Offset Minutes</string>
+    <string name="offset_minutes_summary">
+    	How many minutes to adjust incoming messages
+    </string>
+    
+    <string name="notify">Running Notification</string>
+    <string name="notify_summary">
+    	Add a running indicator to the notification bar
+    </string>
+    <string name="notify_message">
+    	SMSFix service running
+    </string>
+    
+    <string name="cdma">Future Only</string>
+    <string name="cdma_summary">
+    	Only adjust when SMS time is in the future.
+    </string>
+    
+    <string name="set">Set</string>
+    <string name="cancel">Cancel</string>
+    
+    <string name="more">More</string>
+    
+    <string name="donate">Donate! &lt;3</string>
+    <string name="donate_title">Donate</string>
+    <string name="donate_message">
+    	Support the continued development of this app by installing the donate version.
+    </string>
+    
+    <string name="donate_yes">Yes!</string>
+    <string name="donate_no">Nope</string>
+    
+    <string name="help">Help</string>
+    
+    <!-- changes to this value must also be changed in the other projects -->
+	<string name="help_title">Help</string>
+	
+	<string name="help_h1">
+		Adjustment Method 
+	</string>
+	<string name="help_b1">
+		This setting determines how the times of incoming messages will be altered. There are four methods available to choose from:
+	</string>
+	
+	<string name="help_h2">
+		Time Zone
+	</string>
+	<string name="help_b2">
+		This method will dynamically determine how to offset your messages by using your current time zone as the offset value. If you are GMT-5:00 then 5 hours will be added to your messages.
+	</string>
+	
+	<string name="help_h3">
+		Negative Time Zone
+	</string>
+	<string name="help_b3">
+		Same as above, but changes the time in the opposite direction. So, if you are GMT-5:00 then 5 hours will be subtracted from your messages.
+	</string>
+	
+	<string name="help_h4">
+		Add Manual Offset
+	</string>
+	<string name="help_b4">
+		This method allows you to specify the number of hours to offset incoming messages.
+	</string>
+	
+	<string name="help_h5">
+		Use Phone\'s Time
+	</string>
+	<string name="help_b5">
+		This method uses the phone\'s current time as the sent time for all incoming messages. Keep in mind, however, that this method ignores when a message was actually sent, and instead uses when it was received by your phone.
+	</string>
+	
+	<string name="help_h6">
+		Offset
+	</string>
+	<string name="help_b6">
+		The offset is the number of hours that you want incoming messages to be shifted by. For example, if a message received at 5:00 PM is being displayed as 1:00PM, then you need to set the offset to <b>4</b> to add four hours to your incoming messages.
+		\n<b>NOTE:</b> The offset can be negative!
+	</string>
+	
+	<string name="help_h7">
+		CDMA Fix
+	</string>
+	<string name="help_b7">
+		This is a setting for CDMA users with roaming problems. This will only alter the time of an incoming message if the time on the message is in the future.
+	</string>
+		
+	<string name="help_h8">
+		I\'m still confused!
+		\nIt\'s broken!
+		\nThis doesn\'t solve anything!
+		\nThis solves everything!
+	</string>
+	<string name="help_b8">
+		I would love to hear from you! Please visit my website http://mattprecious.com to contact me.
+	</string>
+    
+    <string name="about">About</string>
+    
+    <!-- changes to this value must also be changed in the other projects -->
+	<string name="about_title">About</string>
+	
+	<string name="about_version">
+		Version 2.3
+	</string>
+	
+	<string name="about_donated">Donated!</string>
+	
+	<string name="about_by">
+		Written by:
+	</string>
+		
+	<string name="about_contact">
+		Matthew Precious
+		\nhttp://mattprecious.com
+	</string>
+		
+	<string name="about_blurb">
+		Please contact me if there are any problems or if you would like to request a new feature. I\'d also love to hear if everything is working! Your feedback is very important to me. Every update I release is due to user feedback.
+	</string>
+</resources>
