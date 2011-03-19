@@ -54,4 +54,17 @@
 				android:defaultValue="0" />
 								
 	</PreferenceCategory>
+	
+	<PreferenceCategory
+		android:title="@string/more">
+		
+		<Preference
+			android:key="help"
+			android:title="@string/help" />
+	
+		<Preference
+			android:key="about"
+			android:title="@string/about" />
+			
+	</PreferenceCategory>
 </PreferenceScreen>
