@@ -14,7 +14,7 @@
 	</PreferenceCategory>
 	
 	<PreferenceCategory
-		android:title="Settings">
+		android:title="@string/settings">
 		
 			<ListPreference
 				android:key="offset_method"
