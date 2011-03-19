@@ -43,7 +43,9 @@
     <string name="set">Set</string>
     <string name="cancel">Cancel</string>
     
-    <string name="menu_help">Help</string>
+    <string name="more">More</string>
+    
+    <string name="help">Help</string>
 	<string name="help_title">Help</string>
 	
 	<string name="help_h1">
@@ -106,7 +108,7 @@
 		I would love to hear from you! Please visit my website http://mattprecious.com to contact me.
 	</string>
     
-    <string name="menu_about">About</string>
+    <string name="about">About</string>
 	<string name="about_title">About</string>
 	
 	<string name="about_version">

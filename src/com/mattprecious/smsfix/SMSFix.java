@@ -23,11 +23,11 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.text.InputType;
-import android.view.Menu;
-import android.view.MenuItem;
 
 /**
  * SMS Time Fix main activity window
@@ -43,11 +43,10 @@ public class SMSFix extends PreferenceActivity {
     private EditTextPreference editOffsetHours;
     private EditTextPreference editOffsetMinutes;
     private CheckBoxPreference cdmaBox;
+    private Preference help;
+    private Preference about;
 
     private OnSharedPreferenceChangeListener prefListener;
-
-    static final int MENU_HELP_ID = 0;
-    static final int MENU_ABOUT_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +60,26 @@ public class SMSFix extends PreferenceActivity {
         editOffsetHours = (EditTextPreference) findPreference("offset_hours");
         editOffsetMinutes = (EditTextPreference) findPreference("offset_minutes");
         cdmaBox = (CheckBoxPreference) findPreference("cdma");
+        help = (Preference) findPreference("help");
+        about = (Preference) findPreference("about");
+        
+        help.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            
+            @Override
+            public boolean onPreferenceClick(Preference arg0) {
+                startActivity(new Intent(SMSFix.this, Help.class));
+                return true;
+            }
+        });
+        
+        about.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            
+            @Override
+            public boolean onPreferenceClick(Preference arg0) {
+                startActivity(new Intent(SMSFix.this, About.class));
+                return true;
+            }
+        });
 
         // register a listener for changes
         prefListener = new OnSharedPreferenceChangeListener() {
@@ -100,32 +119,6 @@ public class SMSFix extends PreferenceActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        menu.add(0, MENU_HELP_ID, 0, R.string.menu_help).setIcon(android.R.drawable.ic_menu_help);
-
-        menu.add(0, MENU_ABOUT_ID, 0, R.string.menu_about).setIcon(android.R.drawable.ic_menu_info_details);
-
-        return true;
-    }
-
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        switch (item.getItemId()) {
-            case MENU_HELP_ID:
-                startActivity(new Intent(SMSFix.this, Help.class));
-                return true;
-
-            case MENU_ABOUT_ID:
-                startActivity(new Intent(SMSFix.this, About.class));
-                return true;
-        }
-
-        return super.onMenuItemSelected(featureId, item);
     }
 
     /**
