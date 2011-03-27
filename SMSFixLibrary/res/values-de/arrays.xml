@@ -1,0 +1,15 @@
+<resources>
+	<string-array name="offset_options_text">
+		<item>Zeitzone abziehen</item>
+		<item>Zeitzone addieren</item>
+		<item>Manuelle Differenz</item>
+		<item>Telefon-Uhrzeit verwenden</item>
+	</string-array>
+
+	<string-array name="offset_options_values">
+		<item>automatic</item>
+		<item>neg_automatic</item>
+		<item>manual</item>
+		<item>phone</item>
+	</string-array>
+</resources>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<!-- changes to this value must also be changed in the other projects -->
+	<string name="app_name">SMS Time Fix</string>
+
+	<string name="status">Status</string>
+
+	<string name="active">Aktiv</string>
+	<string name="active_summary_on">
+		SMS-Eingang überwachen
+	</string>
+	<string name="active_summary_off">
+		Keine Aktion
+	</string>
+
+	<string name="settings">Einstellungen</string>
+
+	<string name="offset_method">Korrektur-Methode</string>
+	<string name="offset_method_summary">Methode zur Korrektur der Sendezeit eingehender SMS</string>
+
+	<string name="offset_hours">Stunden-Differenz</string>
+	<string name="offset_hours_summary">
+		Stunden, um die die Sendezeit korrigiert wird
+	</string>
+
+	<string name="offset_minutes">Minuten-Differenz</string>
+	<string name="offset_minutes_summary">
+		Minuten, um die die Sendezeit korrigiert wird
+	</string>
+
+	<string name="notify">Aktivitäs-Anzeige</string>
+	<string name="notify_summary">
+		Fügt der Statusleiste eine Aktivitätsanzeige hinzu
+	</string>
+	<string name="notify_message">
+		SMSFix-Dienst läuft
+	</string>
+
+	<string name="cdma">Nur Zukünftige</string>
+	<string name="cdma_summary">
+		Nur Zeiten korrigieren, die in der Zukunft liegen
+	</string>
+
+	<string name="set">Speichern</string>
+	<string name="cancel">Abbrechen</string>
+
+	<string name="more">Mehr</string>
+
+	<string name="donate">Spenden! &lt;3</string>
+	<string name="donate_title">Spenden</string>
+	<string name="donate_message">
+		Unterstützen Sie die Weiterentwicklung durch Installation der Spenden-Version
+	</string>
+
+	<string name="donate_yes">Ja!</string>
+	<string name="donate_no">Nein</string>
+
+	<string name="help">Hilfe</string>
+
+	<!-- changes to this value must also be changed in the other projects -->
+	<string name="help_title">Hilfe</string>
+
+	<string name="help_h1">
+		Korrektur-Methode
+	</string>
+	<string name="help_b1">
+		Diese Einstellung bestimmt, wie die Sendezeit eingehender SMS verändert wird. Vier Methoden stehen zur Verfügung:
+	</string>
+
+	<string name="help_h2">
+		Zeitzone abziehen
+	</string>
+	<string name="help_b2">
+		Diese Methode korrigiert die Sendezeit, indem sie den Wert der aktuellen Zeitzone abzieht. Ist die Zeitzone GMT+2, werden 2 Stunden abgezogen.
+	</string>
+
+	<string name="help_h3">
+		Zeitzone addieren
+	</string>
+	<string name="help_b3">
+		Diese Methode korrigiert die Sendezeit, indem sie den Wert der aktuellen Zeitzone addiert. Ist die Zeitzone GMT+2, werden 2 Stunden addiert.
+	</string>
+
+	<string name="help_h4">
+		Manuelle Differenz
+	</string>
+	<string name="help_b4">
+		Diese Methode verschiebt die Sendezeit um eine manuell einstellbare Differenz (Stunden, Minuten).
+	</string>
+
+	<string name="help_h5">
+		Telefon-Uhrzeit verwenden
+	</string>
+	<string name="help_b5">
+		Diese Methode stellt als Sendezeit einer empfangenen SMS die aktuelle Telefon-Uhrzeit ein. Die tatsächliche Sendezeit wird also ignoriert und durch die Empfangszeit ersetzt.
+	</string>
+
+	<string name="help_h6">
+		Differenz
+	</string>
+	<string name="help_b6">
+		Die Differenz ist die Anzahl der Stunden (bzw. Minuten), um die die Sendezeit einer eingehenden SMS verschoben werden soll. Wird beispielsweise eine um 17 Uhr versandte SMS mit 15 Uhr angezeigt, stellen Sie die Differenz auf <b>2</b> Stunden ein.
+		\n<b>HINWEIS:</b> Die Differenz darf auch negativ sein.
+	</string>
+
+	<string name="help_h7">
+		Nur Zukünftige
+	</string>
+	<string name="help_b7">
+		Ist diese Einstellung aktiviert, werden eingehende SMS nur korrigiert, wenn sie eine Sendezeit aufweisen, die in der Zukunft liegt.
+	</string>
+
+	<string name="help_h8">
+		Ich bin immer noch unsicher!
+		\nEs funktioniert nicht!
+		\nEs löst kein Problem!
+		\nEs löst alle Probleme!
+	</string>
+	<string name="help_b8">
+		Ich würde gern von Ihnen hören (auf Englisch)! Bitte besuchen Sie meine Website http://mattprecious.com, um mich zu erreichen.
+	</string>
+
+	<string name="about">Info</string>
+
+	<!-- changes to this value must also be changed in the other projects -->
+	<string name="about_title">Info</string>
+
+	<string name="about_version">
+		Version 2.3
+	</string>
+
+	<string name="about_donated">Gespendet!</string>
+
+	<string name="about_by">
+		Geschrieben von:
+	</string>
+
+	<string name="about_contact">
+		Matthew Precious
+		\nhttp://mattprecious.com
+	</string>
+
+	<string name="about_blurb">
+		Bitte kontaktieren Sie mich (auf Englisch), wenn irgendein Problem auftritt oder wenn Sie einen Erweiterungswunsch haben. Ich würde auch gern erfahren, wenn alles funktioniert. Ihre Rückmeldung ist wichtig. Jedes Update von mir erscheint aufgrund des Feedbacks von Nutzern.
+	</string>
+</resources>
