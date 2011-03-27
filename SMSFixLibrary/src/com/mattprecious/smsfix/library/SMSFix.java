@@ -86,7 +86,6 @@ public class SMSFix extends PreferenceActivity {
         about = (Preference) findPreference("about");
         
         readProperties();
-        System.out.println(donated);
         
         if (donated) {
             more.removePreference(donate);
