@@ -204,13 +204,14 @@ public class FixService extends Service {
         String method = settings.getString("offset_method", "manual");
         if (method.equals("automatic") || method.equals("neg_automatic")) {
             offset = TimeZone.getDefault().getRawOffset();
-            if (method.equals("automatic")) {
-                offset *= -1;
-            }
             
             // account for DST
             if (TimeZone.getDefault().useDaylightTime() && TimeZone.getDefault().inDaylightTime(new Date())) {
-                offset -= 3600000;
+                offset += 3600000;
+            }
+            
+            if (method.equals("automatic")) {
+                offset *= -1;
             }
             
             // otherwise, use the offset the user has specified
