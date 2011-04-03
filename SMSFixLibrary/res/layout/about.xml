@@ -39,9 +39,15 @@
 			android:text="@string/about_contact" />
 			
 		<TextView
+			style="@style/About.TranslatedBy"
+			android:id="@+id/about_translated_by"
+			android:layout_below="@id/about_contact"
+			android:text="@string/about_translated_by" />
+			
+		<TextView
 			style="@style/About.Blurb"
 			android:id="@+id/about_blurb"
-			android:layout_below="@id/about_contact"
+			android:layout_below="@id/about_translated_by"
 			android:text="@string/about_blurb" />
 		
 	</RelativeLayout>
