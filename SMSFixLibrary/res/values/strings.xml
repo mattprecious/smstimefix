@@ -104,10 +104,10 @@
 	</string>
 	
 	<string name="help_h7">
-		CDMA Fix
+		Future Only
 	</string>
 	<string name="help_b7">
-		This is a setting for CDMA users with roaming problems. This will only alter the time of an incoming message if the time on the message is in the future.
+		This will only alter the time of an incoming message if the time on the message is in the future.
 	</string>
 		
 	<string name="help_h8">
