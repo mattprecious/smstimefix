@@ -32,4 +32,6 @@
 	<uses-permission android:name="android.permission.WRITE_SMS" />
 	<uses-permission android:name="android.permission.READ_SMS" />
 	
+	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+	
 </manifest> 
