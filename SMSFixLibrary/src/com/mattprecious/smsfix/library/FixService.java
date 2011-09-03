@@ -92,7 +92,7 @@ public class FixService extends Service {
         // set up the query we'll be observing
         // we only need the ID and the date
         String[] columns = { "_id", "date" };
-        observingCursor = getContentResolver().query(observingURI, null, null, null, null);
+        observingCursor = getContentResolver().query(observingURI, columns, null, null, null);
         editingCursor = getContentResolver().query(editingURI, columns, "type=?", new String[] { "1" }, "_id DESC");
 
         // register the observer
