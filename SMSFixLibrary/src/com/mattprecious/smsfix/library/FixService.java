@@ -16,6 +16,8 @@
 
 package com.mattprecious.smsfix.library;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -44,6 +46,9 @@ import android.util.Log;
  * assume it is a new message and alter its time stamp. Once we reach a message
  * that is not new, stop the loop.
  * 
+ * Foreground service code taken from the Android API Demos:
+ * ForegroundService.java
+ * 
  * @author Matthew Precious
  * 
  */
@@ -60,15 +65,26 @@ public class FixService extends Service {
     private Cursor observingCursor;
     private Cursor editingCursor;
     private FixServiceObserver observer = new FixServiceObserver();
-    
+
     // notification variables
     private static NotificationManager nm;
     private static Notification notif;
-    
+
     private static boolean running = false;
 
     public long lastSMSId = 0; // the ID of the last message we've
-                                      // altered
+                               // altered
+    
+    private static final Class<?>[] setForegroundSignature = new Class[] { boolean.class };
+    private static final Class<?>[] startForegroundSignature = new Class[] { int.class, Notification.class };
+    private static final Class<?>[] stopForegroundSignature = new Class[] { boolean.class };
+
+    private Method setForeground;
+    private Method startForeground;
+    private Method stopForeground;
+    private Object[] setForegroundArgs = new Object[1];
+    private Object[] startForegroundArgs = new Object[2];
+    private Object[] stopForegroundArgs = new Object[1];
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -78,15 +94,16 @@ public class FixService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        
+
         running = true;
 
         // set up everything we need for the running notification
-        nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notif = new Notification (R.drawable.icon, null, 0);
-        notif.setLatestEventInfo(getApplicationContext(), getString(R.string.notify_message), null, PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(), SMSFix.class), PendingIntent.FLAG_CANCEL_CURRENT));
-        notif.flags |= Notification.FLAG_ONGOING_EVENT;
+        nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notif = new Notification(R.drawable.icon, null, 0);
         
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, SMSFix.class), 0);
+        notif.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.notify_message), contentIntent);
+
         settings = PreferenceManager.getDefaultSharedPreferences(this);
 
         // set up the query we'll be observing
@@ -101,11 +118,8 @@ public class FixService extends Service {
         // get the current last message ID
         lastSMSId = getLastMessageId();
 
-        // start the running notification
-        if (settings.getBoolean("notify", false)) {
-            startNotify();
-        }
-        
+        setupForegroundVars();
+
         Log.i(getClass().getSimpleName(), "SMS messages now being monitored");
     }
 
@@ -115,12 +129,113 @@ public class FixService extends Service {
 
         // stop the notification
         if (settings.getBoolean("notify", false)) {
-            stopNotify();
+            // Make sure our notification is gone.
+            stopForegroundCompat(R.string.notify_message);
         }
-        
+
         Log.i(getClass().getSimpleName(), "SMS messages are no longer being monitored. Good-bye.");
     }
     
+    // This is the old onStart method that will be called on the pre-2.0
+    // platform. On 2.0 or later we override onStartCommand() so this
+    // method will not be called.
+    @Override
+    public void onStart(Intent intent, int startId) {
+        if (settings.getBoolean("notify", false)) {
+            startNotify();
+        }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (settings.getBoolean("notify", false)) {
+            startNotify();
+        }
+        
+        // We want this service to continue running until it is explicitly
+        // stopped, so return sticky.
+        return START_STICKY;
+        }
+    
+    private void setupForegroundVars() {
+        try {
+            startForeground = getClass().getMethod("startForeground", startForegroundSignature);
+            stopForeground = getClass().getMethod("stopForeground", stopForegroundSignature);
+        } catch (NoSuchMethodException e) {
+            // Running on an older platform.
+            startForeground = stopForeground = null;
+            return;
+        }
+
+        try {
+            setForeground = getClass().getMethod("setForeground", setForegroundSignature);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalStateException("OS doesn't have Service.startForeground OR Service.setForeground!");
+        }
+    }
+    
+    public void startNotify() {
+        startForegroundCompat(R.string.notify_message, notif);
+    }
+    
+    /**
+     * This is a wrapper around the new startForeground method, using the older
+     * APIs if it is not available.
+     */
+    void startForegroundCompat(int id, Notification notification) {
+        // If we have the new startForeground API, then use it.
+        if (startForeground != null) {
+            startForegroundArgs[0] = Integer.valueOf(id);
+            startForegroundArgs[1] = notification;
+            invokeMethod(startForeground, startForegroundArgs);
+            return;
+        }
+
+        // Fall back on the old API.
+        setForegroundArgs[0] = Boolean.TRUE;
+        invokeMethod(setForeground, setForegroundArgs);
+        nm.notify(id, notification);
+    }
+    
+    /**
+     * This is a wrapper around the new stopForeground method, using the older
+     * APIs if it is not available.
+     */
+    void stopForegroundCompat(int id) {
+        // If we have the new stopForeground API, then use it.
+        if (stopForeground != null) {
+            stopForegroundArgs[0] = Boolean.TRUE;
+            try {
+                stopForeground.invoke(this, stopForegroundArgs);
+            } catch (InvocationTargetException e) {
+                // Should not happen.
+                Log.w("ApiDemos", "Unable to invoke stopForeground", e);
+            } catch (IllegalAccessException e) {
+                // Should not happen.
+                Log.w("ApiDemos", "Unable to invoke stopForeground", e);
+            }
+            return;
+        }
+
+        // Fall back on the old API. Note to cancel BEFORE changing the
+        // foreground state, since we could be killed at that point.
+        nm.cancel(id);
+        setForegroundArgs[0] = Boolean.FALSE;
+        invokeMethod(setForeground, setForegroundArgs);
+    }
+    
+    void invokeMethod(Method method, Object[] args) {
+        try {
+            startForeground.invoke(this, startForegroundArgs);
+        } catch (InvocationTargetException e) {
+            // Should not happen.
+            Log.w(getClass().getSimpleName(), "Unable to invoke method", e);
+        } catch (IllegalAccessException e) {
+            // Should not happen.
+            Log.w(getClass().getSimpleName(), "Unable to invoke method", e);
+        }
+    }
+
     /**
      * Returns true if the service is running
      * 
@@ -204,16 +319,16 @@ public class FixService extends Service {
         String method = settings.getString("offset_method", "manual");
         if (method.equals("automatic") || method.equals("neg_automatic")) {
             offset = TimeZone.getDefault().getRawOffset();
-            
+
             // account for DST
             if (TimeZone.getDefault().useDaylightTime() && TimeZone.getDefault().inDaylightTime(new Date())) {
                 offset += 3600000;
             }
-            
+
             if (method.equals("automatic")) {
                 offset *= -1;
             }
-            
+
             // otherwise, use the offset the user has specified
         } else {
             offset = Integer.parseInt(settings.getString("offset_hours", "0")) * 3600000;
@@ -231,15 +346,17 @@ public class FixService extends Service {
      */
     private void alterMessage(long id) {
         Log.i(getClass().getSimpleName(), "Adjusting timestamp for message: " + id);
-	
+
         // grab the date assigned to the message
         long longdate = editingCursor.getLong(editingCursor.getColumnIndexOrThrow("date"));
-        
-        // if the user has asked for the Future Only option, make sure the message
+
+        // if the user has asked for the Future Only option, make sure the
+        // message
         // time is greater than the phone time, giving a 5 second grace
         // period
-        
-        // keeping the preference name as cdma so when users upgrade it uses their current value
+
+        // keeping the preference name as cdma so when users upgrade it uses
+        // their current value
         if (!settings.getBoolean("cdma", false) || (longdate - (new Date()).getTime() > 5000)) {
             // if the user wants to use the phone's time, use the current date
             if (settings.getString("offset_method", "manual").equals("phone")) {
@@ -249,29 +366,10 @@ public class FixService extends Service {
             }
         }
 
-
         // update the message with the new time stamp
         ContentValues values = new ContentValues();
         values.put("date", longdate);
         getContentResolver().update(editingURI, values, "_id = " + id, null);
-    }
-    
-    /**
-     * Start the running notification
-     */
-    public static void startNotify() {
-        if (nm != null) {
-            nm.notify(R.drawable.icon, notif);
-        }
-    }
-    
-    /**
-     * Stop the running notification
-     */
-    public static void stopNotify() {
-        if (nm != null) {
-            nm.cancel(R.drawable.icon);
-        }
     }
 
     /**
