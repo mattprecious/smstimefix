@@ -21,12 +21,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class Receiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences settings = context.getSharedPreferences(context.getPackageName() + "_preferences", 0);
 
         if (settings.getBoolean("active", false)) {
             Intent svc = new Intent(context, FixService.class);
