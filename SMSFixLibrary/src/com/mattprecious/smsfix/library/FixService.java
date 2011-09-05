@@ -133,11 +133,8 @@ public class FixService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
-        // stop the notification
-        if (settings.getBoolean("notify", false)) {
-            // Make sure our notification is gone.
-            stopForegroundCompat(R.string.notify_message);
-        }
+        // Make sure our notification is gone.
+        stopForegroundCompat(R.string.notify_message);
 
         Log.i(getClass().getSimpleName(), "SMS messages are no longer being monitored. Good-bye.");
     }
@@ -167,10 +164,10 @@ public class FixService extends Service {
         try {
             startForeground = getClass().getMethod("startForeground", startForegroundSignature);
             stopForeground = getClass().getMethod("stopForeground", stopForegroundSignature);
+            return;
         } catch (NoSuchMethodException e) {
             // Running on an older platform.
             startForeground = stopForeground = null;
-            return;
         }
 
         try {
@@ -232,7 +229,7 @@ public class FixService extends Service {
 
     void invokeMethod(Method method, Object[] args) {
         try {
-            startForeground.invoke(this, startForegroundArgs);
+            method.invoke(this, args);
         } catch (InvocationTargetException e) {
             // Should not happen.
             Log.w(getClass().getSimpleName(), "Unable to invoke method", e);
