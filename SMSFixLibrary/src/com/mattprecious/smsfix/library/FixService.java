@@ -74,7 +74,7 @@ public class FixService extends Service {
 
     public long lastSMSId = 0; // the ID of the last message we've
                                // altered
-    
+
     private static final Class<?>[] setForegroundSignature = new Class[] { boolean.class };
     private static final Class<?>[] startForegroundSignature = new Class[] { int.class, Notification.class };
     private static final Class<?>[] stopForegroundSignature = new Class[] { boolean.class };
@@ -100,7 +100,7 @@ public class FixService extends Service {
         // set up everything we need for the running notification
         nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notif = new Notification(R.drawable.icon, null, 0);
-        
+
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, SMSFix.class), 0);
         notif.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.notify_message), contentIntent);
 
@@ -111,6 +111,12 @@ public class FixService extends Service {
         String[] columns = { "_id", "date" };
         observingCursor = getContentResolver().query(observingURI, columns, null, null, null);
         editingCursor = getContentResolver().query(editingURI, columns, "type=?", new String[] { "1" }, "_id DESC");
+
+        // if the observingCursor is null, fall back and try getting a cursor
+        // using the editingCursor
+        if (observingCursor == null) {
+            observingCursor = getContentResolver().query(editingURI, columns, null, null, null);
+        }
 
         // register the observer
         observingCursor.registerContentObserver(observer);
@@ -135,7 +141,7 @@ public class FixService extends Service {
 
         Log.i(getClass().getSimpleName(), "SMS messages are no longer being monitored. Good-bye.");
     }
-    
+
     // This is the old onStart method that will be called on the pre-2.0
     // platform. On 2.0 or later we override onStartCommand() so this
     // method will not be called.
@@ -151,12 +157,12 @@ public class FixService extends Service {
         if (settings.getBoolean("notify", false)) {
             startNotify();
         }
-        
+
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
         return START_STICKY;
-        }
-    
+    }
+
     private void setupForegroundVars() {
         try {
             startForeground = getClass().getMethod("startForeground", startForegroundSignature);
@@ -173,11 +179,11 @@ public class FixService extends Service {
             throw new IllegalStateException("OS doesn't have Service.startForeground OR Service.setForeground!");
         }
     }
-    
+
     public void startNotify() {
         startForegroundCompat(R.string.notify_message, notif);
     }
-    
+
     /**
      * This is a wrapper around the new startForeground method, using the older
      * APIs if it is not available.
@@ -196,7 +202,7 @@ public class FixService extends Service {
         invokeMethod(setForeground, setForegroundArgs);
         nm.notify(id, notification);
     }
-    
+
     /**
      * This is a wrapper around the new stopForeground method, using the older
      * APIs if it is not available.
@@ -223,7 +229,7 @@ public class FixService extends Service {
         setForegroundArgs[0] = Boolean.FALSE;
         invokeMethod(setForeground, setForegroundArgs);
     }
-    
+
     void invokeMethod(Method method, Object[] args) {
         try {
             startForeground.invoke(this, startForegroundArgs);
