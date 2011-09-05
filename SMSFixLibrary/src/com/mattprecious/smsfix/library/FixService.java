@@ -99,7 +99,7 @@ public class FixService extends Service {
 
         // set up everything we need for the running notification
         nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notif = new Notification(R.drawable.icon, null, 0);
+        notif = new Notification(R.drawable.icon_bw, null, 0);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, SMSFix.class), 0);
         notif.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.notify_message), contentIntent);
