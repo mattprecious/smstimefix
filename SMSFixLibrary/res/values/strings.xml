@@ -3,7 +3,11 @@
 	<!-- changes to this value must also be changed in the other projects -->
 	<string name="app_name">SMS Time Fix</string>
 	
-	<string name="status">Status</string>
+	<string name="category_status">Status</string>
+    <string name="category_actions">Actions</string>
+    <string name="category_conditions">Conditions</string>
+    <string name="category_extra">Extra</string>
+    <string name="category_more">More</string>
 	
     <string name="active">Active</string>
     <string name="active_summary_on">
@@ -12,8 +16,6 @@
     <string name="active_summary_off">
     	Do nothing
     </string>
-    
-    <string name="settings">Settings</string>
     
     <string name="offset_method">Adjustment Method</string>
     <string name="offset_method_summary">Method for adjusting time stamps</string>
@@ -43,8 +45,6 @@
     
     <string name="set">Set</string>
     <string name="cancel">Cancel</string>
-    
-    <string name="more">More</string>
     
     <string name="donate">Donate! &lt;3</string>
     <string name="donate_title">Donate</string>

@@ -3,7 +3,7 @@
 	android:key="preferences">
 
 	<PreferenceCategory
-		android:title="@string/status">
+		android:title="@string/category_status">
 		
 		<CheckBoxPreference
 			android:key="active"
@@ -14,7 +14,7 @@
 	</PreferenceCategory>
 	
 	<PreferenceCategory
-		android:title="@string/settings">
+		android:title="@string/category_actions">
 		
 			<ListPreference
 				android:key="offset_method"
@@ -38,6 +38,23 @@
 				android:title="@string/offset_minutes"
 				android:summary="@string/offset_minutes_summary"
 				android:defaultValue="0" />
+			
+		</PreferenceCategory>
+		
+		<PreferenceCategory
+			android:title="@string/category_conditions">
+			
+			<CheckBoxPreference
+				android:key="cdma"
+				android:dependency="active"
+				android:title="@string/cdma"
+				android:summary="@string/cdma_summary"
+				android:defaultValue="0" />
+				
+		</PreferenceCategory>
+		
+		<PreferenceCategory
+			android:title="@string/category_extra">
 				
 			<CheckBoxPreference
 				android:key="notify"
@@ -45,19 +62,12 @@
 				android:title="@string/notify"
 				android:summary="@string/notify_summary"
 				android:defaultValue="0" />
-				
-			<CheckBoxPreference
-				android:key="cdma"
-				android:dependency="active"
-				android:title="@string/cdma"
-				android:summary="@string/cdma_summary"
-				android:defaultValue="0" />
 								
 	</PreferenceCategory>
 	
 	<PreferenceCategory
 		android:key="more"
-		android:title="@string/more">
+		android:title="@string/category_more">
 		
 		<Preference
 			android:key="donate"
