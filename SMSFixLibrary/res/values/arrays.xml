@@ -12,4 +12,14 @@
 		<item>manual</item>
 		<item>phone</item>
 	</string-array>
+	
+	<string-array name="notification_icon_text">
+		<item>Orange</item>
+		<item>Grey</item>
+	</string-array>
+	
+	<string-array name="notification_icon_values">
+		<item>orange</item>
+		<item>grey</item>
+	</string-array>
 </resources>
