@@ -96,15 +96,21 @@ public class FixService extends Service {
         super.onCreate();
 
         running = true;
+        
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
 
         // set up everything we need for the running notification
         nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notif = new Notification(R.drawable.icon_bw, null, 0);
+        
+        int icon = R.drawable.icon;
+        if (settings.getString("notify_icon", "grey").equals("grey")) {
+            icon = R.drawable.icon_bw;
+        }
+        
+        notif = new Notification(icon, null, 0);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, SMSFix.class), 0);
         notif.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.notify_message), contentIntent);
-
-        settings = PreferenceManager.getDefaultSharedPreferences(this);
 
         // set up the query we'll be observing
         // we only need the ID and the date

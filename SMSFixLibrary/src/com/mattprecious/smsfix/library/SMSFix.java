@@ -57,6 +57,8 @@ public class SMSFix extends PreferenceActivity {
     private EditTextPreference editOffsetHours;
     private EditTextPreference editOffsetMinutes;
     private CheckBoxPreference cdmaBox;
+    private CheckBoxPreference notify;
+    private ListPreference notifyIcon;
     
     private PreferenceCategory more;
     private Preference donate;
@@ -79,6 +81,8 @@ public class SMSFix extends PreferenceActivity {
         editOffsetHours = (EditTextPreference) findPreference("offset_hours");
         editOffsetMinutes = (EditTextPreference) findPreference("offset_minutes");
         cdmaBox = (CheckBoxPreference) findPreference("cdma");
+        notify = (CheckBoxPreference) findPreference("notify");
+        notifyIcon = (ListPreference) findPreference("notify_icon");
         
         more = (PreferenceCategory) findPreference("more");
         donate = (Preference) findPreference("donate");
@@ -126,8 +130,9 @@ public class SMSFix extends PreferenceActivity {
                 // if "Active" has changed, start or stop the service
                 if (key.equals("active")) {
                     toggleService(sharedPreferences.getBoolean(key, false));
-                } else if (key.equals("notify")) {
+                } else if (key.equals("notify") || key.equals("notify_icon")) {
                     // if "Notification" has changed, we want to restart the service
+                    // also restart if the icon has changed
                     restartService();
                 }
 
@@ -135,6 +140,7 @@ public class SMSFix extends PreferenceActivity {
                 // change
                 toggleOffset();
                 toggleCDMA();
+                toggleNotify();
             }
         };
         
@@ -152,6 +158,7 @@ public class SMSFix extends PreferenceActivity {
         // set the initial status of the offset and CDMA
         toggleOffset();
         toggleCDMA();
+        toggleNotify();
     }
 
     @Override
@@ -244,6 +251,13 @@ public class SMSFix extends PreferenceActivity {
      */
     public void toggleCDMA() {
         cdmaBox.setEnabled(settings.getBoolean("active", false));
+    }
+    
+    /**
+     * Toggle whether or not the "Icon Style" option should be enabled.
+     */
+    public void toggleNotify() {
+        notifyIcon.setEnabled(settings.getBoolean("notify", false));
     }
 
 }

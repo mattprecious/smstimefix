@@ -38,6 +38,11 @@
     	SMSFix service running
     </string>
     
+    <string name="notify_icon">Icon Style</string>
+    <string name="notify_icon_summary">
+    	The style of icon to use
+    </string>
+    
     <string name="cdma">Future Only</string>
     <string name="cdma_summary">
     	Only adjust when SMS time is in the future.
