@@ -34,6 +34,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 /**
@@ -65,6 +66,8 @@ public class FixService extends Service {
     private Cursor observingCursor;
     private Cursor editingCursor;
     private FixServiceObserver observer = new FixServiceObserver();
+
+    private TelephonyManager telephonyManager;
 
     // notification variables
     private static NotificationManager nm;
@@ -98,6 +101,8 @@ public class FixService extends Service {
         running = true;
         
         settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+        telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
         // set up everything we need for the running notification
         nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -382,6 +387,21 @@ public class FixService extends Service {
     }
 
     /**
+     * Checks if the roaming condition is met. Returns true if the user doesn't
+     * care about roaming, or if the user does but isn't currently roaming
+     * 
+     * @return boolean
+     */
+    private boolean roamingConditionMet() {
+        boolean onlyRoaming = settings.getBoolean("roaming", false);
+        boolean isRoaming = telephonyManager.isNetworkRoaming();
+
+        boolean roamingCondition = !(onlyRoaming && isRoaming);
+
+        return roamingCondition;
+    }
+
+    /**
      * ContentObserver to handle updates to the SMS database
      * 
      * @author Matthew Precious
@@ -399,7 +419,7 @@ public class FixService extends Service {
 
             // if the change wasn't self inflicted
             // TODO: make this boolean actually work...
-            if (!selfChange) {
+            if (!selfChange && roamingConditionMet()) {
                 Log.i(getClass().getSimpleName(), "SMS database altered, checking...!");
                 // requery the database to get the latest messages
                 editingCursor.requery();

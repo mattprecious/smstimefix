@@ -48,6 +48,11 @@
     	Only adjust when SMS time is in the future.
     </string>
     
+    <string name="roaming">Roaming Only</string>
+    <string name="roaming_summary">
+    	Only adjust when roaming
+    </string>
+    
     <string name="set">Set</string>
     <string name="cancel">Cancel</string>
     
