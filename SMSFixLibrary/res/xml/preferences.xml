@@ -51,6 +51,13 @@
 				android:summary="@string/cdma_summary"
 				android:defaultValue="0" />
 				
+			<CheckBoxPreference
+				android:key="roaming"
+				android:dependency="active"
+				android:title="@string/roaming"
+				android:summary="@string/roaming_summary"
+				android:defaultValue="0" />
+				
 		</PreferenceCategory>
 		
 		<PreferenceCategory
