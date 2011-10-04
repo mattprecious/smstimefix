@@ -100,4 +100,12 @@
 	<string name="about_blurb">
 		Please contact me if there are any problems or if you would like to request a new feature. I\'d also love to hear if everything is working! Your feedback is very important to me. Every update I release is due to user feedback.
 	</string>
+	
+	<string name="ok">OK</string>
+	
+	<string name="whats_new">What\'s New?</string>
+    <string name="change_log">
+    	<ul>
+    	</ul>
+    </string>
 </resources>
