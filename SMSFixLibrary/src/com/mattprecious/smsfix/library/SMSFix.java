@@ -127,7 +127,8 @@ public class SMSFix extends PreferenceActivity {
             
             @Override
             public boolean onPreferenceClick(Preference arg0) {
-                startActivity(new Intent(SMSFix.this, Help.class));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.mattprecious.com/smsfix_help.html"));
+                startActivity(browserIntent);
                 return true;
             }
         });
