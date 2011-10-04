@@ -39,6 +39,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.text.InputType;
+import android.util.Log;
 
 /**
  * SMS Time Fix main activity window
@@ -57,6 +58,7 @@ public class SMSFix extends PreferenceActivity {
     private EditTextPreference editOffsetHours;
     private EditTextPreference editOffsetMinutes;
     private CheckBoxPreference cdmaBox;
+    private CheckBoxPreference roamingBox;
     private CheckBoxPreference notify;
     private ListPreference notifyIcon;
     
@@ -68,6 +70,7 @@ public class SMSFix extends PreferenceActivity {
     private OnSharedPreferenceChangeListener prefListener;
     
     static final int DIALOG_DONATE_ID = 0;
+    static final int DIALOG_ROAMING_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +79,16 @@ public class SMSFix extends PreferenceActivity {
         addPreferencesFromResource(R.xml.preferences);
 
         settings = ((PreferenceScreen) findPreference("preferences")).getSharedPreferences();
+        
         activeBox = (CheckBoxPreference) findPreference("active");
+        
         offsetMethod = (ListPreference) findPreference("offset_method");
         editOffsetHours = (EditTextPreference) findPreference("offset_hours");
         editOffsetMinutes = (EditTextPreference) findPreference("offset_minutes");
+        
         cdmaBox = (CheckBoxPreference) findPreference("cdma");
+        roamingBox = (CheckBoxPreference) findPreference("roaming");
+        
         notify = (CheckBoxPreference) findPreference("notify");
         notifyIcon = (ListPreference) findPreference("notify_icon");
         
@@ -88,6 +96,17 @@ public class SMSFix extends PreferenceActivity {
         donate = (Preference) findPreference("donate");
         help = (Preference) findPreference("help");
         about = (Preference) findPreference("about");
+        
+        roamingBox.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            
+            @Override
+            public boolean onPreferenceClick(Preference arg0) {
+                if (roamingBox.isChecked()) {
+                    showDialog(DIALOG_ROAMING_ID);
+                }
+                return true;
+            }
+        });
         
         readProperties();
         
@@ -185,9 +204,9 @@ public class SMSFix extends PreferenceActivity {
     
     protected Dialog onCreateDialog(int id) {
         Dialog dialog;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         switch(id) {
             case DIALOG_DONATE_ID:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.donate_title)
                        .setIcon(R.drawable.ic_dialog_heart)
                        .setMessage(R.string.donate_message)
@@ -203,6 +222,25 @@ public class SMSFix extends PreferenceActivity {
                            
                            public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
+                           }
+                       });
+                dialog = builder.create();
+                break;
+            case DIALOG_ROAMING_ID:
+                builder.setTitle(R.string.roaming_title)
+                       .setIcon(android.R.drawable.ic_dialog_info)
+                       .setMessage(R.string.roaming_message)
+                       .setPositiveButton(R.string.roaming_ok, new DialogInterface.OnClickListener() {
+                           
+                           public void onClick(DialogInterface dialog, int id) {
+                               dialog.cancel();
+                           }
+                       })
+                       .setNegativeButton(R.string.roaming_no, new DialogInterface.OnClickListener() {
+                           
+                           public void onClick(DialogInterface dialog, int id) {
+                               roamingBox.setChecked(false);
+                               dialog.cancel();
                            }
                        });
                 dialog = builder.create();
