@@ -14,7 +14,6 @@
             
         </activity>
         
-        <activity android:name="com.mattprecious.smsfix.library.Help" android:label="@string/help_title"></activity>
         <activity android:name="com.mattprecious.smsfix.library.About" android:label="@string/about_title"></activity>
         
         <service android:name="com.mattprecious.smsfix.library.FixService"/>
