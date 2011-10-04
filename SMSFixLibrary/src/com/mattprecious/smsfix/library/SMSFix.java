@@ -25,6 +25,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -39,7 +40,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.text.InputType;
-import android.util.Log;
 
 /**
  * SMS Time Fix main activity window
@@ -48,6 +48,8 @@ import android.util.Log;
  * 
  */
 public class SMSFix extends PreferenceActivity {
+    private final int VERSION_CODE = 11;
+    
     static boolean donated = false;
     
     private final String PROPERTIES_FILE = "main.properties";
@@ -71,6 +73,7 @@ public class SMSFix extends PreferenceActivity {
     
     static final int DIALOG_DONATE_ID = 0;
     static final int DIALOG_ROAMING_ID = 1;
+    static final int DIALOG_CHANGE_LOG_ID = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,6 +182,11 @@ public class SMSFix extends PreferenceActivity {
         toggleOffset();
         toggleCDMA();
         toggleNotify();
+        
+        // debug the change log
+        //settings.edit().putInt("version_code", 0).commit();
+        
+        checkAndShowChangeLog();
     }
 
     @Override
@@ -207,6 +215,19 @@ public class SMSFix extends PreferenceActivity {
         Dialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         switch(id) {
+            case DIALOG_CHANGE_LOG_ID:
+                builder.setTitle(R.string.whats_new)
+                       .setIcon(android.R.drawable.ic_dialog_info)
+                       .setMessage(R.string.change_log)
+                       .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                           
+                           public void onClick(DialogInterface dialog, int id) {
+                               dialog.cancel();
+                           }
+                       })
+                       ;
+                dialog = builder.create();
+                break;
             case DIALOG_DONATE_ID:
                 builder.setTitle(R.string.donate_title)
                        .setIcon(R.drawable.ic_dialog_heart)
@@ -297,6 +318,16 @@ public class SMSFix extends PreferenceActivity {
      */
     public void toggleNotify() {
         notifyIcon.setEnabled(settings.getBoolean("notify", false));
+    }
+    
+    private void checkAndShowChangeLog() {
+        if (settings.getInt("version_code", 0) != VERSION_CODE) {
+            showDialog(DIALOG_CHANGE_LOG_ID);
+            
+            Editor editor = settings.edit();
+            editor.putInt("version_code", VERSION_CODE);
+            editor.commit();
+        }
     }
 
 }
