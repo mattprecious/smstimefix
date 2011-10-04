@@ -327,6 +327,9 @@ public class SMSFix extends PreferenceActivity {
             Editor editor = settings.edit();
             editor.putInt("version_code", VERSION_CODE);
             editor.commit();
+            
+            // while we're here... make sure "active" is unchecked after an update
+            activeBox.setChecked(false);
         }
     }
 
