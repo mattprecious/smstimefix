@@ -18,7 +18,9 @@ package com.mattprecious.smsfix.library;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -40,6 +42,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.text.InputType;
+import android.util.Log;
 
 /**
  * SMS Time Fix main activity window
@@ -100,6 +103,8 @@ public class SMSFix extends PreferenceActivity {
         help = (Preference) findPreference("help");
         about = (Preference) findPreference("about");
         
+        adjustMethodLabels();
+        
         roamingBox.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             
             @Override
@@ -130,7 +135,7 @@ public class SMSFix extends PreferenceActivity {
             
             @Override
             public boolean onPreferenceClick(Preference arg0) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.mattprecious.com/smsfix_help.html"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.mattprecious.com/help/smsfix.html"));
                 startActivity(browserIntent);
                 return true;
             }
@@ -318,6 +323,40 @@ public class SMSFix extends PreferenceActivity {
      */
     public void toggleNotify() {
         notifyIcon.setEnabled(settings.getBoolean("notify", false));
+    }
+    
+    /**
+     * Update the adjustment method labels in two ways:
+     * 
+     * 1. Swap the "Add" and "Subtract" time zone names if we're GMT+X
+     * 2. Add the current time zone offset to the Time Zone methods
+     */
+    private void adjustMethodLabels() {
+        // the labels for the offset methods
+        CharSequence[] offsetMethodEntries = offsetMethod.getEntries();
+        
+        int gmtOffset = TimeZone.getDefault().getRawOffset() / 3600000;
+        
+        // account for DST
+        if (TimeZone.getDefault().useDaylightTime() && TimeZone.getDefault().inDaylightTime(new Date())) {
+            gmtOffset += 1;
+        }
+        
+        int absGMTOffset = Math.abs(gmtOffset);
+        
+        // swap the Add and Subtract time zone method names if we're GMT+X
+        if (gmtOffset >= 0) {
+            CharSequence temp = offsetMethodEntries[0];
+            offsetMethodEntries[0] = offsetMethodEntries[1];
+            offsetMethodEntries[1] = temp;
+        }
+        
+        // add the time zone offset to the labels
+        offsetMethodEntries[0] = offsetMethodEntries[0] + " (" + absGMTOffset + ")";
+        offsetMethodEntries[1] = offsetMethodEntries[1] + " (" + absGMTOffset + ")";
+        
+        // set them
+        offsetMethod.setEntries(offsetMethodEntries);
     }
     
     private void checkAndShowChangeLog() {
