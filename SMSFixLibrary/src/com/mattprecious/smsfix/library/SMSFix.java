@@ -29,6 +29,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -42,7 +45,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.text.InputType;
-import android.util.Log;
 
 /**
  * SMS Time Fix main activity window
@@ -51,8 +53,6 @@ import android.util.Log;
  * 
  */
 public class SMSFix extends PreferenceActivity {
-    private final int VERSION_CODE = 11;
-    
     static boolean donated = false;
     
     private final String PROPERTIES_FILE = "main.properties";
@@ -360,15 +360,23 @@ public class SMSFix extends PreferenceActivity {
     }
     
     private void checkAndShowChangeLog() {
-        if (settings.getInt("version_code", 0) != VERSION_CODE) {
-            showDialog(DIALOG_CHANGE_LOG_ID);
+        PackageManager packageManager = getPackageManager();
+        
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
             
-            Editor editor = settings.edit();
-            editor.putInt("version_code", VERSION_CODE);
-            editor.commit();
+            if (settings.getInt("version_code", 0) != packageInfo.versionCode) {
+                showDialog(DIALOG_CHANGE_LOG_ID);
+                
+                Editor editor = settings.edit();
+                editor.putInt("version_code", packageInfo.versionCode);
+                editor.commit();
+                
+                // while we're here... make sure "active" is unchecked after an update
+                activeBox.setChecked(false);
+            }
+        } catch (NameNotFoundException e) {
             
-            // while we're here... make sure "active" is unchecked after an update
-            activeBox.setChecked(false);
         }
     }
 

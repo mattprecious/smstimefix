@@ -17,6 +17,9 @@
 package com.mattprecious.smsfix.library;
 
 import android.app.Activity;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -35,6 +38,17 @@ public class About extends Activity {
         
         if (!SMSFix.donated) {
             ((TextView) findViewById(R.id.about_donated)).setVisibility(View.GONE);
+        }
+        
+        PackageManager packageManager = getPackageManager();
+        
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
+            
+            TextView versionView = (TextView) findViewById(R.id.about_version);
+            versionView.setText(getString(R.string.about_version, packageInfo.versionName));
+        } catch(NameNotFoundException e) {
+            
         }
     }
 
