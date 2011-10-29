@@ -113,6 +113,7 @@ public class FixService extends Service {
         }
         
         notif = new Notification(icon, null, 0);
+        notif.flags |= Notification.FLAG_ONGOING_EVENT;
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, SMSFix.class), 0);
         notif.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.notify_message), contentIntent);
