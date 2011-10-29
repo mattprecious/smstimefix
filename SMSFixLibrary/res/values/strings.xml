@@ -106,11 +106,7 @@
 	<string name="whats_new">What\'s New?</string>
     <string name="change_log">
     	\n
-   		&#8226; New icons \n
-   		&#8226; Option to revert to orange running notification \n
-   		&#8226; Roaming Only option** \n
-   		&#8226; Better names for the time zone methods \n
-   		&#8226; Recategorize preferences \n
-   		&#8226; New help page
+   		&#8226; Fix for running notification on 1.5 and 1.6 \n
+   		&#8226; Support for Extra-high density screens
     </string>
 </resources>
