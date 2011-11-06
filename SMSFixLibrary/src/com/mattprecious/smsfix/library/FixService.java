@@ -447,7 +447,7 @@ public class FixService extends Service {
         logger.info("onlyRoaming: " + Boolean.toString(onlyRoaming));
         logger.info("isRoaming: " + Boolean.toString(isRoaming));
 
-        boolean roamingCondition = !(onlyRoaming && isRoaming);
+        boolean roamingCondition = !onlyRoaming || isRoaming;
 
         return roamingCondition;
     }
