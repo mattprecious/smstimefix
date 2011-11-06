@@ -20,16 +20,31 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Log;
+
+import com.google.code.microlog4android.Logger;
+import com.google.code.microlog4android.LoggerFactory;
 
 public class Receiver extends BroadcastReceiver {
+    
+    private LoggerHelper logger;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        SharedPreferences settings = context.getSharedPreferences(context.getPackageName() + "_preferences", 0);
+        logger = LoggerHelper.getInstance(context);
+        logger.info("Received BOOT_COMPLETED intent");
+        
+        String name = context.getPackageName() + "_preferences";
+        
+        logger.info("Using preferences: " + name);
+        
+        SharedPreferences settings = context.getSharedPreferences(name, 0);
+        
+        boolean active = settings.getBoolean("active", false);
+        
+        logger.info("Active preference: " + Boolean.toString(active));
 
-        if (settings.getBoolean("active", false)) {
+        if (active) {
+            logger.info("Starting FixService");
             Intent svc = new Intent(context, FixService.class);
             context.startService(svc);
         }

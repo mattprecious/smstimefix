@@ -72,6 +72,16 @@
     	Please note that I\'m unable to do any real testing of this setting since I do not experience this issue. I cannot guarantee that this method works at all. If you decide to try it out, please let me know the results!
     </string>
     
+    <string name="logging">Logging</string>
+    <string name="log_to_sd">Log to SD Card</string>
+    <string name="add_note">Add Note</string>
+    <string name="add_note_summary">
+    	Add a message to the log file to draw attention to an issue
+    </string>
+    <string name="clear_log">Clear Log</string>
+	<string name="clear_log_confirm">Are you sure you want to clear your logs?</string>    
+    <string name="logs_cleared">Logs cleared</string>
+    
     <string name="help">Help</string>
     <string name="about">About</string>
     

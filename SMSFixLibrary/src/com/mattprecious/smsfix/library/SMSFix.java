@@ -22,6 +22,9 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.TimeZone;
 
+import com.google.code.microlog4android.Logger;
+import com.google.code.microlog4android.LoggerFactory;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -45,6 +48,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.text.InputType;
+import android.widget.Toast;
 
 /**
  * SMS Time Fix main activity window
@@ -67,6 +71,10 @@ public class SMSFix extends PreferenceActivity {
     private CheckBoxPreference notify;
     private ListPreference notifyIcon;
     
+    private CheckBoxPreference logToSd;
+    private Preference addNote;
+    private Preference clearLog;
+    
     private PreferenceCategory more;
     private Preference donate;
     private Preference help;
@@ -74,13 +82,19 @@ public class SMSFix extends PreferenceActivity {
 
     private OnSharedPreferenceChangeListener prefListener;
     
+    private LoggerHelper logger;
+    
     static final int DIALOG_DONATE_ID = 0;
     static final int DIALOG_ROAMING_ID = 1;
     static final int DIALOG_CHANGE_LOG_ID = 2;
+    static final int DIALOG_CONFIRM_LOG_CLEAR_ID = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        logger = LoggerHelper.getInstance(getApplicationContext());
+        logger.info("SMSFix Activity started. Preparing the view");
 
         addPreferencesFromResource(R.xml.preferences);
 
@@ -98,6 +112,10 @@ public class SMSFix extends PreferenceActivity {
         notify = (CheckBoxPreference) findPreference("notify");
         notifyIcon = (ListPreference) findPreference("notify_icon");
         
+        logToSd = (CheckBoxPreference) findPreference("log_to_sd");
+        addNote = (Preference) findPreference("add_note");
+        clearLog = (Preference) findPreference("clear_log");
+        
         more = (PreferenceCategory) findPreference("more");
         donate = (Preference) findPreference("donate");
         help = (Preference) findPreference("help");
@@ -112,6 +130,25 @@ public class SMSFix extends PreferenceActivity {
                 if (roamingBox.isChecked()) {
                     showDialog(DIALOG_ROAMING_ID);
                 }
+                return true;
+            }
+        });
+        
+        addNote.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(SMSFix.this, LogNote.class));
+                
+                return true;
+            }
+        });
+        
+        clearLog.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                showDialog(DIALOG_CONFIRM_LOG_CLEAR_ID);
                 return true;
             }
         });
@@ -155,6 +192,8 @@ public class SMSFix extends PreferenceActivity {
 
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                logger.info("Preference changed: " + key);
+                
                 // if "Active" has changed, start or stop the service
                 if (key.equals("active")) {
                     toggleService(sharedPreferences.getBoolean(key, false));
@@ -162,6 +201,8 @@ public class SMSFix extends PreferenceActivity {
                     // if "Notification" has changed, we want to restart the service
                     // also restart if the icon has changed
                     restartService();
+                } else if (key.equals("log_to_sd")) {
+                    logger.reset(getApplicationContext());
                 }
 
                 // update offset and CDMA to reflect the new status or method
@@ -192,10 +233,14 @@ public class SMSFix extends PreferenceActivity {
         //settings.edit().putInt("version_code", 0).commit();
         
         checkAndShowChangeLog();
+        
+        logger.info("SMSFix Activity initialization complete");
     }
 
     @Override
     protected void onDestroy() {
+        logger.info("SMSFix Activity destroy");
+        
         super.onDestroy();
     }
     
@@ -211,7 +256,7 @@ public class SMSFix extends PreferenceActivity {
             
             donated = Boolean.valueOf(properties.getProperty("donated"));
         } catch (IOException e) {
-            System.err.println("Failed to open property file");
+            logger.error("Failed to open properties file");
             e.printStackTrace();
         }
     }
@@ -267,6 +312,25 @@ public class SMSFix extends PreferenceActivity {
                            
                            public void onClick(DialogInterface dialog, int id) {
                                roamingBox.setChecked(false);
+                               dialog.cancel();
+                           }
+                       });
+                dialog = builder.create();
+                break;
+            case DIALOG_CONFIRM_LOG_CLEAR_ID:
+                builder.setMessage(R.string.clear_log_confirm)
+                       .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                           
+                           public void onClick(DialogInterface dialog, int id) {
+                               logger.clearLog(getApplicationContext());
+                               
+                               Toast toast = Toast.makeText(getApplicationContext(), R.string.logs_cleared, Toast.LENGTH_SHORT);
+                               toast.show();
+                           }
+                       })
+                       .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                           
+                           public void onClick(DialogInterface dialog, int id) {
                                dialog.cancel();
                            }
                        });

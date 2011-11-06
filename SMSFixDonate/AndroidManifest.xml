@@ -14,6 +14,9 @@
             
         </activity>
         
+	    <activity android:name="com.mattprecious.smsfix.library.LogNote"
+	    	  android:theme="@android:style/Theme.Dialog" />
+        
         <activity android:name="com.mattprecious.smsfix.library.About" android:label="@string/about_title"></activity>
         
         <service android:name="com.mattprecious.smsfix.library.FixService"/>
@@ -23,6 +26,12 @@
 				<action	android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
 		</receiver>
+		
+		<receiver android:name="com.mattprecious.smsfix.library.LogRolloverReceiver">
+		    <intent-filter>
+		        <action android:name="com.mattprecious.smsfix.library.INTENT_LOG_ROLLOVER" />
+		    </intent-filter>
+		</receiver>
 	    
 	</application>
     
@@ -30,6 +39,7 @@
     
 	<uses-permission android:name="android.permission.WRITE_SMS" />
 	<uses-permission android:name="android.permission.READ_SMS" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 </manifest>
