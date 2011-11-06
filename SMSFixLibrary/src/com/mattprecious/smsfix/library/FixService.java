@@ -16,6 +16,8 @@
 
 package com.mattprecious.smsfix.library;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
@@ -32,10 +34,14 @@ import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
-import android.util.Log;
+
+import com.google.code.microlog4android.Logger;
+import com.google.code.microlog4android.LoggerFactory;
+import com.google.code.microlog4android.config.PropertyConfigurator;
 
 /**
  * Service to fix all incoming text messages
@@ -88,6 +94,8 @@ public class FixService extends Service {
     private Object[] setForegroundArgs = new Object[1];
     private Object[] startForegroundArgs = new Object[2];
     private Object[] stopForegroundArgs = new Object[1];
+    
+    private LoggerHelper logger;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -97,7 +105,10 @@ public class FixService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        
+        logger = LoggerHelper.getInstance(getApplicationContext());
+        logger.info("FixService starting");
+        
         running = true;
         
         settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -127,6 +138,7 @@ public class FixService extends Service {
         // if the observingCursor is null, fall back and try getting a cursor
         // using the editingCursor
         if (observingCursor == null) {
+            logger.info("observingCursor is null. Retrying with second URI");
             observingCursor = getContentResolver().query(editingURI, columns, null, null, null);
         }
 
@@ -135,10 +147,12 @@ public class FixService extends Service {
 
         // get the current last message ID
         lastSMSId = getLastMessageId();
+        
+        logger.info("lastSMSId initialized to " + lastSMSId);
 
         setupForegroundVars();
 
-        Log.i(getClass().getSimpleName(), "SMS messages now being monitored");
+        logger.info("FixService initialization complete. Now monitoring SMS messages");
     }
 
     @Override
@@ -148,7 +162,7 @@ public class FixService extends Service {
         // Make sure our notification is gone.
         stopForegroundCompat(R.string.notify_message);
 
-        Log.i(getClass().getSimpleName(), "SMS messages are no longer being monitored. Good-bye.");
+        logger.info("FixService destroy");
     }
 
     // This is the old onStart method that will be called on the pre-2.0
@@ -224,10 +238,10 @@ public class FixService extends Service {
                 stopForeground.invoke(this, stopForegroundArgs);
             } catch (InvocationTargetException e) {
                 // Should not happen.
-                Log.w("ApiDemos", "Unable to invoke stopForeground", e);
+                logger.warn("Unable to invoke stopForeground", e);
             } catch (IllegalAccessException e) {
                 // Should not happen.
-                Log.w("ApiDemos", "Unable to invoke stopForeground", e);
+                logger.warn("Unable to invoke stopForeground", e);
             }
             return;
         }
@@ -244,10 +258,10 @@ public class FixService extends Service {
             method.invoke(this, args);
         } catch (InvocationTargetException e) {
             // Should not happen.
-            Log.w(getClass().getSimpleName(), "Unable to invoke method", e);
+            logger.warn("Unable to invoke method", e);
         } catch (IllegalAccessException e) {
             // Should not happen.
-            Log.w(getClass().getSimpleName(), "Unable to invoke method", e);
+            logger.warn("Unable to invoke method", e);
         }
     }
 
@@ -284,6 +298,8 @@ public class FixService extends Service {
      * Updates the time stamp on any messages that have come in
      */
     private void fixLastMessage() {
+        logger.info("Cursor count: " + editingCursor.getCount());
+        
         // if there are any messages
         if (editingCursor.getCount() > 0) {
             // move to the first one
@@ -294,6 +310,8 @@ public class FixService extends Service {
 
             // keep the current last changed ID
             long oldLastChanged = lastSMSId;
+            
+            logger.info("Latest ID: " + id + "; Last ID: " + oldLastChanged);
 
             // update our counter
             lastSMSId = id;
@@ -306,6 +324,7 @@ public class FixService extends Service {
 
                 // base case, handle there being no more messages and break out
                 if (editingCursor.isLast()) {
+                    logger.info("This is the last message, aborting");
                     break;
                 }
 
@@ -328,28 +347,44 @@ public class FixService extends Service {
      */
     private long getOffset() {
         long offset = 0;
-
+        
         // if the user wants us to auto-determine the offset use the negative of
         // their GMT offset
         String method = settings.getString("offset_method", "manual");
+        
+        logger.info("Adjustment method: " + method);
+        
         if (method.equals("automatic") || method.equals("neg_automatic")) {
             offset = TimeZone.getDefault().getRawOffset();
+            
+            logger.info("Raw offset: " + offset);
 
             // account for DST
             if (TimeZone.getDefault().useDaylightTime() && TimeZone.getDefault().inDaylightTime(new Date())) {
                 offset += 3600000;
+                
+                logger.info("Adjusting for DST: " + offset);
             }
 
             if (method.equals("automatic")) {
                 offset *= -1;
+                
+                logger.info("Negate the offset: " + offset);
             }
 
-            // otherwise, use the offset the user has specified
+        // otherwise, use the offset the user has specified
         } else {
-            offset = Integer.parseInt(settings.getString("offset_hours", "0")) * 3600000;
-            offset += Integer.parseInt(settings.getString("offset_minutes", "0")) * 60000;
+            int offsetHours = Integer.parseInt(settings.getString("offset_hours", "0"));
+            int offsetMinutes = Integer.parseInt(settings.getString("offset_minutes", "0"));
+            
+            logger.info("Offset Hours: " + offsetHours);
+            logger.info("Offset Minutes: " + offsetMinutes);
+            
+            offset = offsetHours * 3600000;
+            offset += offsetMinutes * 60000;
         }
 
+        logger.info("Final offset: " + offset);
         return offset;
     }
 
@@ -360,10 +395,12 @@ public class FixService extends Service {
      *            - the ID of the message to be altered
      */
     private void alterMessage(long id) {
-        Log.i(getClass().getSimpleName(), "Adjusting timestamp for message: " + id);
+        logger.info("Adjusting timestamp for message: " + id);
 
         // grab the date assigned to the message
         long longdate = editingCursor.getLong(editingCursor.getColumnIndexOrThrow("date"));
+        
+        logger.info("Timestamp from the message is: " + longdate);
 
         // if the user has asked for the Future Only option, make sure the
         // message
@@ -372,7 +409,13 @@ public class FixService extends Service {
 
         // keeping the preference name as cdma so when users upgrade it uses
         // their current value
-        if (!settings.getBoolean("cdma", false) || (longdate - (new Date()).getTime() > 5000)) {
+        boolean futureOnly = settings.getBoolean("cdma", false);
+        boolean inTheFuture = (longdate - (new Date()).getTime()) > 5000;
+        
+        logger.info("Future only: " + Boolean.toString(futureOnly));
+        logger.info("In the future? " + Boolean.toString(inTheFuture));
+        
+        if (!futureOnly || inTheFuture) {
             // if the user wants to use the phone's time, use the current date
             if (settings.getString("offset_method", "manual").equals("phone")) {
                 longdate = (new Date()).getTime();
@@ -380,11 +423,15 @@ public class FixService extends Service {
                 longdate = longdate + getOffset();
             }
         }
+        
+        logger.info("Setting timestamp to " + longdate);
 
         // update the message with the new time stamp
         ContentValues values = new ContentValues();
         values.put("date", longdate);
-        getContentResolver().update(editingURI, values, "_id = " + id, null);
+        int result = getContentResolver().update(editingURI, values, "_id = " + id, null);
+        
+        logger.info("Rows updated: " + result);
     }
 
     /**
@@ -396,6 +443,9 @@ public class FixService extends Service {
     private boolean roamingConditionMet() {
         boolean onlyRoaming = settings.getBoolean("roaming", false);
         boolean isRoaming = telephonyManager.isNetworkRoaming();
+        
+        logger.info("onlyRoaming: " + Boolean.toString(onlyRoaming));
+        logger.info("isRoaming: " + Boolean.toString(isRoaming));
 
         boolean roamingCondition = !(onlyRoaming && isRoaming);
 
@@ -417,13 +467,21 @@ public class FixService extends Service {
         @Override
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
+            
+            logger.info("SMS database altered, checking...");
+            
+            boolean roamingConditionMet = roamingConditionMet();
+            
+            logger.info("selfChange: " + Boolean.toString(selfChange));
+            logger.info("roamingConditionMet: " + Boolean.toString(roamingConditionMet));
 
             // if the change wasn't self inflicted
             // TODO: make this boolean actually work...
-            if (!selfChange && roamingConditionMet()) {
-                Log.i(getClass().getSimpleName(), "SMS database altered, checking...!");
+            if (!selfChange && roamingConditionMet) {
                 // requery the database to get the latest messages
                 editingCursor.requery();
+                
+                logger.info("Adjusting the message(s)");
 
                 // fix them
                 fixLastMessage();
