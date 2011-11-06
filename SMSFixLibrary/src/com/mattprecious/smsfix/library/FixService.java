@@ -157,12 +157,13 @@ public class FixService extends Service {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-
         // Make sure our notification is gone.
         stopForegroundCompat(R.string.notify_message);
 
+        running = false;
         logger.info("FixService destroy");
+        
+        super.onDestroy();
     }
 
     // This is the old onStart method that will be called on the pre-2.0
