@@ -16,14 +16,13 @@
 
 package com.mattprecious.smsfix.library;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 import java.util.TimeZone;
-
-import com.google.code.microlog4android.Logger;
-import com.google.code.microlog4android.LoggerFactory;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -79,6 +78,7 @@ public class SMSFix extends PreferenceActivity {
     private Preference donate;
     private Preference help;
     private Preference about;
+    private Preference emailDev;
 
     private OnSharedPreferenceChangeListener prefListener;
     
@@ -88,6 +88,7 @@ public class SMSFix extends PreferenceActivity {
     static final int DIALOG_ROAMING_ID = 1;
     static final int DIALOG_CHANGE_LOG_ID = 2;
     static final int DIALOG_CONFIRM_LOG_CLEAR_ID = 3;
+    static final int DIALOG_ATTACH_LOGS_ID = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +121,7 @@ public class SMSFix extends PreferenceActivity {
         donate = (Preference) findPreference("donate");
         help = (Preference) findPreference("help");
         about = (Preference) findPreference("about");
+        emailDev = (Preference) findPreference("email_dev");
         
         adjustMethodLabels();
         
@@ -183,6 +185,15 @@ public class SMSFix extends PreferenceActivity {
             @Override
             public boolean onPreferenceClick(Preference arg0) {
                 startActivity(new Intent(SMSFix.this, About.class));
+                return true;
+            }
+        });
+        
+        emailDev.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                showDialog(DIALOG_ATTACH_LOGS_ID);
                 return true;
             }
         });
@@ -336,6 +347,26 @@ public class SMSFix extends PreferenceActivity {
                        });
                 dialog = builder.create();
                 break;
+            case DIALOG_ATTACH_LOGS_ID:
+                builder.setTitle(R.string.include_logs_title)
+                       .setIcon(android.R.drawable.ic_dialog_info)
+                       .setMessage(R.string.include_logs_message)
+                       .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                           
+                           public void onClick(DialogInterface dialog, int id) {
+                               sendEmailToDev(true);
+                               dialog.cancel();
+                           }
+                       })
+                       .setNegativeButton(R.string.nope, new DialogInterface.OnClickListener() {
+                           
+                           public void onClick(DialogInterface dialog, int id) {
+                               sendEmailToDev(false);
+                               dialog.cancel();
+                           }
+                       });
+                 dialog = builder.create();
+                 break;
             default:
                 dialog = null;
         }
@@ -387,6 +418,31 @@ public class SMSFix extends PreferenceActivity {
      */
     public void toggleNotify() {
         notifyIcon.setEnabled(settings.getBoolean("notify", false));
+    }
+    
+    public void sendEmailToDev(boolean attachLogs) {
+        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setType("vnd.android.cursor.dir/email");
+        
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"matt@mattprecious.com"});
+        intent.putExtra(Intent.EXTRA_SUBJECT, "SMS Time Fix Feedback");
+        
+        File logFile = LoggerHelper.getLogFile();
+        File rolloverLogFile = LoggerHelper.getRolloverLogFile();
+        
+        if (attachLogs && logFile.exists()) {
+            ArrayList<Uri> attachments = new ArrayList<Uri>();
+            attachments.add(Uri.fromFile(logFile));
+            
+            if (logFile.length() < LoggerHelper.EMAIL_LOG_MIN && rolloverLogFile.exists()) {
+                attachments.add(Uri.fromFile(rolloverLogFile));
+            }
+            
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachments);
+        }
+    
+        startActivity(intent); 
     }
     
     /**

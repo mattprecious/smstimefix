@@ -116,5 +116,9 @@
 			android:key="about"
 			android:title="@string/about" />
 			
+		<Preference
+			android:key="email_dev"
+			android:title="@string/email_dev" />
+			
 	</PreferenceCategory>
 </PreferenceScreen>
