@@ -73,7 +73,7 @@
     </string>
     
     <string name="logging">Logging</string>
-    <string name="log_to_sd">Log to SD Card</string>
+    <string name="log_to_sd">Log to External Storage</string>
     <string name="add_note">Add Note</string>
     <string name="add_note_summary">
     	Add a message to the log file to draw attention to an issue
