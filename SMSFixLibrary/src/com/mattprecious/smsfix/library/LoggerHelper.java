@@ -20,14 +20,15 @@ import com.google.code.microlog4android.config.PropertyConfigurator;
 import com.google.code.microlog4android.format.PatternFormatter;
 
 public class LoggerHelper {
-    private static final String INTENT_LOG_ROLLOVER = "com.mattprecious.smsfix.library.INTENT_LOG_ROLLOVER";
+    public static final String INTENT_LOG_ROLLOVER = "com.mattprecious.smsfix.library.INTENT_LOG_ROLLOVER";
     
-    private static final String ROOT_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
-    private static final String LOG_FILE = "/Android/data/com.mattprecious.smsfix/files/smsfix.log";
-    private static final String LOG_PATTERN = "%d{ISO8601}-[%P]-%m";
-    private static final String ROLLOVER_SUFFIX = ".old";
+    public static final String ROOT_DIR = Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static final String LOG_FILE = "/Android/data/com.mattprecious.smsfix/files/smsfix.log";
+    public static final String LOG_PATTERN = "%d{ISO8601}-[%P]-%m";
+    public static final String ROLLOVER_SUFFIX = ".old";
     
-    private static final long MAX_LOG_SIZE = 1 * 1024 * 1024;   // 1MB
+    public static final long MAX_LOG_SIZE = 1 * 1024 * 1024;   // 1MB
+    public static final long EMAIL_LOG_MIN = 100 * 1024; // 100KB
     
     private static LoggerHelper instance;
 
@@ -52,7 +53,7 @@ public class LoggerHelper {
         String storageState = Environment.getExternalStorageState();
 
         if (Environment.MEDIA_MOUNTED.equals(storageState)) {
-            File logFile = new File(ROOT_DIR + LOG_FILE);
+            File logFile = getLogFile();
             if (!logFile.exists() && logToSd) {
                 try {
                     logFile.getParentFile().mkdirs();
@@ -153,8 +154,8 @@ public class LoggerHelper {
     }
 
     public void clearLog(Context context) {
-        File logFile = new File(ROOT_DIR + LOG_FILE);
-        File rolloverLogFile = new File(ROOT_DIR + LOG_FILE + ROLLOVER_SUFFIX);
+        File logFile = getLogFile();
+        File rolloverLogFile = getRolloverLogFile();
         
         if (logFile.exists()) {
             try {
@@ -175,7 +176,7 @@ public class LoggerHelper {
     }
     
     public static void checkForRollover(Context context) {
-        File logFile = new File(ROOT_DIR + LOG_FILE);
+        File logFile = getLogFile();
         
         if (instance != null) {
             if (logFile.length() > MAX_LOG_SIZE) {
@@ -199,8 +200,8 @@ public class LoggerHelper {
                 logger.close();
             }
             
-            File logFile = new File(ROOT_DIR + LOG_FILE);
-            File rolloverFile = new File(ROOT_DIR + LOG_FILE + ROLLOVER_SUFFIX);
+            File logFile = getLogFile();
+            File rolloverFile = getRolloverLogFile();
             
             if (rolloverFile.exists()) {
                 rolloverFile.delete();
@@ -214,5 +215,13 @@ public class LoggerHelper {
         } catch(IOException e) {
             logger.error("Could not rollover log file");
         }
+    }
+    
+    public static File getLogFile() {
+        return new File(ROOT_DIR + LOG_FILE);
+    }
+    
+    public static File getRolloverLogFile() {
+        return new File(ROOT_DIR + LOG_FILE + ROLLOVER_SUFFIX);
     }
 }

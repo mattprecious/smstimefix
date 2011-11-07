@@ -85,6 +85,13 @@
     <string name="help">Help</string>
     <string name="about">About</string>
     
+    <string name="email_dev">Email Developer</string>
+    <string name="include_logs_title">Include Logs?</string>
+    <string name="include_logs_message">
+    	Would you like to attach your log files to the email? This will help diagnose any problems you\'re experiencing.
+    </string>
+    <string name="email_intent_title">Send email</string>
+    
     <!-- changes to this value must also be changed in the other projects -->
 	<string name="about_title">About</string>
 	
@@ -112,6 +119,7 @@
 	</string>
 	
 	<string name="ok">OK</string>
+	<string name="nope">Nope</string>
 	
 	<string name="whats_new">What\'s New?</string>
     <string name="change_log">
