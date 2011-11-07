@@ -124,7 +124,9 @@
 	<string name="whats_new">What\'s New?</string>
     <string name="change_log">
     	\n
-   		&#8226; Fix for running notification on 1.5 and 1.6 \n
-   		&#8226; Support for Extra-high density screens
+   		&#8226; Added logging to external storage. See Help for more information. \n
+   		&#8226; Email Developer option. \n
+   		&#8226; Some fixes for the logic of "Roaming Only" \n
+   		&#8226; Fix for "Active" checkbox consistency
     </string>
 </resources>
