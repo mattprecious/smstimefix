@@ -2,6 +2,7 @@ package com.mattprecious.smsfix.library;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -89,9 +90,19 @@ public class LoggerHelper {
 
         logger.info("Logger has been initialized");
         logger.info("Android release: " + Build.VERSION.RELEASE);
-        logger.info("Android codename: " + Build.VERSION.CODENAME);
         logger.info("Android incremental" + Build.VERSION.INCREMENTAL);
-        logger.info("Android SDK: " + Build.VERSION.SDK_INT);
+        
+        int sdkVersion;
+        
+        try {
+            // works for level 4 and up
+            Field SDK_INT_field = Build.VERSION.class.getField("SDK_INT");
+            sdkVersion = (Integer) SDK_INT_field.get(null);
+        } catch (Exception e) {
+            sdkVersion = Integer.parseInt(Build.VERSION.SDK);
+        }
+        
+        logger.info("Android SDK: " + sdkVersion);
 
         return logger;
     }
