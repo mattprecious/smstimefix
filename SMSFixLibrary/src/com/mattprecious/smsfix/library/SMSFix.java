@@ -493,7 +493,7 @@ public class SMSFix extends PreferenceActivity {
                 editor.commit();
                 
                 // while we're here... make sure "active" is unchecked after an update
-                activeBox.setChecked(false);
+//                activeBox.setChecked(false);
             }
         } catch (NameNotFoundException e) {
             

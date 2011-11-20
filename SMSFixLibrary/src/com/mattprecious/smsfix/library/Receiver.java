@@ -31,7 +31,7 @@ public class Receiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         logger = LoggerHelper.getInstance(context);
-        logger.info("Received BOOT_COMPLETED intent");
+        logger.info("Received " + intent.getAction() + " intent");
         
         String name = context.getPackageName() + "_preferences";
         
