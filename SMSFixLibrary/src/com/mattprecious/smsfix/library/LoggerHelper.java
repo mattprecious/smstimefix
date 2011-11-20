@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.code.microlog4android.Logger;
 import com.google.code.microlog4android.LoggerFactory;
@@ -60,7 +61,7 @@ public class LoggerHelper {
                     logFile.getParentFile().mkdirs();
                     logFile.createNewFile();
                 } catch (IOException e) {
-                    logger.error("Could not create file: " + logFile.getAbsolutePath());
+                    Log.e(getClass().getSimpleName(), "Could not create log file");
                 }
             }
         }
