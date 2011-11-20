@@ -31,6 +31,10 @@
 		    <intent-filter>
 		        <action android:name="com.mattprecious.smsfix.library.INTENT_LOG_ROLLOVER" />
 		    </intent-filter>
+		    <intent-filter>
+				<action	android:name="android.intent.action.PACKAGE_REPLACED" />
+				<data android:scheme="package" android:path="com.mattprecious.smsfixdonate" />
+			</intent-filter>
 		</receiver>
 	    
 	</application>

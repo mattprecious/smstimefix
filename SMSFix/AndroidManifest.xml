@@ -25,6 +25,10 @@
 			<intent-filter>
 				<action	android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
+			<intent-filter>
+				<action	android:name="android.intent.action.PACKAGE_REPLACED" />
+				<data android:scheme="package" android:path="com.mattprecious.smsfix" />
+			</intent-filter>
 		</receiver>
 		
 		<receiver android:name="com.mattprecious.smsfix.library.LogRolloverReceiver">
