@@ -115,6 +115,10 @@
 		<Preference
 			android:key="about"
 			android:title="@string/about" />
+		
+		<Preference
+			android:key="translate"
+			android:title="@string/translate" />
 			
 		<Preference
 			android:key="email_dev"

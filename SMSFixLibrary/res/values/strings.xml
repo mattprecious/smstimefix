@@ -85,6 +85,8 @@
     <string name="help">Help</string>
     <string name="about">About</string>
     
+    <string name="translate">Contribute Translations</string>
+    
     <string name="email_dev">Email Developer</string>
     <string name="include_logs_title">Include Logs?</string>
     <string name="include_logs_message">
