@@ -9,6 +9,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -88,7 +91,7 @@ public class LoggerHelper {
         if (logToSd) {
             logger.addAppender(fileAppender);
         }
-
+        
         logger.info("Logger has been initialized");
         logger.info("Android release: " + Build.VERSION.RELEASE);
         logger.info("Android incremental" + Build.VERSION.INCREMENTAL);
@@ -105,6 +108,20 @@ public class LoggerHelper {
         
         logger.info("Android SDK: " + sdkVersion);
 
+        String appVersion = "";
+        
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            
+            appVersion = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
+        } catch (NameNotFoundException e) {
+            
+        }
+        
+        logger.info("SMSFix package: " + context.getPackageName());
+        logger.info("SMSFix Version: " + appVersion);
+        
         return logger;
     }
     
