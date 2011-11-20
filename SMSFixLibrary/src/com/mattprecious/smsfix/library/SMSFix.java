@@ -78,6 +78,7 @@ public class SMSFix extends PreferenceActivity {
     private Preference donate;
     private Preference help;
     private Preference about;
+    private Preference translate;
     private Preference emailDev;
 
     private OnSharedPreferenceChangeListener prefListener;
@@ -121,6 +122,7 @@ public class SMSFix extends PreferenceActivity {
         donate = (Preference) findPreference("donate");
         help = (Preference) findPreference("help");
         about = (Preference) findPreference("about");
+        translate = (Preference) findPreference("translate");
         emailDev = (Preference) findPreference("email_dev");
         
         adjustMethodLabels();
@@ -185,6 +187,18 @@ public class SMSFix extends PreferenceActivity {
             @Override
             public boolean onPreferenceClick(Preference arg0) {
                 startActivity(new Intent(SMSFix.this, About.class));
+                return true;
+            }
+        });
+        
+        translate.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("http://crowdin.net/project/sms-time-fix"));
+                startActivity(intent);
+                
                 return true;
             }
         });
