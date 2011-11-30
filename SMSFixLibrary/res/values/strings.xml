@@ -126,9 +126,8 @@
 	<string name="whats_new">What\'s New?</string>
     <string name="change_log">
     	\n
-   		&#8226; Added logging to external storage. See Help for more information. \n
-   		&#8226; Email Developer option. \n
-   		&#8226; Some fixes for the logic of "Roaming Only" \n
-   		&#8226; Fix for "Active" checkbox consistency
+   		&#8226; Fix for force close on start
+   		&#8226; Add link to contribute translations
+   		&#8226; Restart service on update
     </string>
 </resources>
