@@ -128,6 +128,11 @@ public class FixService extends Service {
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, SMSFix.class), 0);
         notif.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.notify_message), contentIntent);
+        
+        // fix for null pointer on observingURI
+        if (observingURI == null) {
+            observingURI = editingURI;
+        }
 
         // set up the query we'll be observing
         // we only need the ID and the date
