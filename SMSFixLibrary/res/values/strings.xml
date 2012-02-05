@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-	<!-- changes to this value must also be changed in the other projects -->
-	<string name="app_name">SMS Time Fix</string>
-	
 	<string name="category_status">Status</string>
     <string name="category_actions">Actions</string>
     <string name="category_conditions">Conditions</string>
@@ -120,10 +117,4 @@
 	<string name="nope">Nope</string>
 	
 	<string name="whats_new">What\'s New?</string>
-    <string name="change_log">
-    	\n
-   		&#8226; Fix for force close on start \n
-   		&#8226; Add link to contribute translations \n
-   		&#8226; Restart service on update \n
-    </string>
 </resources>

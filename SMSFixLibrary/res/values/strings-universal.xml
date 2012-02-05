@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<!-- changes to this value must also be changed in the other projects -->
+	<string name="app_name">SMS Time Fix</string>
+</resources>
