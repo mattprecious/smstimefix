@@ -380,14 +380,14 @@ public class FixService extends Service {
 
         // otherwise, use the offset the user has specified
         } else {
-            int offsetHours = Integer.parseInt(settings.getString("offset_hours", "0"));
-            int offsetMinutes = Integer.parseInt(settings.getString("offset_minutes", "0"));
+            double offsetHours = Double.parseDouble(settings.getString("offset_hours", "0"));
+            double offsetMinutes = Double.parseDouble(settings.getString("offset_minutes", "0"));
             
             logger.info("Offset Hours: " + offsetHours);
             logger.info("Offset Minutes: " + offsetMinutes);
             
-            offset = offsetHours * 3600000;
-            offset += offsetMinutes * 60000;
+            offset = (long) (offsetHours * 3600000);
+            offset += (long) (offsetMinutes * 60000);
         }
 
         logger.info("Final offset: " + offset);
