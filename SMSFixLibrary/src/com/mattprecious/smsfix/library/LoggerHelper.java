@@ -95,6 +95,7 @@ public class LoggerHelper {
         logger.info("Logger has been initialized");
         logger.info("Android release: " + Build.VERSION.RELEASE);
         logger.info("Android incremental" + Build.VERSION.INCREMENTAL);
+        logger.info("Preferences:" + settings.getAll().toString());
         
         int sdkVersion;
         
