@@ -242,6 +242,7 @@ public class LoggerHelper {
             logFile.createNewFile();
             
             logger = createLogger(context);
+            logger.info("Log rolled over");
         } catch(IOException e) {
             logger.error("Could not rollover log file");
         }
