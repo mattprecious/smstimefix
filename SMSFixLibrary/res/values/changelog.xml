@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="change_log">
-   		\n&#8226; Italian, Japanese, and Russian translations. Thanks to the contributors on Crowdin!
-   		\n&#8226; \'Holo\' theme for 3.0+ devices
-   		\n&#8226; Fix for force close on start
+   		\n&#8226; Fix for auto start on ICS. Thanks for being patient.
+   		\n&#8226; Fix for decimals in offset hours and minutes.
     </string>
 </resources>
