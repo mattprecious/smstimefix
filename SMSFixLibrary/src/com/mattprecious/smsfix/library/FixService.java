@@ -133,6 +133,13 @@ public class FixService extends Service {
         if (observingURI == null) {
             observingURI = editingURI;
         }
+        
+        // shit's broken... throw my own exception so I don't have to read stack traces
+        if (observingURI == null) {
+            throw new RuntimeException("Observing URI is null");
+        } else if (editingURI == null) {
+            throw new RuntimeException("Editing URI is null");
+        }
 
         // set up the query we'll be observing
         // we only need the ID and the date
