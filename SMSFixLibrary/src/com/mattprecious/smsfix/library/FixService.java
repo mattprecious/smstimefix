@@ -34,6 +34,7 @@ import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -144,8 +145,14 @@ public class FixService extends Service {
         // set up the query we'll be observing
         // we only need the ID and the date
         String[] columns = { "_id", "date" };
-        observingCursor = getContentResolver().query(observingURI, columns, null, null, null);
         editingCursor = getContentResolver().query(editingURI, columns, "type=?", new String[] { "1" }, "_id DESC");
+        
+        // stupid Samsung...
+        try {
+            observingCursor = getContentResolver().query(observingURI, columns, null, null, null);
+        } catch (NullPointerException e) {
+            observingCursor = editingCursor;
+        }
 
         // if the observingCursor is null, fall back and try getting a cursor
         // using the editingCursor
