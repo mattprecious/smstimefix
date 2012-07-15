@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="change_log">
-   		\n&#8226; Fix for auto start on ICS. Thanks for being patient.
-   		\n&#8226; Fix for decimals in offset hours and minutes.
+   		\n&#8226; Fix for Galaxy S3
     </string>
 </resources>
