@@ -26,6 +26,7 @@
 	    <activity android:name="com.mattprecious.smsfix.library.LogNote"
 	    	  android:theme="@android:style/Theme.Dialog" />
         
+	    <activity android:name="com.mattprecious.smsfix.library.FixOld" android:label="@string/fix_old_title"></activity>
         <activity android:name="com.mattprecious.smsfix.library.About" android:label="@string/about_title"></activity>
         
         <service android:name="com.mattprecious.smsfix.library.FixService"/>

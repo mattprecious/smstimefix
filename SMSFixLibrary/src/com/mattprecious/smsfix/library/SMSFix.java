@@ -76,6 +76,7 @@ public class SMSFix extends PreferenceActivity {
     
     private PreferenceCategory more;
     private Preference donate;
+    private Preference fixOld;
     private Preference help;
     private Preference about;
     private Preference translate;
@@ -120,6 +121,7 @@ public class SMSFix extends PreferenceActivity {
         
         more = (PreferenceCategory) findPreference("more");
         donate = (Preference) findPreference("donate");
+        fixOld = (Preference) findPreference("fix_old");
         help = (Preference) findPreference("help");
         about = (Preference) findPreference("about");
         translate = (Preference) findPreference("translate");
@@ -171,6 +173,15 @@ public class SMSFix extends PreferenceActivity {
                 }
             });
         }
+        
+        fixOld.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            
+            @Override
+            public boolean onPreferenceClick(Preference arg0) {
+                startActivity(new Intent(SMSFix.this, FixOld.class));
+                return true;
+            }
+        });
         
         help.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             

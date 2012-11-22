@@ -109,6 +109,10 @@
 		</PreferenceScreen>
 		
 		<Preference
+		    android:key="fix_old"
+		    android:title="@string/fix_old" />
+		
+		<Preference
 			android:key="help"
 			android:title="@string/help" />
 	

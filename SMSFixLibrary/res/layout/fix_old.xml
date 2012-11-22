@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dip" >
+
+        <TextView
+            style="@android:style/TextAppearance.Medium"
+            android:id="@+id/fix_old_instructions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fix_old_instructions" />
+        
+        <TextView
+            style="@android:style/TextAppearance.Medium"
+            android:id="@+id/starting"
+            android:layout_below="@+id/fix_old_instructions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dip"
+            android:text="@string/fix_old_starting" />
+
+        <RelativeLayout
+            android:id="@+id/starting_buttons"
+            android:layout_below="@+id/starting"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            
+            <Button
+	            android:id="@+id/start_date_button"
+	            style="?android:attr/buttonStyleSmall"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+            
+            <Button
+	            android:id="@+id/start_time_button"
+	            style="?android:attr/buttonStyleSmall"
+	            android:layout_toRightOf="@id/start_date_button"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+            
+        </RelativeLayout>
+        
+        <TextView
+            style="@android:style/TextAppearance.Medium"
+            android:id="@+id/ending"
+            android:layout_below="@+id/starting_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dip"
+            android:text="@string/fix_old_ending" />
+
+        <RelativeLayout
+            android:id="@+id/ending_buttons"
+            android:layout_below="@+id/ending"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            
+            <Button
+	            android:id="@+id/end_date_button"
+	            style="?android:attr/buttonStyleSmall"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+            
+            <Button
+	            android:id="@+id/end_time_button"
+	            style="?android:attr/buttonStyleSmall"
+	            android:layout_toRightOf="@id/end_date_button"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+            
+        </RelativeLayout>
+        
+        <TextView
+            style="@android:style/TextAppearance.Medium"
+            android:id="@+id/by"
+            android:layout_below="@+id/ending_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dip"
+            android:text="@string/fix_old_method" />
+
+        <RelativeLayout
+            android:id="@+id/adjustment_buttons"
+            android:layout_below="@+id/by"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            
+            <Button
+	            android:id="@+id/sign_button"
+	            style="?android:attr/buttonStyleSmall"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+            
+            <Button
+	            android:id="@+id/offset_button"
+	            style="?android:attr/buttonStyleSmall"
+	            android:layout_toRightOf="@+id/sign_button"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+            
+        </RelativeLayout>
+        
+        <Button
+            android:id="@+id/go_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_below="@+id/adjustment_buttons"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dip"
+            android:text="GO!" />
+
+    </RelativeLayout>
+</ScrollView>

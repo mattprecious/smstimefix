@@ -79,6 +79,7 @@
 	<string name="clear_log_confirm">Are you sure you want to clear your logs?</string>    
     <string name="logs_cleared">Logs cleared</string>
     
+    <string name="fix_old">Fix Old Messages</string>
     <string name="help">Help</string>
     <string name="about">About</string>
     
@@ -91,6 +92,27 @@
     </string>
     <string name="email_intent_title">Send email</string>
     
+    <!-- changes to this value must also be changed in the other projects -->
+    <string name="fix_old_title">Fix Old Messages</string>
+    
+    <string name="fix_old_instructions">
+       Use this tool to fix any messages that were received prior to using SMS Time Fix. Set a start date and end date that includes the messages that you want adjusted.
+       \n\nPlease make sure that you have backed up all of your messages before running this tool! If your battery dies, or the app crashes, or you have misconfigured the tool, there is no easy way to undo. Pick any of the SMS backup tools in the Play Store and back them up!
+       \n\nNote that for some devices, the time of affected conversations will be incorrectly updated to the current time. The individual messages will be correct, but the conversation/thread time will not. i.e. In the main SMS app where it shows a snippet of all of your conversations, the last updated time will be incorrect. After selecting a conversation, all of the individual messages inside will have the correct time. This will be fixed once a new message is sent/received for a conversation.
+    </string>
+    
+    <string name="fix_old_starting">Starting date:</string>
+    <string name="fix_old_ending">Ending date:</string>
+    <string name="fix_old_method">How to adjust messages:</string>
+    <string name="fix_old_add">add</string>
+    <string name="fix_old_subtract">subtract</string>
+    <string name="fix_old_offset_hours">%s hours</string>
+    <string name="fix_old_invalid_dates">Start time must be before end time</string>
+    <string name="fix_old_invalid_offset">Offset must not be zero</string>
+    <string name="fix_old_go">GO!</string>
+    <string name="fix_old_confirm_title">Are you sure?</string>
+    <string name="fix_old_confirm_message">There is no easy way to undo if something goes wrong. Please make sure you\'ve backed up your messages before continuing.</string>
+
     <!-- changes to this value must also be changed in the other projects -->
 	<string name="about_title">About</string>
 	
