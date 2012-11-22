@@ -16,8 +16,6 @@
 
 package com.mattprecious.smsfix.library;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
@@ -34,15 +32,12 @@ import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 
-import com.google.code.microlog4android.Logger;
-import com.google.code.microlog4android.LoggerFactory;
-import com.google.code.microlog4android.config.PropertyConfigurator;
+import com.mattprecious.smsfix.library.util.SmsDbHelper;
+import com.mattprecious.smsfix.library.util.TimeHelper;
 
 /**
  * Service to fix all incoming text messages
@@ -68,8 +63,8 @@ public class FixService extends Service {
     // This provider, however, does not play nice when looking for and editing
     // the existing messages. So, we use the original content://sms URI for our
     // editing
-    private Uri observingURI = Uri.parse("content://mms-sms/conversations");
-    private Uri editingURI = Uri.parse("content://sms");
+    private Uri observingURI = SmsDbHelper.getObservingUri();
+    private Uri editingURI = SmsDbHelper.getEditingUri();
     private Cursor observingCursor;
     private Cursor editingCursor;
     private FixServiceObserver observer = new FixServiceObserver();
@@ -129,11 +124,6 @@ public class FixService extends Service {
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, SMSFix.class), 0);
         notif.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.notify_message), contentIntent);
-        
-        // fix for null pointer on observingURI
-        if (observingURI == null) {
-            observingURI = editingURI;
-        }
         
         // shit's broken... throw my own exception so I don't have to read stack traces
         if (observingURI == null) {
@@ -361,54 +351,6 @@ public class FixService extends Service {
     }
 
     /**
-     * Get the desired offset change based on the user's preferences
-     * 
-     * @return long
-     */
-    private long getOffset() {
-        long offset = 0;
-        
-        // if the user wants us to auto-determine the offset use the negative of
-        // their GMT offset
-        String method = settings.getString("offset_method", "manual");
-        
-        logger.info("Adjustment method: " + method);
-        
-        if (method.equals("automatic") || method.equals("neg_automatic")) {
-            offset = TimeZone.getDefault().getRawOffset();
-            
-            logger.info("Raw offset: " + offset);
-
-            // account for DST
-            if (TimeZone.getDefault().useDaylightTime() && TimeZone.getDefault().inDaylightTime(new Date())) {
-                offset += 3600000;
-                
-                logger.info("Adjusting for DST: " + offset);
-            }
-
-            if (method.equals("automatic")) {
-                offset *= -1;
-                
-                logger.info("Negate the offset: " + offset);
-            }
-
-        // otherwise, use the offset the user has specified
-        } else {
-            double offsetHours = Double.parseDouble(settings.getString("offset_hours", "0"));
-            double offsetMinutes = Double.parseDouble(settings.getString("offset_minutes", "0"));
-            
-            logger.info("Offset Hours: " + offsetHours);
-            logger.info("Offset Minutes: " + offsetMinutes);
-            
-            offset = (long) (offsetHours * 3600000);
-            offset += (long) (offsetMinutes * 60000);
-        }
-
-        logger.info("Final offset: " + offset);
-        return offset;
-    }
-
-    /**
      * Alter the time stamp of the message with the given ID
      * 
      * @param id
@@ -440,7 +382,7 @@ public class FixService extends Service {
             if (settings.getString("offset_method", "manual").equals("phone")) {
                 longdate = (new Date()).getTime();
             } else {
-                longdate = longdate + getOffset();
+                longdate = longdate + TimeHelper.getOffset(this);
             }
         }
         
