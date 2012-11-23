@@ -116,7 +116,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dip"
-            android:text="GO!" />
+            android:text="@string/fix_old_go" />
 
     </RelativeLayout>
 </ScrollView>
