@@ -31,6 +31,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 
 import com.mattprecious.smsfix.library.util.LoggerHelper;
@@ -75,8 +76,8 @@ public class FixService extends Service {
     private TelephonyManager telephonyManager;
 
     // notification variables
-    private static NotificationManager nm;
-    private static Notification notif;
+    private static NotificationManager notificationManager;
+    private static Notification notification;
 
     private static boolean running = false;
 
@@ -115,18 +116,24 @@ public class FixService extends Service {
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
         // set up everything we need for the running notification
-        nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         
         int icon = R.drawable.icon;
         if (settings.getString("notify_icon", "grey").equals("grey")) {
             icon = R.drawable.icon_bw;
         }
         
-        notif = new Notification(icon, null, 0);
-        notif.flags |= Notification.FLAG_ONGOING_EVENT;
-
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+        notificationBuilder.setSmallIcon(icon);
+        notificationBuilder.setOngoing(true);
+        notificationBuilder.setPriority(Notification.PRIORITY_MIN);
+        notificationBuilder.setContentTitle(getString(R.string.app_name));
+        notificationBuilder.setContentText(getString(R.string.notify_message));
+        
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, SMSFix.class), 0);
-        notif.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.notify_message), contentIntent);
+        notificationBuilder.setContentIntent(contentIntent);
+        
+        notification = notificationBuilder.build();
         
         // shit's broken... throw my own exception so I don't have to read stack traces
         if (SMS_URI == null) {
@@ -229,7 +236,7 @@ public class FixService extends Service {
     }
 
     public void startNotify() {
-        startForegroundCompat(R.string.notify_message, notif);
+        startForegroundCompat(R.string.notify_message, notification);
     }
 
     /**
@@ -248,7 +255,7 @@ public class FixService extends Service {
         // Fall back on the old API.
         setForegroundArgs[0] = Boolean.TRUE;
         invokeMethod(setForeground, setForegroundArgs);
-        nm.notify(id, notification);
+        notificationManager.notify(id, notification);
     }
 
     /**
@@ -273,7 +280,7 @@ public class FixService extends Service {
 
         // Fall back on the old API. Note to cancel BEFORE changing the
         // foreground state, since we could be killed at that point.
-        nm.cancel(id);
+        notificationManager.cancel(id);
         setForegroundArgs[0] = Boolean.FALSE;
         invokeMethod(setForeground, setForegroundArgs);
     }
