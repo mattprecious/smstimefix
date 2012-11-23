@@ -26,7 +26,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
-import com.mattprecious.smsfix.library.util.SmsDbHelper;
+import com.mattprecious.smsfix.library.util.SmsMmsDbHelper;
 import com.mattprecious.smsfix.library.util.TimeHelper;
 
 public class FixOld extends Activity {
@@ -299,7 +299,7 @@ public class FixOld extends Activity {
             String startTime = String.valueOf(startCalendar.getTimeInMillis());
             String endTime = String.valueOf(endCalendar.getTimeInMillis());
 
-            Uri uri = SmsDbHelper.getEditingUri();
+            Uri uri = SmsMmsDbHelper.getSmsUri();
             String[] columns = { "_id", "date" };
             String condition = "type = ? AND date >= ? AND date <= ?";
             String[] args = { "1", startTime, endTime };

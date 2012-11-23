@@ -18,14 +18,11 @@ package com.mattprecious.smsfix.library;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.TimeZone;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,8 +34,7 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 
 import com.mattprecious.smsfix.library.util.LoggerHelper;
-import com.mattprecious.smsfix.library.util.SmsDbHelper;
-import com.mattprecious.smsfix.library.util.TimeHelper;
+import com.mattprecious.smsfix.library.util.SmsMmsDbHelper;
 
 /**
  * Service to fix all incoming text messages
@@ -59,17 +55,23 @@ import com.mattprecious.smsfix.library.util.TimeHelper;
 public class FixService extends Service {
     private SharedPreferences settings;
 
-    // The content://sms URI does not notify when a thread is deleted, so
-    // instead we use the content://mms-sms/conversations URI for observing.
+    // The SMS and MMS URIs do not notify when a thread is deleted, so
+    // instead we use the MMS/SMS URI for observing.
     // This provider, however, does not play nice when looking for and editing
-    // the existing messages. So, we use the original content://sms URI for our
+    // the existing messages. So, we use the original SMS and MMS URIs for our
     // editing
-    private Uri observingURI = SmsDbHelper.getObservingUri();
-    private Uri editingURI = SmsDbHelper.getEditingUri();
-    private Cursor observingCursor;
-    private Cursor editingCursor;
-    private FixServiceObserver observer = new FixServiceObserver();
-
+    private final Uri SMS_URI = SmsMmsDbHelper.getSmsUri();
+    private final Uri MMS_URI = SmsMmsDbHelper.getMmsUri();
+    private final Uri MMS_SMS_URI = SmsMmsDbHelper.getMmsSmsUri();
+    
+    private Cursor smsCursor;
+    private Cursor mmsCursor;
+    private Cursor mmsSmsCursor;
+    
+    private FixServiceObserver smsObserver;
+    private FixServiceObserver mmsObserver;
+    private FixServiceObserver mmsSmsObserver;
+    
     private TelephonyManager telephonyManager;
 
     // notification variables
@@ -78,8 +80,8 @@ public class FixService extends Service {
 
     private static boolean running = false;
 
-    public long lastSMSId = 0; // the ID of the last message we've
-                               // altered
+    private long lastSmsId = -1; // the ID of the last sms message we've altered
+    private long lastMmsId = -1; // the ID of the last mms message we've altered
 
     private static final Class<?>[] setForegroundSignature = new Class[] { boolean.class };
     private static final Class<?>[] startForegroundSignature = new Class[] { int.class, Notification.class };
@@ -127,38 +129,38 @@ public class FixService extends Service {
         notif.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.notify_message), contentIntent);
         
         // shit's broken... throw my own exception so I don't have to read stack traces
-        if (observingURI == null) {
-            throw new RuntimeException("Observing URI is null");
-        } else if (editingURI == null) {
-            throw new RuntimeException("Editing URI is null");
+        if (SMS_URI == null) {
+            logger.error("SMS URI is null");
+            throw new RuntimeException("SMS URI is null");
         }
-
-        // set up the query we'll be observing
-        // we only need the ID and the date
-        String[] columns = { "_id", "date" };
-        editingCursor = getContentResolver().query(editingURI, columns, "type=?", new String[] { "1" }, "_id DESC");
         
-        // stupid Samsung...
+        // MMS URI is null, but this isn't vital... log it.
+        if (MMS_URI == null) {
+            logger.warn("MMS URI is null");
+        }
+        
         try {
-            observingCursor = getContentResolver().query(observingURI, columns, null, null, null);
+            mmsSmsObserver = new FixServiceObserver(FixServiceObserver.TYPE_MMS_SMS);
+            mmsSmsCursor = SmsMmsDbHelper.getInboxCursor(this, MMS_SMS_URI, null, null);
+            mmsSmsCursor.registerContentObserver(mmsSmsObserver);
         } catch (NullPointerException e) {
-            observingCursor = editingCursor;
+            smsObserver = new FixServiceObserver(FixServiceObserver.TYPE_SMS);
+            smsCursor = SmsMmsDbHelper.getInboxCursor(this, SMS_URI, null, null);
+            smsCursor.registerContentObserver(smsObserver);
+            
+            if (MMS_URI != null) {
+                mmsObserver = new FixServiceObserver(FixServiceObserver.TYPE_MMS);
+                mmsCursor = SmsMmsDbHelper.getInboxCursor(this, MMS_URI, null, null);
+                mmsCursor.registerContentObserver(mmsObserver);
+            }
         }
-
-        // if the observingCursor is null, fall back and try getting a cursor
-        // using the editingCursor
-        if (observingCursor == null) {
-            logger.info("observingCursor is null. Retrying with second URI");
-            observingCursor = getContentResolver().query(editingURI, columns, null, null, null);
-        }
-
-        // register the observer
-        observingCursor.registerContentObserver(observer);
 
         // get the current last message ID
-        lastSMSId = getLastMessageId();
+        lastSmsId = SmsMmsDbHelper.getLastMessageId(this, SMS_URI);
+        lastMmsId = SmsMmsDbHelper.getLastMessageId(this, MMS_URI);
         
-        logger.info("lastSMSId initialized to " + lastSMSId);
+        logger.info("lastSmsId initialized to " + lastSmsId);
+        logger.info("lastMmsId initialized to " + lastMmsId);
 
         setupForegroundVars();
 
@@ -169,6 +171,18 @@ public class FixService extends Service {
     public void onDestroy() {
         // Make sure our notification is gone.
         stopForegroundCompat(R.string.notify_message);
+        
+        if (smsCursor != null) {
+            smsCursor.close();
+        }
+        
+        if (mmsCursor != null) {
+            mmsCursor.close();
+        }
+        
+        if (mmsSmsCursor != null) {
+            mmsSmsCursor.close();
+        }
 
         running = false;
         logger.info("FixService destroy");
@@ -286,118 +300,6 @@ public class FixService extends Service {
     }
 
     /**
-     * Returns the ID of the most recent message
-     * 
-     * @return long
-     */
-    private long getLastMessageId() {
-        long ret = -1;
-
-        // if there are any messages at our cursor
-        if (editingCursor.getCount() > 0) {
-            // get the first one
-            editingCursor.moveToFirst();
-
-            // grab its ID
-            ret = editingCursor.getLong(editingCursor.getColumnIndexOrThrow("_id"));
-        }
-
-        return ret;
-    }
-
-    /**
-     * Updates the time stamp on any messages that have come in
-     */
-    private void fixLastMessage() {
-        logger.info("Cursor count: " + editingCursor.getCount());
-        
-        // if there are any messages
-        if (editingCursor.getCount() > 0) {
-            // move to the first one
-            editingCursor.moveToFirst();
-
-            // get the message's ID
-            long id = editingCursor.getLong(editingCursor.getColumnIndexOrThrow("_id"));
-
-            // keep the current last changed ID
-            long oldLastChanged = lastSMSId;
-            
-            logger.info("Latest ID: " + id + "; Last ID: " + oldLastChanged);
-
-            // update our counter
-            lastSMSId = id;
-
-            // while the new ID is still greater than the last altered message
-            // loop just in case messages come in quick succession
-            while (id > oldLastChanged) {
-                // alter the time stamp
-                alterMessage(id);
-
-                // base case, handle there being no more messages and break out
-                if (editingCursor.isLast()) {
-                    logger.info("This is the last message, aborting");
-                    break;
-                }
-
-                // move to the next message
-                editingCursor.moveToNext();
-
-                // grab its ID
-                id = editingCursor.getLong(editingCursor.getColumnIndexOrThrow("_id"));
-            }
-        } else {
-            // there aren't any messages, reset the id counter
-            lastSMSId = -1;
-        }
-    }
-
-    /**
-     * Alter the time stamp of the message with the given ID
-     * 
-     * @param id
-     *            - the ID of the message to be altered
-     */
-    private void alterMessage(long id) {
-        logger.info("Adjusting timestamp for message: " + id);
-
-        // grab the date assigned to the message
-        long longdate = editingCursor.getLong(editingCursor.getColumnIndexOrThrow("date"));
-        
-        logger.info("Timestamp from the message is: " + longdate);
-
-        // if the user has asked for the Future Only option, make sure the
-        // message
-        // time is greater than the phone time, giving a 5 second grace
-        // period
-
-        // keeping the preference name as cdma so when users upgrade it uses
-        // their current value
-        boolean futureOnly = settings.getBoolean("cdma", false);
-        boolean inTheFuture = (longdate - (new Date()).getTime()) > 5000;
-        
-        logger.info("Future only: " + Boolean.toString(futureOnly));
-        logger.info("In the future? " + Boolean.toString(inTheFuture));
-        
-        if (!futureOnly || inTheFuture) {
-            // if the user wants to use the phone's time, use the current date
-            if (settings.getString("offset_method", "manual").equals("phone")) {
-                longdate = (new Date()).getTime();
-            } else {
-                longdate = longdate + TimeHelper.getOffset(this);
-            }
-        }
-        
-        logger.info("Setting timestamp to " + longdate);
-
-        // update the message with the new time stamp
-        ContentValues values = new ContentValues();
-        values.put("date", longdate);
-        int result = getContentResolver().update(editingURI, values, "_id = " + id, null);
-        
-        logger.info("Rows updated: " + result);
-    }
-
-    /**
      * Checks if the roaming condition is met. Returns true if the user doesn't
      * care about roaming, or if the user does but isn't currently roaming
      * 
@@ -422,32 +324,66 @@ public class FixService extends Service {
      * 
      */
     private class FixServiceObserver extends ContentObserver {
-
-        public FixServiceObserver() {
+        private final static int TYPE_SMS = 0;
+        private final static int TYPE_MMS = 1;
+        private final static int TYPE_MMS_SMS = 2;
+        
+        private final int type;
+        
+        public FixServiceObserver(int type) {
             super(null);
+            
+            switch (type) {
+                case TYPE_SMS:
+                case TYPE_MMS:
+                case TYPE_MMS_SMS:
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+            
+            this.type = type;
         }
 
         @Override
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
             
-            logger.info("SMS database altered, checking...");
+            String typeStr;
+            switch (type) {
+                case TYPE_SMS:
+                    typeStr = "SMS";
+                    break;
+                case TYPE_MMS:
+                    typeStr = "MMS";
+                    break;
+                case TYPE_MMS_SMS:
+                    typeStr = "MMS/SMS";
+                    break;
+                default:
+                    typeStr = "";
+                    break;
+            }
+            
+            logger.info(typeStr + " database altered, checking...");
             
             boolean roamingConditionMet = roamingConditionMet();
             
             logger.info("selfChange: " + Boolean.toString(selfChange));
             logger.info("roamingConditionMet: " + Boolean.toString(roamingConditionMet));
 
-            // if the change wasn't self inflicted
-            // TODO: make this boolean actually work...
+            // TODO: make the selfChange boolean actually work...
             if (!selfChange && roamingConditionMet) {
-                // requery the database to get the latest messages
-                editingCursor.requery();
-                
                 logger.info("Adjusting the message(s)");
 
                 // fix them
-                fixLastMessage();
+                if (type == TYPE_SMS || type == TYPE_MMS_SMS) {
+                    lastSmsId = SmsMmsDbHelper.fixMessages(getApplicationContext(), SMS_URI, lastSmsId);
+                }
+                
+                if (type == TYPE_MMS || type == TYPE_MMS_SMS){
+                    lastMmsId = SmsMmsDbHelper.fixMessages(getApplicationContext(), MMS_URI, lastMmsId);
+                }
             }
         }
     }
