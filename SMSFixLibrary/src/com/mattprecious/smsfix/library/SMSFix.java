@@ -1,17 +1,15 @@
 /*
  * Copyright 2011 Matthew Precious
  * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.mattprecious.smsfix.library;
@@ -59,7 +57,7 @@ import android.widget.Toast;
  */
 public class SMSFix extends PreferenceActivity {
     static boolean donated = false;
-    
+
     private final String PROPERTIES_FILE = "main.properties";
 
     private SharedPreferences settings;
@@ -71,11 +69,11 @@ public class SMSFix extends PreferenceActivity {
     private CheckBoxPreference roamingBox;
     private CheckBoxPreference notify;
     private ListPreference notifyIcon;
-    
+
     private CheckBoxPreference logToSd;
     private Preference addNote;
     private Preference clearLog;
-    
+
     private PreferenceCategory more;
     private Preference donate;
     private Preference fixOld;
@@ -85,9 +83,9 @@ public class SMSFix extends PreferenceActivity {
     private Preference emailDev;
 
     private OnSharedPreferenceChangeListener prefListener;
-    
+
     private LoggerHelper logger;
-    
+
     static final int DIALOG_DONATE_ID = 0;
     static final int DIALOG_ROAMING_ID = 1;
     static final int DIALOG_CHANGE_LOG_ID = 2;
@@ -97,30 +95,30 @@ public class SMSFix extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         logger = LoggerHelper.getInstance(getApplicationContext());
         logger.info("SMSFix Activity started. Preparing the view");
 
         addPreferencesFromResource(R.xml.preferences);
 
         settings = ((PreferenceScreen) findPreference("preferences")).getSharedPreferences();
-        
+
         activeBox = (CheckBoxPreference) findPreference("active");
-        
+
         offsetMethod = (ListPreference) findPreference("offset_method");
         editOffsetHours = (EditTextPreference) findPreference("offset_hours");
         editOffsetMinutes = (EditTextPreference) findPreference("offset_minutes");
-        
+
         cdmaBox = (CheckBoxPreference) findPreference("cdma");
         roamingBox = (CheckBoxPreference) findPreference("roaming");
-        
+
         notify = (CheckBoxPreference) findPreference("notify");
         notifyIcon = (ListPreference) findPreference("notify_icon");
-        
+
         logToSd = (CheckBoxPreference) findPreference("log_to_sd");
         addNote = (Preference) findPreference("add_note");
         clearLog = (Preference) findPreference("clear_log");
-        
+
         more = (PreferenceCategory) findPreference("more");
         donate = (Preference) findPreference("donate");
         fixOld = (Preference) findPreference("fix_old");
@@ -128,11 +126,11 @@ public class SMSFix extends PreferenceActivity {
         about = (Preference) findPreference("about");
         translate = (Preference) findPreference("translate");
         emailDev = (Preference) findPreference("email_dev");
-        
+
         adjustMethodLabels();
-        
+
         roamingBox.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            
+
             @Override
             public boolean onPreferenceClick(Preference arg0) {
                 if (roamingBox.isChecked()) {
@@ -141,33 +139,33 @@ public class SMSFix extends PreferenceActivity {
                 return true;
             }
         });
-        
+
         addNote.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            
+
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 startActivity(new Intent(SMSFix.this, LogNote.class));
-                
+
                 return true;
             }
         });
-        
+
         clearLog.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            
+
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 showDialog(DIALOG_CONFIRM_LOG_CLEAR_ID);
                 return true;
             }
         });
-        
+
         readProperties();
-        
+
         if (donated) {
             more.removePreference(donate);
         } else {
             donate.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                
+
                 @Override
                 public boolean onPreferenceClick(Preference arg0) {
                     showDialog(DIALOG_DONATE_ID);
@@ -175,49 +173,50 @@ public class SMSFix extends PreferenceActivity {
                 }
             });
         }
-        
+
         fixOld.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            
+
             @Override
             public boolean onPreferenceClick(Preference arg0) {
                 startActivity(new Intent(SMSFix.this, FixOld.class));
                 return true;
             }
         });
-        
+
         help.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            
+
             @Override
             public boolean onPreferenceClick(Preference arg0) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.mattprecious.com/help/smsfix.html"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
+                        .parse("http://www.mattprecious.com/help/smsfix.html"));
                 startActivity(browserIntent);
                 return true;
             }
         });
-        
+
         about.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            
+
             @Override
             public boolean onPreferenceClick(Preference arg0) {
                 startActivity(new Intent(SMSFix.this, About.class));
                 return true;
             }
         });
-        
+
         translate.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            
+
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse("http://crowdin.net/project/sms-time-fix"));
                 startActivity(intent);
-                
+
                 return true;
             }
         });
-        
+
         emailDev.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            
+
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 showDialog(DIALOG_ATTACH_LOGS_ID);
@@ -231,7 +230,7 @@ public class SMSFix extends PreferenceActivity {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 logger.info("Preference changed: " + key);
-                
+
                 // if "Active" has changed, start or stop the service
                 if (key.equals("active")) {
                     toggleService(sharedPreferences.getBoolean(key, false));
@@ -250,150 +249,155 @@ public class SMSFix extends PreferenceActivity {
                 toggleNotify();
             }
         };
-        
+
         settings.registerOnSharedPreferenceChangeListener(prefListener);
-        
+
         // show the true value of active
         activeBox.setChecked(FixService.isRunning());
 
         // set the offset field to be a decimal number
         editOffsetHours.getEditText().setInputType(
-                InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED
+                        | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         editOffsetMinutes.getEditText().setInputType(
-                InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED
+                        | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         // set the initial status of the offset and CDMA
         toggleOffset();
         toggleCDMA();
         toggleNotify();
-        
+
         // debug the change log
-        //settings.edit().putInt("version_code", 0).commit();
-        
+        // settings.edit().putInt("version_code", 0).commit();
+
         checkAndShowChangeLog();
-        
+
         logger.info("SMSFix Activity initialization complete");
     }
 
     @Override
     protected void onDestroy() {
         logger.info("SMSFix Activity destroy");
-        
+
         super.onDestroy();
     }
-    
+
     protected void readProperties() {
         Resources resources = this.getResources();
         AssetManager assetManager = resources.getAssets();
 
         try {
             InputStream inputStream = assetManager.open(PROPERTIES_FILE);
-            
+
             Properties properties = new Properties();
             properties.load(inputStream);
-            
+
             donated = Boolean.valueOf(properties.getProperty("donated"));
         } catch (IOException e) {
             logger.error("Failed to open properties file");
             e.printStackTrace();
         }
     }
-    
+
     protected Dialog onCreateDialog(int id) {
         Dialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        switch(id) {
+        switch (id) {
             case DIALOG_CHANGE_LOG_ID:
-                builder.setTitle(R.string.whats_new)
-                       .setIcon(android.R.drawable.ic_dialog_info)
-                       .setMessage(R.string.change_log)
-                       .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                           
-                           public void onClick(DialogInterface dialog, int id) {
-                               dialog.cancel();
-                           }
-                       })
-                       ;
+                builder.setTitle(R.string.whats_new).setIcon(android.R.drawable.ic_dialog_info)
+                        .setMessage(R.string.change_log)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
                 dialog = builder.create();
                 break;
             case DIALOG_DONATE_ID:
                 builder.setTitle(R.string.donate_title)
-                       .setIcon(R.drawable.ic_dialog_heart)
-                       .setMessage(R.string.donate_message)
-                       .setPositiveButton(R.string.donate_yes, new DialogInterface.OnClickListener() {
-                           
-                           public void onClick(DialogInterface dialog, int id) {
-                               Intent intent = new Intent(Intent.ACTION_VIEW);
-                               intent.setData(Uri.parse("market://details?id=com.mattprecious.smsfixdonate"));
-                               startActivity(intent);
-                           }
-                       })
-                       .setNegativeButton(R.string.donate_no, new DialogInterface.OnClickListener() {
-                           
-                           public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                           }
-                       });
+                        .setIcon(R.drawable.ic_dialog_heart)
+                        .setMessage(R.string.donate_message)
+                        .setPositiveButton(R.string.donate_yes,
+                                new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                        intent.setData(Uri
+                                                .parse("market://details?id=com.mattprecious.smsfixdonate"));
+                                        startActivity(intent);
+                                    }
+                                })
+                        .setNegativeButton(R.string.donate_no,
+                                new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
                 dialog = builder.create();
                 break;
             case DIALOG_ROAMING_ID:
                 builder.setTitle(R.string.roaming_title)
-                       .setIcon(android.R.drawable.ic_dialog_info)
-                       .setMessage(R.string.roaming_message)
-                       .setPositiveButton(R.string.roaming_ok, new DialogInterface.OnClickListener() {
-                           
-                           public void onClick(DialogInterface dialog, int id) {
-                               dialog.cancel();
-                           }
-                       })
-                       .setNegativeButton(R.string.roaming_no, new DialogInterface.OnClickListener() {
-                           
-                           public void onClick(DialogInterface dialog, int id) {
-                               roamingBox.setChecked(false);
-                               dialog.cancel();
-                           }
-                       });
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setMessage(R.string.roaming_message)
+                        .setPositiveButton(R.string.roaming_ok,
+                                new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                })
+                        .setNegativeButton(R.string.roaming_no,
+                                new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        roamingBox.setChecked(false);
+                                        dialog.cancel();
+                                    }
+                                });
                 dialog = builder.create();
                 break;
             case DIALOG_CONFIRM_LOG_CLEAR_ID:
                 builder.setMessage(R.string.clear_log_confirm)
-                       .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                           
-                           public void onClick(DialogInterface dialog, int id) {
-                               logger.clearLog(getApplicationContext());
-                               
-                               Toast toast = Toast.makeText(getApplicationContext(), R.string.logs_cleared, Toast.LENGTH_SHORT);
-                               toast.show();
-                           }
-                       })
-                       .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                           
-                           public void onClick(DialogInterface dialog, int id) {
-                               dialog.cancel();
-                           }
-                       });
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+                                logger.clearLog(getApplicationContext());
+
+                                Toast toast = Toast.makeText(getApplicationContext(),
+                                        R.string.logs_cleared, Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
                 dialog = builder.create();
                 break;
             case DIALOG_ATTACH_LOGS_ID:
                 builder.setTitle(R.string.include_logs_title)
-                       .setIcon(android.R.drawable.ic_dialog_info)
-                       .setMessage(R.string.include_logs_message)
-                       .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                           
-                           public void onClick(DialogInterface dialog, int id) {
-                               sendEmailToDev(true);
-                               dialog.cancel();
-                           }
-                       })
-                       .setNegativeButton(R.string.nope, new DialogInterface.OnClickListener() {
-                           
-                           public void onClick(DialogInterface dialog, int id) {
-                               sendEmailToDev(false);
-                               dialog.cancel();
-                           }
-                       });
-                 dialog = builder.create();
-                 break;
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setMessage(R.string.include_logs_message)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+                                sendEmailToDev(true);
+                                dialog.cancel();
+                            }
+                        }).setNegativeButton(R.string.nope, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+                                sendEmailToDev(false);
+                                dialog.cancel();
+                            }
+                        });
+                dialog = builder.create();
+                break;
             default:
                 dialog = null;
         }
@@ -412,10 +416,10 @@ public class SMSFix extends PreferenceActivity {
             stopService(new Intent(this, FixService.class));
         }
     }
-    
+
     /**
-     *  Restart the fixing service
-     *  
+     * Restart the fixing service
+     * 
      */
     public void restartService() {
         stopService(new Intent(this, FixService.class));
@@ -423,107 +427,110 @@ public class SMSFix extends PreferenceActivity {
     }
 
     /**
-     * Toggle whether or not the "Offset" option should be enabled.
-     * If the method is manual and the service is active.
+     * Toggle whether or not the "Offset" option should be enabled. If the method is manual and the
+     * service is active.
      * 
      */
     public void toggleOffset() {
-        editOffsetHours.setEnabled(offsetMethod.getValue().equals("manual") && settings.getBoolean("active", false));
-        editOffsetMinutes.setEnabled(offsetMethod.getValue().equals("manual") && settings.getBoolean("active", false));
+        editOffsetHours.setEnabled(offsetMethod.getValue().equals("manual")
+                && settings.getBoolean("active", false));
+        editOffsetMinutes.setEnabled(offsetMethod.getValue().equals("manual")
+                && settings.getBoolean("active", false));
     }
 
     /**
-     * Toggle whether or not the "CDMA' option should be enabled.
-     * If the method is phone and the service is active.
+     * Toggle whether or not the "CDMA' option should be enabled. If the method is phone and the
+     * service is active.
      */
     public void toggleCDMA() {
         cdmaBox.setEnabled(settings.getBoolean("active", false));
     }
-    
+
     /**
      * Toggle whether or not the "Icon Style" option should be enabled.
      */
     public void toggleNotify() {
         notifyIcon.setEnabled(settings.getBoolean("notify", false));
     }
-    
+
     public void sendEmailToDev(boolean attachLogs) {
         Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setType("vnd.android.cursor.dir/email");
-        
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"matt@mattprecious.com"});
+
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "matt@mattprecious.com" });
         intent.putExtra(Intent.EXTRA_SUBJECT, "SMS Time Fix Feedback");
-        
+
         File logFile = LoggerHelper.getLogFile();
         File rolloverLogFile = LoggerHelper.getRolloverLogFile();
-        
+
         if (attachLogs && logFile.exists()) {
             ArrayList<Uri> attachments = new ArrayList<Uri>();
             attachments.add(Uri.fromFile(logFile));
-            
+
             if (logFile.length() < LoggerHelper.EMAIL_LOG_MIN && rolloverLogFile.exists()) {
                 attachments.add(Uri.fromFile(rolloverLogFile));
             }
-            
+
             intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachments);
         }
-    
-        startActivity(intent); 
+
+        startActivity(intent);
     }
-    
+
     /**
      * Update the adjustment method labels in two ways:
      * 
-     * 1. Swap the "Add" and "Subtract" time zone names if we're GMT+X
-     * 2. Add the current time zone offset to the Time Zone methods
+     * 1. Swap the "Add" and "Subtract" time zone names if we're GMT+X 2. Add the current time zone
+     * offset to the Time Zone methods
      */
     private void adjustMethodLabels() {
         // the labels for the offset methods
         CharSequence[] offsetMethodEntries = offsetMethod.getEntries();
-        
+
         int gmtOffset = TimeZone.getDefault().getRawOffset() / 3600000;
-        
+
         // account for DST
-        if (TimeZone.getDefault().useDaylightTime() && TimeZone.getDefault().inDaylightTime(new Date())) {
+        if (TimeZone.getDefault().useDaylightTime()
+                && TimeZone.getDefault().inDaylightTime(new Date())) {
             gmtOffset += 1;
         }
-        
+
         int absGMTOffset = Math.abs(gmtOffset);
-        
+
         // swap the Add and Subtract time zone method names if we're GMT+X
         if (gmtOffset >= 0) {
             CharSequence temp = offsetMethodEntries[0];
             offsetMethodEntries[0] = offsetMethodEntries[1];
             offsetMethodEntries[1] = temp;
         }
-        
+
         // add the time zone offset to the labels
         offsetMethodEntries[0] = offsetMethodEntries[0] + " (" + absGMTOffset + ")";
         offsetMethodEntries[1] = offsetMethodEntries[1] + " (" + absGMTOffset + ")";
-        
+
         // set them
         offsetMethod.setEntries(offsetMethodEntries);
     }
-    
+
     private void checkAndShowChangeLog() {
         PackageManager packageManager = getPackageManager();
-        
+
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
-            
+
             if (settings.getInt("version_code", 0) != packageInfo.versionCode) {
                 showDialog(DIALOG_CHANGE_LOG_ID);
-                
+
                 Editor editor = settings.edit();
                 editor.putInt("version_code", packageInfo.versionCode);
                 editor.commit();
-                
+
                 // while we're here... make sure "active" is unchecked after an update
 //                activeBox.setChecked(false);
             }
         } catch (NameNotFoundException e) {
-            
+
         }
     }
 

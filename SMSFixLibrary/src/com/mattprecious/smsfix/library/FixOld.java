@@ -206,36 +206,38 @@ public class FixOld extends Activity {
                     }
                 });
 
-                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(android.R.string.cancel,
+                        new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
 
                 dialog = builder.create();
                 break;
             case DIALOG_ID_CONFIRM:
                 builder.setTitle(R.string.fix_old_confirm_title);
                 builder.setMessage(R.string.fix_old_confirm_message);
-                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        fixMessages();
-                        
-                    }
-                });
-                
+                builder.setPositiveButton(android.R.string.ok,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                fixMessages();
+
+                            }
+                        });
+
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    
+
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        
+
                     }
                 });
-                
+
                 dialog = builder.create();
                 break;
             default:
@@ -255,7 +257,8 @@ public class FixOld extends Activity {
         signButton.setText(offset >= 0 ? R.string.fix_old_add : R.string.fix_old_subtract);
 
         DecimalFormat df = new DecimalFormat("#.###");
-        offsetButton.setText(getString(R.string.fix_old_offset_hours, df.format(Math.abs(offset) / 3600000.0)));
+        offsetButton.setText(getString(R.string.fix_old_offset_hours,
+                df.format(Math.abs(offset) / 3600000.0)));
 
         if (!startCalendar.before(endCalendar)) {
             goButton.setEnabled(false);
