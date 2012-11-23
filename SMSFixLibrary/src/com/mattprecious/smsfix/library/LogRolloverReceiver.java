@@ -1,5 +1,7 @@
 package com.mattprecious.smsfix.library;
 
+import com.mattprecious.smsfix.library.util.LoggerHelper;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

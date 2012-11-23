@@ -1,4 +1,4 @@
-package com.mattprecious.smsfix.library;
+package com.mattprecious.smsfix.library.util;
 
 import java.io.File;
 import java.io.IOException;

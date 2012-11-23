@@ -3,7 +3,6 @@ package com.mattprecious.smsfix.library.util;
 import java.util.Date;
 import java.util.TimeZone;
 
-import com.mattprecious.smsfix.library.LoggerHelper;
 
 import android.content.Context;
 import android.content.SharedPreferences;

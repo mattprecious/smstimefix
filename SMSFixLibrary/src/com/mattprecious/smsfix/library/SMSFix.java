@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.TimeZone;
 
+import com.mattprecious.smsfix.library.util.LoggerHelper;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;

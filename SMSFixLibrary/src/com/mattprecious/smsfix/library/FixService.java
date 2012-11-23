@@ -36,6 +36,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 
+import com.mattprecious.smsfix.library.util.LoggerHelper;
 import com.mattprecious.smsfix.library.util.SmsDbHelper;
 import com.mattprecious.smsfix.library.util.TimeHelper;
 
