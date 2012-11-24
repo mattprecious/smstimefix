@@ -112,6 +112,8 @@
     <string name="fix_old_go">GO!</string>
     <string name="fix_old_confirm_title">Are you sure?</string>
     <string name="fix_old_confirm_message">There is no easy way to undo if something goes wrong. Please make sure you\'ve backed up your messages before continuing.</string>
+    <string name="fix_old_complete_title">Complete</string>
+    <string name="fix_old_complete_message">%s messages were updated</string>
 
     <!-- changes to this value must also be changed in the other projects -->
 	<string name="about_title">About</string>

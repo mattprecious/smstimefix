@@ -314,6 +314,7 @@ public class FixOld extends Activity {
             int totalCount = c.getCount();
             progressDialog.setMax(totalCount);
 
+            int numCompleted = 0;
             if (c.moveToFirst()) {
                 do {
                     long id = c.getLong(c.getColumnIndexOrThrow("_id"));
@@ -326,8 +327,7 @@ public class FixOld extends Activity {
                     values.put("date", longdate);
                     int result = getContentResolver().update(uri, values, "_id = " + id, null);
 
-                    // TODO: can tally the number of failed updates here if need
-                    // be... (if result == 0)
+                    numCompleted += result;
 
                     progressDialog.incrementProgressBy(1);
                 } while (c.moveToNext());
@@ -335,12 +335,26 @@ public class FixOld extends Activity {
 
             c.close();
 
-            return null;
+            return numCompleted;
         }
 
         @Override
         protected void onPostExecute(Integer result) {
             progressDialog.dismiss();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle(R.string.fix_old_complete_title);
+            builder.setMessage(getString(R.string.fix_old_complete_message, result));
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+
+                }
+            });
+
+            builder.create().show();
         }
     }
 
