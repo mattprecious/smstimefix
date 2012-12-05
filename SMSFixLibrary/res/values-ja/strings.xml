@@ -54,6 +54,9 @@
   <string name="about_donated">寄付しました!</string>
   <string name="about_by">作者:
 	</string>
+  <string name="about_contact">Matthew Precious
+\nhttp://mattprecious.com
+	</string>
   <string name="about_blurb">何らかの問題がある場合、または新しい機能を希望する場合はご連絡ください。すべてが正常に動作しているかどうかも聞きたいです! あなたのフィードバックは私にとって非常に重要です。私がリリースする全てのアップデートはユーザーのフィードバックによるものです。
 	</string>
   <string name="ok">OK</string>
