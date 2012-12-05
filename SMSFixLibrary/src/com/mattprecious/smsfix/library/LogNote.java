@@ -22,7 +22,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.code.microlog4android.Logger;
 import com.mattprecious.smsfix.library.util.LoggerHelper;
 
 public class LogNote extends Activity {
