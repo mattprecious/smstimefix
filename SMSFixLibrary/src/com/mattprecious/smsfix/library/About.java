@@ -14,11 +14,11 @@
 
 package com.mattprecious.smsfix.library;
 
-import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -27,7 +27,7 @@ import android.widget.TextView;
  * @author Matthew Precious
  * 
  */
-public class About extends Activity {
+public class About extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -31,6 +31,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -43,7 +44,7 @@ import android.widget.TimePicker;
 import com.mattprecious.smsfix.library.util.SmsMmsDbHelper;
 import com.mattprecious.smsfix.library.util.TimeHelper;
 
-public class FixOld extends Activity {
+public class FixOld extends FragmentActivity {
     private final int DIALOG_ID_START_DATE_PICKER = 1;
     private final int DIALOG_ID_START_TIME_PICKER = 2;
     private final int DIALOG_ID_END_DATE_PICKER = 3;

@@ -14,8 +14,8 @@
 
 package com.mattprecious.smsfix.library;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -24,7 +24,7 @@ import android.widget.EditText;
 
 import com.mattprecious.smsfix.library.util.LoggerHelper;
 
-public class LogNote extends Activity {
+public class LogNote extends FragmentActivity {
     private EditText logNoteText;
     private Button okButton;
     private Button cancelButton;
