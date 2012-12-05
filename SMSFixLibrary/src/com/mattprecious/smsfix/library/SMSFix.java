@@ -67,10 +67,8 @@ public class SMSFix extends PreferenceActivity {
     private EditTextPreference editOffsetMinutes;
     private CheckBoxPreference cdmaBox;
     private CheckBoxPreference roamingBox;
-    private CheckBoxPreference notify;
     private ListPreference notifyIcon;
 
-    private CheckBoxPreference logToSd;
     private Preference addNote;
     private Preference clearLog;
 
@@ -112,10 +110,8 @@ public class SMSFix extends PreferenceActivity {
         cdmaBox = (CheckBoxPreference) findPreference("cdma");
         roamingBox = (CheckBoxPreference) findPreference("roaming");
 
-        notify = (CheckBoxPreference) findPreference("notify");
         notifyIcon = (ListPreference) findPreference("notify_icon");
 
-        logToSd = (CheckBoxPreference) findPreference("log_to_sd");
         addNote = (Preference) findPreference("add_note");
         clearLog = (Preference) findPreference("clear_log");
 
