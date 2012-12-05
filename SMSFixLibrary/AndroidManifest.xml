@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.mattprecious.smsfix.library">
-	
-    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="17" />
-    
-</manifest> 
+    package="com.mattprecious.smsfix.library" >
+
+    <uses-sdk
+        android:minSdkVersion="3"
+        android:targetSdkVersion="17" />
+
+</manifest>
