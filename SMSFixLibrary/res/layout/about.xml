@@ -1,47 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ScrollView
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
-	
-	<RelativeLayout
-		android:id="@+id/about"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content">
-		
-		<TextView
-			style="@style/About.Title"
-			android:id="@+id/about_title"
-			android:text="@string/app_name" />
-			
-		<TextView
-			style="@style/About.Version"
-			android:id="@+id/about_version"
-			android:layout_below="@id/about_title" />
-			
-		<TextView
-			style="@style/About.Donated"
-			android:id="@+id/about_donated"
-			android:layout_below="@id/about_version"
-			android:text="@string/about_donated" />
-		
-		<TextView
-			style="@style/About.By"
-			android:id="@+id/about_by"
-			android:layout_below="@id/about_donated"
-			android:text="@string/about_by" />
-			
-		<TextView
-			style="@style/About"
-			android:id="@+id/about_contact"
-			android:layout_below="@id/about_by"
-			android:text="@string/about_contact" />
-			
-		<TextView
-			style="@style/About.Blurb"
-			android:id="@+id/about_blurb"
-			android:layout_below="@id/about_contact"
-			android:text="@string/about_blurb" />
-		
-	</RelativeLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:id="@+id/about"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/about_title"
+            style="@style/About.Title"
+            android:text="@string/app_name" />
+
+        <TextView
+            android:id="@+id/about_version"
+            style="@style/About.Version"
+            android:layout_below="@id/about_title" />
+
+        <TextView
+            android:id="@+id/about_donated"
+            style="@style/About.Donated"
+            android:layout_below="@id/about_version"
+            android:text="@string/about_donated" />
+
+        <TextView
+            android:id="@+id/about_by"
+            style="@style/About.By"
+            android:layout_below="@id/about_donated"
+            android:text="@string/about_by" />
+
+        <TextView
+            android:id="@+id/about_contact"
+            style="@style/About"
+            android:layout_below="@id/about_by"
+            android:text="@string/about_contact" />
+
+        <TextView
+            android:id="@+id/about_blurb"
+            style="@style/About.Blurb"
+            android:layout_below="@id/about_contact"
+            android:text="@string/about_blurb" />
+    </RelativeLayout>
+
 </ScrollView>

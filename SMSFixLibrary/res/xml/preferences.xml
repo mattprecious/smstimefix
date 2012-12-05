@@ -1,132 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-	android:key="preferences">
+    android:key="preferences" >
 
-	<PreferenceCategory
-		android:title="@string/category_status">
-		
-		<CheckBoxPreference
-			android:key="active"
-			android:title="@string/active"
-			android:summaryOn="@string/active_summary_on"
-			android:summaryOff="@string/active_summary_off" />
-	
-	</PreferenceCategory>
-	
-	<PreferenceCategory
-		android:title="@string/category_actions">
-		
-			<ListPreference
-				android:key="offset_method"
-				android:dependency="active"
-				android:title="@string/offset_method"
-				android:summary="@string/offset_method_summary"
-				android:entries="@array/offset_options_text"
-				android:entryValues="@array/offset_options_values"
-				android:defaultValue="manual" />
-				
-			<EditTextPreference
-				android:key="offset_hours"
-				android:dependency="active"
-				android:title="@string/offset_hours"
-				android:summary="@string/offset_hours_summary"
-				android:defaultValue="0" />
-				
-			<EditTextPreference
-				android:key="offset_minutes"
-				android:dependency="active"
-				android:title="@string/offset_minutes"
-				android:summary="@string/offset_minutes_summary"
-				android:defaultValue="0" />
-			
-		</PreferenceCategory>
-		
-		<PreferenceCategory
-			android:title="@string/category_conditions">
-			
-			<CheckBoxPreference
-				android:key="cdma"
-				android:dependency="active"
-				android:title="@string/cdma"
-				android:summary="@string/cdma_summary"
-				android:defaultValue="0" />
-				
-			<CheckBoxPreference
-				android:key="roaming"
-				android:dependency="active"
-				android:title="@string/roaming"
-				android:summary="@string/roaming_summary"
-				android:defaultValue="0" />
-				
-		</PreferenceCategory>
-		
-		<PreferenceCategory
-			android:title="@string/category_extra">
-				
-			<CheckBoxPreference
-				android:key="notify"
-				android:dependency="active"
-				android:title="@string/notify"
-				android:summary="@string/notify_summary"
-				android:defaultValue="0" />
-				
-			<ListPreference
-				android:key="notify_icon"
-				android:dependency="active"
-				android:title="@string/notify_icon"
-				android:summary="@string/notify_icon_summary"
-				android:entries="@array/notification_icon_text"
-				android:entryValues="@array/notification_icon_values"
-				android:defaultValue="grey" />
-								
-	</PreferenceCategory>
-	
-	<PreferenceCategory
-		android:key="more"
-		android:title="@string/category_more">
-		
-		<Preference
-			android:key="donate"
-			android:title="@string/donate" />
-		
-		<PreferenceScreen
-			android:title="@string/logging">
-		
-			<CheckBoxPreference
-				android:key="log_to_sd"
-				android:title="@string/log_to_sd"
-				android:defaultValue="1" />
-			
-			<Preference
-				android:key="add_note"
-				android:title="@string/add_note"
-				android:summary="@string/add_note_summary" />
-			
-			<Preference
-				android:key="clear_log"
-				android:title="@string/clear_log" />
-		
-		</PreferenceScreen>
-		
-		<Preference
-		    android:key="fix_old"
-		    android:title="@string/fix_old" />
-		
-		<Preference
-			android:key="help"
-			android:title="@string/help" />
-	
-		<Preference
-			android:key="about"
-			android:title="@string/about" />
-		
-		<Preference
-			android:key="translate"
-			android:title="@string/translate" />
-			
-		<Preference
-			android:key="email_dev"
-			android:title="@string/email_dev" />
-			
-	</PreferenceCategory>
+    <PreferenceCategory android:title="@string/category_status" >
+        <CheckBoxPreference
+            android:key="active"
+            android:summaryOff="@string/active_summary_off"
+            android:summaryOn="@string/active_summary_on"
+            android:title="@string/active" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/category_actions" >
+        <ListPreference
+            android:defaultValue="manual"
+            android:dependency="active"
+            android:entries="@array/offset_options_text"
+            android:entryValues="@array/offset_options_values"
+            android:key="offset_method"
+            android:summary="@string/offset_method_summary"
+            android:title="@string/offset_method" />
+
+        <EditTextPreference
+            android:defaultValue="0"
+            android:dependency="active"
+            android:key="offset_hours"
+            android:summary="@string/offset_hours_summary"
+            android:title="@string/offset_hours" />
+        <EditTextPreference
+            android:defaultValue="0"
+            android:dependency="active"
+            android:key="offset_minutes"
+            android:summary="@string/offset_minutes_summary"
+            android:title="@string/offset_minutes" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/category_conditions" >
+        <CheckBoxPreference
+            android:defaultValue="0"
+            android:dependency="active"
+            android:key="cdma"
+            android:summary="@string/cdma_summary"
+            android:title="@string/cdma" />
+        <CheckBoxPreference
+            android:defaultValue="0"
+            android:dependency="active"
+            android:key="roaming"
+            android:summary="@string/roaming_summary"
+            android:title="@string/roaming" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/category_extra" >
+        <CheckBoxPreference
+            android:defaultValue="0"
+            android:dependency="active"
+            android:key="notify"
+            android:summary="@string/notify_summary"
+            android:title="@string/notify" />
+
+        <ListPreference
+            android:defaultValue="grey"
+            android:dependency="active"
+            android:entries="@array/notification_icon_text"
+            android:entryValues="@array/notification_icon_values"
+            android:key="notify_icon"
+            android:summary="@string/notify_icon_summary"
+            android:title="@string/notify_icon" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="more"
+        android:title="@string/category_more" >
+        <Preference
+            android:key="donate"
+            android:title="@string/donate" />
+
+        <PreferenceScreen android:title="@string/logging" >
+            <CheckBoxPreference
+                android:defaultValue="1"
+                android:key="log_to_sd"
+                android:title="@string/log_to_sd" />
+
+            <Preference
+                android:key="add_note"
+                android:summary="@string/add_note_summary"
+                android:title="@string/add_note" />
+            <Preference
+                android:key="clear_log"
+                android:title="@string/clear_log" />
+        </PreferenceScreen>
+
+        <Preference
+            android:key="fix_old"
+            android:title="@string/fix_old" />
+        <Preference
+            android:key="help"
+            android:title="@string/help" />
+        <Preference
+            android:key="about"
+            android:title="@string/about" />
+        <Preference
+            android:key="translate"
+            android:title="@string/translate" />
+        <Preference
+            android:key="email_dev"
+            android:title="@string/email_dev" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

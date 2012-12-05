@@ -229,7 +229,7 @@ public class LoggerHelper {
             alartManager.set(AlarmManager.RTC_WAKEUP, nextRunTime, sender);
         }
     }
-    
+
     @SuppressWarnings("deprecation")
     private int getSdkVersion() {
         int sdkVersion;
@@ -240,7 +240,7 @@ public class LoggerHelper {
         } catch (Exception e) {
             sdkVersion = Integer.parseInt(Build.VERSION.SDK);
         }
-        
+
         return sdkVersion;
     }
 
