@@ -12,7 +12,7 @@
 	
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
     
-	<application android:icon="@drawable/icon" android:label="@string/app_name">
+	<application android:icon="@drawable/icon" android:allowBackup="true" android:label="@string/app_name">
 		<activity android:name="com.mattprecious.smsfix.library.SMSFix"
                   android:label="@string/app_name">
                   
@@ -41,7 +41,7 @@
 			</intent-filter>
 		</receiver>
 		
-		<receiver android:name="com.mattprecious.smsfix.library.LogRolloverReceiver">
+		<receiver android:name="com.mattprecious.smsfix.library.LogRolloverReceiver" android:exported="false">
 		    <intent-filter>
 		        <action android:name="com.mattprecious.smsfix.library.INTENT_LOG_ROLLOVER" />
 		    </intent-filter>
