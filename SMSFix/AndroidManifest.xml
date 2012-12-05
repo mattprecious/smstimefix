@@ -12,7 +12,7 @@
 	
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
       
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
+    <application android:icon="@drawable/icon" android:allowBackup="true" android:label="@string/app_name">
 		<activity android:name="com.mattprecious.smsfix.library.SMSFix"
                   android:label="@string/app_name">
                   
