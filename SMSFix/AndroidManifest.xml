@@ -41,7 +41,7 @@
 			</intent-filter>
 		</receiver>
 		
-		<receiver android:name="com.mattprecious.smsfix.library.LogRolloverReceiver">
+		<receiver android:name="com.mattprecious.smsfix.library.LogRolloverReceiver" android:exported="false">
 		    <intent-filter>
 		        <action android:name="com.mattprecious.smsfix.library.INTENT_LOG_ROLLOVER" />
 		    </intent-filter>
