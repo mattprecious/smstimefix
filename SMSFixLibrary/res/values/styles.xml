@@ -9,7 +9,7 @@
     
     <style name="About.Title">
     	<item name="android:textColor">#FF7700</item>
-    	<item name="android:textSize">40dip</item>
+    	<item name="android:textSize">40sp</item>
     </style>
     
     <style name="About.Version">
@@ -19,7 +19,7 @@
     <style name="About.Donated">
     	<item name="android:gravity">right</item>
     	<item name="android:textColor">#FF0000</item>
-    	<item name="android:textSize">12dip</item>
+    	<item name="android:textSize">12sp</item>
     </style>
     
     <style name="About.By">

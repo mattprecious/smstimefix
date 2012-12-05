@@ -3,13 +3,15 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <EditText 
+    <EditText
         android:id="@+id/log_note"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dip"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
-        android:layout_marginBottom="10dip" />
+        android:inputType="text|textMultiLine"
+        android:maxLines="5" />
    	
     <LinearLayout
 		android:orientation="horizontal"
