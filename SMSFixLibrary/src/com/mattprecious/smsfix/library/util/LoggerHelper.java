@@ -111,18 +111,7 @@ public class LoggerHelper {
         logger.info("Android release: " + Build.VERSION.RELEASE);
         logger.info("Android incremental" + Build.VERSION.INCREMENTAL);
         logger.info("Preferences:" + settings.getAll().toString());
-
-        int sdkVersion;
-
-        try {
-            // works for level 4 and up
-            Field SDK_INT_field = Build.VERSION.class.getField("SDK_INT");
-            sdkVersion = (Integer) SDK_INT_field.get(null);
-        } catch (Exception e) {
-            sdkVersion = Integer.parseInt(Build.VERSION.SDK);
-        }
-
-        logger.info("Android SDK: " + sdkVersion);
+        logger.info("Android SDK: " + getSdkVersion());
 
         String appVersion = "";
 
@@ -239,6 +228,20 @@ public class LoggerHelper {
 
             alartManager.set(AlarmManager.RTC_WAKEUP, nextRunTime, sender);
         }
+    }
+    
+    @SuppressWarnings("deprecation")
+    private int getSdkVersion() {
+        int sdkVersion;
+        try {
+            // works for level 4 and up
+            Field SDK_INT_field = Build.VERSION.class.getField("SDK_INT");
+            sdkVersion = (Integer) SDK_INT_field.get(null);
+        } catch (Exception e) {
+            sdkVersion = Integer.parseInt(Build.VERSION.SDK);
+        }
+        
+        return sdkVersion;
     }
 
     private void rollover(Context context) {
