@@ -3,7 +3,8 @@
 
     <string name="change_log">
 		&#8226; Fix old messages!
-		\n&#8226; MMS should work&#8230; let me know
+		\n&#8226; Removed logging
+		\n&#8226; MMS should work&#8230;
 		\n&#8226; Minor bug fixes
 		\n&#8226; Minor UI tweaks
     </string>
