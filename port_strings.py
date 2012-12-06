@@ -4,6 +4,7 @@ import xml.etree.ElementTree as etree
 import xml.dom.minidom as minidom
 import glob
 import os
+import sys
 
 def makedir(directory):
 	if not os.path.exists(directory):
@@ -44,16 +45,18 @@ def generatefile(sources, targets):
 		f.write(output)
 		f.close()
 
-resLibrary = 'SMSFixLibrary/res/'
-resRegular = 'SMSFix/res/'
-resDonate = 'SMSFixDonate/res/'
+rootPath = sys.path[0] + '/'
 
-pathLibrary = resLibrary + 'values/'
-pathRegular = resRegular + 'values/'
-pathDonate = resDonate + 'values/'
+resLibrary = rootPath + 'SMSFixLibrary/res/'
+resRegular = rootPath + 'SMSFix/res/'
+resDonate = rootPath + 'SMSFixDonate/res/'
+
+valuesLibrary = resLibrary + 'values/'
+valuesRegular = resRegular + 'values/'
+valuesDonate = resDonate + 'values/'
 
 # english (with universal file)
-generatefile({pathLibrary + "strings-universal.xml", pathLibrary + "strings.xml"}, {pathRegular + "strings.xml", pathDonate + "strings.xml"})
+generatefile({valuesLibrary + "strings-universal.xml", valuesLibrary + "strings.xml"}, {valuesRegular + "strings.xml", valuesDonate + "strings.xml"})
 
 # the rest
 for directory in glob.glob(resLibrary + 'values-*'):
