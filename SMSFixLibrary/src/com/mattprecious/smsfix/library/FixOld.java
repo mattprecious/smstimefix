@@ -304,7 +304,7 @@ public class FixOld extends FragmentActivity {
         protected void onPreExecute() {
             progressDialog = new ProgressDialog(activity);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.setTitle("Fixing old messages...");
+            progressDialog.setTitle(R.string.fix_old_fixing);
             progressDialog.setIndeterminate(false);
             progressDialog.setCancelable(false);
             progressDialog.setCanceledOnTouchOutside(false);
