@@ -20,7 +20,7 @@
             style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/fix_old_instructions"
+            android:layout_below="@id/fix_old_instructions"
             android:layout_marginTop="30dip"
             android:text="@string/fix_old_starting" />
 
@@ -28,7 +28,7 @@
             android:id="@+id/starting_buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/starting"
+            android:layout_below="@id/starting"
             android:layout_centerHorizontal="true" >
 
             <Button
@@ -50,7 +50,7 @@
             style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/starting_buttons"
+            android:layout_below="@id/starting_buttons"
             android:layout_marginTop="30dip"
             android:text="@string/fix_old_ending" />
 
@@ -58,7 +58,7 @@
             android:id="@+id/ending_buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ending"
+            android:layout_below="@id/ending"
             android:layout_centerHorizontal="true" >
 
             <Button
@@ -80,7 +80,7 @@
             style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ending_buttons"
+            android:layout_below="@id/ending_buttons"
             android:layout_marginTop="30dip"
             android:text="@string/fix_old_method" />
 
@@ -88,7 +88,7 @@
             android:id="@+id/adjustment_buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/by"
+            android:layout_below="@id/by"
             android:layout_centerHorizontal="true" >
 
             <Button
@@ -102,15 +102,24 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/sign_button" />
+                android:layout_toRightOf="@id/sign_button" />
         </RelativeLayout>
+
+        <Button
+            android:id="@+id/type_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/adjustment_buttons"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dip" />
 
         <Button
             android:id="@+id/go_button"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/adjustment_buttons"
+            android:layout_below="@id/type_button"
             android:layout_marginTop="30dip"
             android:text="@string/fix_old_go" />
     </RelativeLayout>

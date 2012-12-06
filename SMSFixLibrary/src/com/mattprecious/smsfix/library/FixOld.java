@@ -45,12 +45,17 @@ import com.mattprecious.smsfix.library.util.SmsMmsDbHelper;
 import com.mattprecious.smsfix.library.util.TimeHelper;
 
 public class FixOld extends FragmentActivity {
+    private final Uri SMS_URI = SmsMmsDbHelper.getSmsUri();
+    private final Uri MMS_URI = SmsMmsDbHelper.getMmsUri();
+    
     private final int DIALOG_ID_START_DATE_PICKER = 1;
     private final int DIALOG_ID_START_TIME_PICKER = 2;
     private final int DIALOG_ID_END_DATE_PICKER = 3;
     private final int DIALOG_ID_END_TIME_PICKER = 4;
     private final int DIALOG_ID_OFFSET_PICKER = 5;
     private final int DIALOG_ID_CONFIRM = 6;
+    
+    private enum Type { SMS, MMS };
 
     private Button startDateButton;
     private Button startTimeButton;
@@ -58,11 +63,13 @@ public class FixOld extends FragmentActivity {
     private Button endTimeButton;
     private Button signButton;
     private Button offsetButton;
+    private Button typeButton;
     private Button goButton;
 
     private Calendar startCalendar;
     private Calendar endCalendar;
     private long offset;
+    private Type type = Type.SMS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +90,12 @@ public class FixOld extends FragmentActivity {
         endTimeButton = (Button) findViewById(R.id.end_time_button);
         signButton = (Button) findViewById(R.id.sign_button);
         offsetButton = (Button) findViewById(R.id.offset_button);
+        typeButton = (Button) findViewById(R.id.type_button);
         goButton = (Button) findViewById(R.id.go_button);
+        
+        if (MMS_URI == null) {
+            typeButton.setVisibility(View.GONE);
+        }
 
         startDateButton.setOnClickListener(new OnClickListener() {
 
@@ -131,6 +143,20 @@ public class FixOld extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 showDialog(DIALOG_ID_OFFSET_PICKER);
+            }
+        });
+        
+        typeButton.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                if (type == Type.SMS) {
+                    type = Type.MMS;
+                } else {
+                    type = Type.SMS;
+                }
+                
+                updateButtons();
             }
         });
 
@@ -285,19 +311,37 @@ public class FixOld extends FragmentActivity {
             goButton.setEnabled(true);
             goButton.setText(R.string.fix_old_go);
         }
+        
+        if (type == Type.SMS) {
+            typeButton.setText("SMS");
+        } else {
+            typeButton.setText("MMS");
+        }
     }
 
     private void fixMessages() {
-        new FixMessagesTask(this).execute(startCalendar, endCalendar);
-//        new FixThreadsTask(this).execute();
+        Uri uri = (type == Type.SMS) ? SMS_URI : MMS_URI;
+        if (uri != null) {
+            new FixMessagesTask(this, uri).execute(startCalendar, endCalendar);
+        }
     }
+    
+//    private void fixThreads() {
+//        new FixThreadsTask(this).execute();
+//    }
 
     private class FixMessagesTask extends AsyncTask<Calendar, Integer, Integer> {
         Activity activity;
         ProgressDialog progressDialog;
+        Uri uri;
 
-        public FixMessagesTask(Activity activity) {
+        public FixMessagesTask(Activity activity, Uri uri) {
             this.activity = activity;
+            this.uri = uri;
+
+            if (uri == null) {
+                cancel(true);
+            }
         }
 
         @Override
@@ -314,12 +358,12 @@ public class FixOld extends FragmentActivity {
 
         @Override
         protected Integer doInBackground(Calendar... params) {
-            String startTime = String.valueOf(startCalendar.getTimeInMillis());
-            String endTime = String.valueOf(endCalendar.getTimeInMillis());
+            String startTime = String.valueOf(params[0].getTimeInMillis());
+            String endTime = String.valueOf(params[1].getTimeInMillis());
 
-            Uri uri = SmsMmsDbHelper.getSmsUri();
+            String typeColumn = SmsMmsDbHelper.getTypeColumnName(uri);
             String[] columns = { "_id", "date" };
-            String condition = "type = ? AND date >= ? AND date <= ?";
+            String condition = typeColumn + " = ? AND date >= ? AND date <= ?";
             String[] args = { "1", startTime, endTime };
 
             Cursor c = getContentResolver().query(uri, columns, condition, args, "date ASC");
