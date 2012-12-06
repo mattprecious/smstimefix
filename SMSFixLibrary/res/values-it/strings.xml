@@ -49,7 +49,7 @@
     <string name="include_logs_title">Includi Diari di bordo?</string>
     <string name="include_logs_message">Vuoi aggiungere il diario di bordo? questo può aiutarci a risolvere eventuali problemi che hai trovato</string>
     <string name="email_intent_title">Invia Email</string>
-    <string name="about_title">Info</string>
+    <string name="about_title" multiapk="true">Info</string>
     <string name="about_version">Versione %s</string>
     <string name="about_donated">Donazioni!</string>
     <string name="about_by">Edito da:</string>

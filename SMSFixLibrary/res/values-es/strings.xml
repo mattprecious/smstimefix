@@ -50,7 +50,7 @@
     <string name="include_logs_title">Incluir registros?</string>
     <string name="include_logs_message">¿Desea adjuntar los archivos de registro al correo electrónico? Esto le ayudará a diagnosticar cualquier problema que esté experimentando.</string>
     <string name="email_intent_title">Enviar correo electrónico</string>
-    <string name="about_title">Acerca de</string>
+    <string name="about_title" multiapk="true">Acerca de</string>
     <string name="about_version">Versión %s  </string>
     <string name="about_donated">Ya has donado!</string>
     <string name="about_by">Escrito por  </string>

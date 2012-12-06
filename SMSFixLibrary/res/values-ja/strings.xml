@@ -49,7 +49,7 @@
     <string name="include_logs_title">ログを含めますか?</string>
     <string name="include_logs_message">ログファイルをメールに添付しますか? これは発生している問題を診断する手がかりになります。</string>
     <string name="email_intent_title">メールを送信</string>
-    <string name="about_title">情報</string>
+    <string name="about_title" multiapk="true">情報</string>
     <string name="about_version">バージョン %s</string>
     <string name="about_donated">寄付しました!</string>
     <string name="about_by">作者:</string>

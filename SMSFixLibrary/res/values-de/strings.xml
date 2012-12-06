@@ -50,7 +50,7 @@
     <string name="include_logs_title">Protokolle hinzufügen?</string>
     <string name="include_logs_message">Möchtest du die Protokolldateien an die E-Mail hängen? Dies wird helfen, die Probleme zu diagnostizieren.     </string>
     <string name="email_intent_title">E-Mail senden</string>
-    <string name="about_title">Über</string>
+    <string name="about_title" multiapk="true">Über</string>
     <string name="about_version">Version %s  </string>
     <string name="about_donated">Gespendet!</string>
     <string name="about_by">Geschrieben von:  </string>

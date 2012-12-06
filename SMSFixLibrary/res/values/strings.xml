@@ -92,8 +92,7 @@
     </string>
     <string name="email_intent_title">Send email</string>
     
-    <!-- changes to this value must also be changed in the other projects -->
-    <string name="fix_old_title">Fix Old Messages</string>
+    <string name="fix_old_title" multiapk="true">Fix Old Messages</string>
     
     <string name="fix_old_instructions">
        Use this tool to fix any messages that were received prior to using SMS Time Fix. Set a start date and end date that includes the messages that you want adjusted.
@@ -115,8 +114,7 @@
     <string name="fix_old_complete_title">Complete</string>
     <string name="fix_old_complete_message">%s messages were updated</string>
 
-    <!-- changes to this value must also be changed in the other projects -->
-	<string name="about_title">About</string>
+	<string name="about_title" multiapk="true">About</string>
 	
 	<string name="about_version">
 		Version %s
