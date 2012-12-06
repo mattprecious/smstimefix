@@ -2,7 +2,10 @@
 <resources>
 
     <string name="change_log">
-   		\n&#8226; Fix for Galaxy S3
+		&#8226; Fix old messages!
+		\n&#8226; MMS should work&#8230; let me know
+		\n&#8226; Minor bug fixes
+		\n&#8226; Minor UI tweaks
     </string>
 
 </resources>
