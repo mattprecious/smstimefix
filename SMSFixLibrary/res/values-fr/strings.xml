@@ -36,20 +36,11 @@
     <string name="roaming_ok">Ok</string>
     <string name="roaming_no">Non</string>
     <string name="roaming_message">Veuillez noter que je suis incapable de faire tout essai réel de ce paramètre car je ne rencontrent pas ce problème. Je ne peux pas garantir que cette méthode fonctionne à tous les coups . Si vous décidez d\'essayer , s\'il vous plaît faites moi savoir le résultat !     </string>
-    <string name="logging">Journal d\'erreur</string>
-    <string name="log_to_sd">Journal de stockage externe</string>
-    <string name="add_note">Ajouter une note</string>
-    <string name="add_note_summary">Ajouter un message dans le fichier log pour attirer l\'attention sur un problème</string>
-    <string name="clear_log">Effacer les fichiers logs</string>
-    <string name="clear_log_confirm">Êtes-vous sur de vouloir effacer les fichiers logs ?</string>
-    <string name="logs_cleared">Fichiers logs supprimés</string>
     <string name="fix_old">Bloquer les anciens messages</string>
     <string name="help">Aide</string>
     <string name="about">A propos</string>
     <string name="translate">Contribuer aux traductions</string>
     <string name="email_dev">Envoyer un email au développeur</string>
-    <string name="include_logs_title">Inclure les fichiers logs ?</string>
-    <string name="include_logs_message">Voulez vous attachez les fichiers logs à vos email ? Cela aiderait à diagnostiquer les problèmes que vous avez eu.     </string>
     <string name="email_intent_title">Envoyer un email</string>
     <string name="fix_old_title" multiapk="true">Bloquer les anciens messages</string>
     <string name="fix_old_instructions">Utilisez cet outil pour corriger tous les messages qui ont été reçus avant d\'utiliser SMS Time Fix. Définir une date de début et fin qui incluent les messages que vous voulez corriger.     \n\nAssurez-vous que vous avez sauvegardé tous vos messages avant de continuer ! Si votre batterie se vide, ou  si l\'application se bloque, ou si vous avez mal configuré l\'outil, il n\'y a aucun moyen simple d\'annuler. Choisissez n\'importe quel outil de sauvegarde des SMS dans le Play Store et sauvegardez les !     \n\nNotez que pour certains appareils, le temps des conversations modifiées va être incorrectement mis à jour à l\'heure actuelle. Les messages individuels seront corrects, mais pas le temps des conversation/fils de discussion. C\'est à dire dans l\'application principale de SMS où il est montré un extrait de toutes vos conversations, la dernière mise à jour sera incorrecte. Après avoir sélectionné une conversation, tous les messages individuels à l\'intérieur auront le temps correct. Ce problème sera résolu une fois qu\'un nouveau message est envoyé ou reçu pour une conversation.     </string>

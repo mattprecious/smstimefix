@@ -22,8 +22,11 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class SmsMmsDbHelper {
+    private final static String TAG = "SmsMmsDbHelper";
+
     private final static Uri SMS_URI = Uri.parse("content://sms");
     private final static Uri MMS_URI = Uri.parse("content://mms");
     private final static Uri MMS_SMS_URI = Uri.parse("content://mms-sms/conversations");
@@ -76,8 +79,6 @@ public class SmsMmsDbHelper {
     }
 
     public static long fixMessages(Context context, Uri uri, long lastUpdatedId) {
-        LoggerHelper logger = LoggerHelper.getInstance(context);
-
         String[] columns = { "_id", "date" };
         Cursor c = getInboxCursor(context, uri, columns, "_id DESC");
 
@@ -90,7 +91,7 @@ public class SmsMmsDbHelper {
             // get the message's ID
             long id = c.getLong(c.getColumnIndexOrThrow("_id"));
 
-            logger.info("Latest ID: " + id + "; Last ID: " + lastUpdatedId);
+            Log.d(TAG, "Latest ID: " + id + "; Last ID: " + lastUpdatedId);
 
             // update our counter
             newUpdatedId = id;
@@ -105,7 +106,7 @@ public class SmsMmsDbHelper {
 
                 // base case, handle there being no more messages and break out
                 if (c.isLast()) {
-                    logger.info("This is the last message, aborting");
+                    Log.d(TAG, "This is the last message, aborting");
                     break;
                 }
 
@@ -132,11 +133,10 @@ public class SmsMmsDbHelper {
      *            - the ID of the message to be altered
      */
     public static void alterMessage(Context context, Uri uri, long id, long date) {
-        LoggerHelper logger = LoggerHelper.getInstance(context);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
-        logger.info("Adjusting timestamp for message: " + id);
-        logger.info("Timestamp from the message is: " + date);
+        Log.d(TAG, "Adjusting timestamp for message: " + id);
+        Log.d(TAG, "Timestamp from the message is: " + date);
 
         // if the user has asked for the Future Only option, make sure the
         // message
@@ -148,8 +148,8 @@ public class SmsMmsDbHelper {
         boolean futureOnly = settings.getBoolean("cdma", false);
         boolean inTheFuture = (date - (new Date()).getTime()) > 5000;
 
-        logger.info("Future only: " + Boolean.toString(futureOnly));
-        logger.info("In the future? " + Boolean.toString(inTheFuture));
+        Log.d(TAG, "Future only: " + Boolean.toString(futureOnly));
+        Log.d(TAG, "In the future? " + Boolean.toString(inTheFuture));
 
         if (!futureOnly || inTheFuture) {
             // if the user wants to use the phone's time, use the current date
@@ -160,13 +160,13 @@ public class SmsMmsDbHelper {
             }
         }
 
-        logger.info("Setting timestamp to " + date);
+        Log.d(TAG, "Setting timestamp to " + date);
 
         // update the message with the new time stamp
         ContentValues values = new ContentValues();
         values.put("date", date);
         int result = context.getContentResolver().update(uri, values, "_id = " + id, null);
 
-        logger.info("Rows updated: " + result);
+        Log.d(TAG, "Rows updated: " + result);
     }
 }

@@ -31,8 +31,8 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
-import com.mattprecious.smsfix.library.util.LoggerHelper;
 import com.mattprecious.smsfix.library.util.SmsMmsDbHelper;
 
 /**
@@ -49,6 +49,8 @@ import com.mattprecious.smsfix.library.util.SmsMmsDbHelper;
  * 
  */
 public class FixService extends Service {
+    private final static String TAG = "FixService";
+
     private SharedPreferences settings;
 
     // The SMS and MMS URIs do not notify when a thread is deleted, so instead we use the MMS/SMS
@@ -90,8 +92,6 @@ public class FixService extends Service {
     private Object[] startForegroundArgs = new Object[2];
     private Object[] stopForegroundArgs = new Object[1];
 
-    private LoggerHelper logger;
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -101,8 +101,7 @@ public class FixService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        logger = LoggerHelper.getInstance(getApplicationContext());
-        logger.info("FixService starting");
+        Log.d(TAG, "FixService starting");
 
         running = true;
 
@@ -133,13 +132,13 @@ public class FixService extends Service {
 
         // shit's broken... throw my own exception so I don't have to read stack traces
         if (SMS_URI == null) {
-            logger.error("SMS URI is null");
+            Log.e(TAG, "SMS URI is null");
             throw new RuntimeException("SMS URI is null");
         }
 
         // MMS URI is null, but this isn't vital... log it.
         if (MMS_URI == null) {
-            logger.warn("MMS URI is null");
+            Log.w(TAG, "MMS URI is null");
         }
 
         try {
@@ -162,12 +161,12 @@ public class FixService extends Service {
         lastSmsId = SmsMmsDbHelper.getLastMessageId(this, SMS_URI);
         lastMmsId = SmsMmsDbHelper.getLastMessageId(this, MMS_URI);
 
-        logger.info("lastSmsId initialized to " + lastSmsId);
-        logger.info("lastMmsId initialized to " + lastMmsId);
+        Log.d(TAG, "lastSmsId initialized to " + lastSmsId);
+        Log.d(TAG, "lastMmsId initialized to " + lastMmsId);
 
         setupForegroundVars();
 
-        logger.info("FixService initialization complete. Now monitoring SMS messages");
+        Log.d(TAG, "FixService initialization complete. Now monitoring SMS messages");
     }
 
     @Override
@@ -188,7 +187,7 @@ public class FixService extends Service {
         }
 
         running = false;
-        logger.info("FixService destroy");
+        Log.d(TAG, "FixService destroy");
 
         super.onDestroy();
     }
@@ -267,10 +266,10 @@ public class FixService extends Service {
                 stopForeground.invoke(this, stopForegroundArgs);
             } catch (InvocationTargetException e) {
                 // Should not happen.
-                logger.warn("Unable to invoke stopForeground", e);
+                Log.w(TAG, "Unable to invoke stopForeground", e);
             } catch (IllegalAccessException e) {
                 // Should not happen.
-                logger.warn("Unable to invoke stopForeground", e);
+                Log.w(TAG, "Unable to invoke stopForeground", e);
             }
             return;
         }
@@ -287,10 +286,10 @@ public class FixService extends Service {
             method.invoke(this, args);
         } catch (InvocationTargetException e) {
             // Should not happen.
-            logger.warn("Unable to invoke method", e);
+            Log.w(TAG, "Unable to invoke method", e);
         } catch (IllegalAccessException e) {
             // Should not happen.
-            logger.warn("Unable to invoke method", e);
+            Log.w(TAG, "Unable to invoke method", e);
         }
     }
 
@@ -313,8 +312,8 @@ public class FixService extends Service {
         boolean onlyRoaming = settings.getBoolean("roaming", false);
         boolean isRoaming = telephonyManager.isNetworkRoaming();
 
-        logger.info("onlyRoaming: " + Boolean.toString(onlyRoaming));
-        logger.info("isRoaming: " + Boolean.toString(isRoaming));
+        Log.d(TAG, "onlyRoaming: " + Boolean.toString(onlyRoaming));
+        Log.d(TAG, "isRoaming: " + Boolean.toString(isRoaming));
 
         boolean roamingCondition = !onlyRoaming || isRoaming;
 
@@ -369,16 +368,16 @@ public class FixService extends Service {
                     break;
             }
 
-            logger.info(typeStr + " database altered, checking...");
+            Log.d(TAG, typeStr + " database altered, checking...");
 
             boolean roamingConditionMet = roamingConditionMet();
 
-            logger.info("selfChange: " + Boolean.toString(selfChange));
-            logger.info("roamingConditionMet: " + Boolean.toString(roamingConditionMet));
+            Log.d(TAG, "selfChange: " + Boolean.toString(selfChange));
+            Log.d(TAG, "roamingConditionMet: " + Boolean.toString(roamingConditionMet));
 
             // TODO: make the selfChange boolean actually work...
             if (!selfChange && roamingConditionMet) {
-                logger.info("Adjusting the message(s)");
+                Log.d(TAG, "Adjusting the message(s)");
 
                 // fix them
                 if (type == TYPE_SMS || type == TYPE_MMS_SMS) {

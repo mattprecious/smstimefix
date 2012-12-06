@@ -36,18 +36,9 @@
     <string name="roaming_ok">OK</string>
     <string name="roaming_no">No, grazie!</string>
     <string name="roaming_message">Sappi che non esiste una conoscenza approfondita di questa funzione in quanto non ho mai riscontrato problemi in merito. Quindi non posso garantire che funzioni al 100%. Se decidi di testarlo approfonditamente, per favore fammi sapere com\'è andata! ;-)</string>
-    <string name="logging">Diario di Bordo</string>
-    <string name="log_to_sd">Registra nella memoria esterna</string>
-    <string name="add_note">Aggiungi note</string>
-    <string name="add_note_summary">Aggiungi un messaggio al diario di bordo per segnalare un problema</string>
-    <string name="clear_log">Pulisci registro</string>
-    <string name="clear_log_confirm">Sei sicuro di voler cancellare il diario di bordo?</string>
-    <string name="logs_cleared">Diario di bordo cancellato</string>
     <string name="help">Aiuto</string>
     <string name="about">Info</string>
     <string name="email_dev">Scrivi al programmatore</string>
-    <string name="include_logs_title">Includi Diari di bordo?</string>
-    <string name="include_logs_message">Vuoi aggiungere il diario di bordo? questo può aiutarci a risolvere eventuali problemi che hai trovato</string>
     <string name="email_intent_title">Invia Email</string>
     <string name="about_title" multiapk="true">Info</string>
     <string name="about_version">Versione %s</string>

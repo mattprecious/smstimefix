@@ -18,30 +18,27 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-
-import com.mattprecious.smsfix.library.util.LoggerHelper;
+import android.util.Log;
 
 public class Receiver extends BroadcastReceiver {
-
-    private LoggerHelper logger;
+    private final static String TAG = "Receiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        logger = LoggerHelper.getInstance(context);
-        logger.info("Received " + intent.getAction() + " intent");
+        Log.d(TAG, "Received " + intent.getAction() + " intent");
 
         String name = context.getPackageName() + "_preferences";
 
-        logger.info("Using preferences: " + name);
+        Log.d(TAG, "Using preferences: " + name);
 
         SharedPreferences settings = context.getSharedPreferences(name, 0);
 
         boolean active = settings.getBoolean("active", false);
 
-        logger.info("Active preference: " + Boolean.toString(active));
+        Log.d(TAG, "Active preference: " + Boolean.toString(active));
 
         if (active) {
-            logger.info("Starting FixService");
+            Log.d(TAG, "Starting FixService");
             Intent svc = new Intent(context, FixService.class);
             context.startService(svc);
         }

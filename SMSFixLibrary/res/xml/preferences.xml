@@ -69,22 +69,6 @@
         <Preference
             android:key="donate"
             android:title="@string/donate" />
-
-        <PreferenceScreen android:title="@string/logging" >
-            <CheckBoxPreference
-                android:defaultValue="1"
-                android:key="log_to_sd"
-                android:title="@string/log_to_sd" />
-
-            <Preference
-                android:key="add_note"
-                android:summary="@string/add_note_summary"
-                android:title="@string/add_note" />
-            <Preference
-                android:key="clear_log"
-                android:title="@string/clear_log" />
-        </PreferenceScreen>
-
         <Preference
             android:key="fix_old"
             android:title="@string/fix_old" />

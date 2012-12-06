@@ -36,19 +36,10 @@
     <string name="roaming_ok">OK</string>
     <string name="roaming_no">No</string>
     <string name="roaming_message">Por favor, hágame saber su experiencia con la aplicación! Yo ya no estoy experimentando problemas con mi celular así que no puedo realizar pruebas reales acerca de su funcionamiento.</string>
-    <string name="logging">Registro</string>
-    <string name="log_to_sd">Guardar registro en almacenamiento externo</string>
-    <string name="add_note">Agregar nota</string>
-    <string name="add_note_summary">      Añadir un mensaje en el archivo de registro para llamar la atención sobre un problema     </string>
-    <string name="clear_log">Borrar registro</string>
-    <string name="clear_log_confirm">¿Está seguro de que desea borrar sus registros?</string>
-    <string name="logs_cleared">Registros borrados</string>
     <string name="help">Ayuda</string>
     <string name="about">Acerca de</string>
     <string name="translate">Ayudar con las traducciones</string>
     <string name="email_dev">Enviar correo al desarrollador</string>
-    <string name="include_logs_title">Incluir registros?</string>
-    <string name="include_logs_message">¿Desea adjuntar los archivos de registro al correo electrónico? Esto le ayudará a diagnosticar cualquier problema que esté experimentando.</string>
     <string name="email_intent_title">Enviar correo electrónico</string>
     <string name="about_title" multiapk="true">Acerca de</string>
     <string name="about_version">Versión %s  </string>

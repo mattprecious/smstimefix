@@ -14,10 +14,9 @@
 
 package com.mattprecious.smsfix.library;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Properties;
 import java.util.TimeZone;
@@ -37,6 +36,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -47,7 +47,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.text.InputType;
-import android.widget.Toast;
+import android.util.Log;
 
 /**
  * SMS Time Fix main activity window
@@ -58,6 +58,7 @@ import android.widget.Toast;
 public class SMSFix extends PreferenceActivity {
     static boolean donated = false;
 
+    private final static String TAG = "SMSFix";
     private final String PROPERTIES_FILE = "main.properties";
 
     private SharedPreferences settings;
@@ -82,20 +83,16 @@ public class SMSFix extends PreferenceActivity {
 
     private OnSharedPreferenceChangeListener prefListener;
 
-    private LoggerHelper logger;
-
     static final int DIALOG_DONATE_ID = 0;
     static final int DIALOG_ROAMING_ID = 1;
     static final int DIALOG_CHANGE_LOG_ID = 2;
     static final int DIALOG_CONFIRM_LOG_CLEAR_ID = 3;
-    static final int DIALOG_ATTACH_LOGS_ID = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        logger = LoggerHelper.getInstance(getApplicationContext());
-        logger.info("SMSFix Activity started. Preparing the view");
+        Log.d(TAG, "SMSFix Activity started. Preparing the view");
 
         addPreferencesFromResource(R.xml.preferences);
 
@@ -132,25 +129,6 @@ public class SMSFix extends PreferenceActivity {
                 if (roamingBox.isChecked()) {
                     showDialog(DIALOG_ROAMING_ID);
                 }
-                return true;
-            }
-        });
-
-        addNote.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(SMSFix.this, LogNote.class));
-
-                return true;
-            }
-        });
-
-        clearLog.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                showDialog(DIALOG_CONFIRM_LOG_CLEAR_ID);
                 return true;
             }
         });
@@ -215,7 +193,7 @@ public class SMSFix extends PreferenceActivity {
 
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                showDialog(DIALOG_ATTACH_LOGS_ID);
+                sendEmailToDev();
                 return true;
             }
         });
@@ -225,7 +203,7 @@ public class SMSFix extends PreferenceActivity {
 
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                logger.info("Preference changed: " + key);
+                Log.d(TAG, "Preference changed: " + key);
 
                 // if "Active" has changed, start or stop the service
                 if (key.equals("active")) {
@@ -234,8 +212,6 @@ public class SMSFix extends PreferenceActivity {
                     // if "Notification" has changed, we want to restart the service
                     // also restart if the icon has changed
                     restartService();
-                } else if (key.equals("log_to_sd")) {
-                    logger.reset(getApplicationContext());
                 }
 
                 // update offset and CDMA to reflect the new status or method
@@ -265,16 +241,16 @@ public class SMSFix extends PreferenceActivity {
         toggleNotify();
 
         // debug the change log
-        // settings.edit().putInt("version_code", 0).commit();
+//        settings.edit().putInt("version_code", 0).commit();
 
         checkAndShowChangeLog();
 
-        logger.info("SMSFix Activity initialization complete");
+        Log.d(TAG, "SMSFix Activity initialization complete");
     }
 
     @Override
     protected void onDestroy() {
-        logger.info("SMSFix Activity destroy");
+        Log.d(TAG, "SMSFix Activity destroy");
 
         super.onDestroy();
     }
@@ -291,7 +267,7 @@ public class SMSFix extends PreferenceActivity {
 
             donated = Boolean.valueOf(properties.getProperty("donated"));
         } catch (IOException e) {
-            logger.error("Failed to open properties file");
+            Log.e(TAG, "Failed to open properties file");
             e.printStackTrace();
         }
     }
@@ -355,45 +331,6 @@ public class SMSFix extends PreferenceActivity {
                                 });
                 dialog = builder.create();
                 break;
-            case DIALOG_CONFIRM_LOG_CLEAR_ID:
-                builder.setMessage(R.string.clear_log_confirm)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int id) {
-                                logger.clearLog(getApplicationContext());
-
-                                Toast toast = Toast.makeText(getApplicationContext(),
-                                        R.string.logs_cleared, Toast.LENGTH_SHORT);
-                                toast.show();
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                dialog = builder.create();
-                break;
-            case DIALOG_ATTACH_LOGS_ID:
-                builder.setTitle(R.string.include_logs_title)
-                        .setIcon(android.R.drawable.ic_dialog_info)
-                        .setMessage(R.string.include_logs_message)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int id) {
-                                sendEmailToDev(true);
-                                dialog.cancel();
-                            }
-                        }).setNegativeButton(R.string.nope, new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int id) {
-                                sendEmailToDev(false);
-                                dialog.cancel();
-                            }
-                        });
-                dialog = builder.create();
-                break;
             default:
                 dialog = null;
         }
@@ -449,29 +386,49 @@ public class SMSFix extends PreferenceActivity {
         notifyIcon.setEnabled(settings.getBoolean("notify", false));
     }
 
-    public void sendEmailToDev(boolean attachLogs) {
-        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    public void sendEmailToDev() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("vnd.android.cursor.dir/email");
 
         intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "matt@mattprecious.com" });
         intent.putExtra(Intent.EXTRA_SUBJECT, "SMS Time Fix Feedback");
+        
+        StringBuffer body = new StringBuffer("\n\n\n------------------------------");
+        body.append("\nAndroid release: ").append(Build.VERSION.RELEASE);
+        body.append("\nAndroid SDK: ").append(getSdkVersion());
 
-        File logFile = LoggerHelper.getLogFile();
-        File rolloverLogFile = LoggerHelper.getRolloverLogFile();
-
-        if (attachLogs && logFile.exists()) {
-            ArrayList<Uri> attachments = new ArrayList<Uri>();
-            attachments.add(Uri.fromFile(logFile));
-
-            if (logFile.length() < LoggerHelper.EMAIL_LOG_MIN && rolloverLogFile.exists()) {
-                attachments.add(Uri.fromFile(rolloverLogFile));
-            }
-
-            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachments);
+        String appVersion = "";
+        
+        try {
+            PackageManager packageManager = getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
+            
+            appVersion = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
+        } catch (NameNotFoundException e) {
+            
         }
+        
+        body.append("\nSMSFix package: ").append(getPackageName());
+        body.append("\nSMSFix Version: ").append(appVersion);
+        body.append("\nPreferences:").append(settings.getAll().toString());
+        intent.putExtra(Intent.EXTRA_TEXT, body.toString());
 
         startActivity(intent);
+    }
+
+    @SuppressWarnings("deprecation")
+    private int getSdkVersion() {
+        int sdkVersion;
+        
+        try {
+            // works for level 4 and up
+            Field SDK_INT_field = Build.VERSION.class.getField("SDK_INT");
+            sdkVersion = (Integer) SDK_INT_field.get(null);
+        } catch (Exception e) {
+            sdkVersion = Integer.parseInt(Build.VERSION.SDK);
+        }
+        
+        return sdkVersion;
     }
 
     /**
@@ -521,13 +478,14 @@ public class SMSFix extends PreferenceActivity {
                 Editor editor = settings.edit();
                 editor.putInt("version_code", packageInfo.versionCode);
                 editor.commit();
-
-                // while we're here... make sure "active" is unchecked after an update
-//                activeBox.setChecked(false);
             }
         } catch (NameNotFoundException e) {
 
         }
+        
+        // remove the old log files
+        // TODO: remove in the next release
+        LoggerHelper.clearLog(this);
     }
 
 }

@@ -20,8 +20,10 @@ import java.util.TimeZone;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class TimeHelper {
+    private final static String TAG = "TimeHelper";
     /**
      * Get the desired offset change based on the user's preferences
      * 
@@ -31,32 +33,31 @@ public class TimeHelper {
     public static long getOffset(Context context) {
         long offset = 0;
 
-        LoggerHelper logger = LoggerHelper.getInstance(context);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
         // if the user wants us to auto-determine the offset use the negative of
         // their GMT offset
         String method = settings.getString("offset_method", "manual");
 
-        logger.info("Adjustment method: " + method);
+        Log.d(TAG, "Adjustment method: " + method);
 
         if (method.equals("automatic") || method.equals("neg_automatic")) {
             offset = TimeZone.getDefault().getRawOffset();
 
-            logger.info("Raw offset: " + offset);
+            Log.d(TAG, "Raw offset: " + offset);
 
             // account for DST
             if (TimeZone.getDefault().useDaylightTime()
                     && TimeZone.getDefault().inDaylightTime(new Date())) {
                 offset += 3600000;
 
-                logger.info("Adjusting for DST: " + offset);
+                Log.d(TAG, "Adjusting for DST: " + offset);
             }
 
             if (method.equals("automatic")) {
                 offset *= -1;
 
-                logger.info("Negate the offset: " + offset);
+                Log.d(TAG, "Negate the offset: " + offset);
             }
 
             // otherwise, use the offset the user has specified
@@ -64,14 +65,14 @@ public class TimeHelper {
             double offsetHours = Double.parseDouble(settings.getString("offset_hours", "0"));
             double offsetMinutes = Double.parseDouble(settings.getString("offset_minutes", "0"));
 
-            logger.info("Offset Hours: " + offsetHours);
-            logger.info("Offset Minutes: " + offsetMinutes);
+            Log.d(TAG, "Offset Hours: " + offsetHours);
+            Log.d(TAG, "Offset Minutes: " + offsetMinutes);
 
             offset = (long) (offsetHours * 3600000);
             offset += (long) (offsetMinutes * 60000);
         }
 
-        logger.info("Final offset: " + offset);
+        Log.d(TAG, "Final offset: " + offset);
         return offset;
     }
 }

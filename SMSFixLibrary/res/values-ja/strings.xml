@@ -36,18 +36,9 @@
     <string name="roaming_ok">OK</string>
     <string name="roaming_no">いいえ</string>
     <string name="roaming_message">私はこの問題を経験していないため、私がこの環境で実際に試すことができないことに注意してください。この方法でうまくいくということを私は全く保証できません。これを試されるのであれば、結果をお知らせください!</string>
-    <string name="logging">記録中</string>
-    <string name="log_to_sd">外部ストレージに記録</string>
-    <string name="add_note">メモを追加</string>
-    <string name="add_note_summary">問題点に注意を引くためにログファイルにメッセージを追加します</string>
-    <string name="clear_log">ログを消去</string>
-    <string name="clear_log_confirm">ログを消去してもよろしいですか?</string>
-    <string name="logs_cleared">ログを消去しました</string>
     <string name="help">ヘルプ</string>
     <string name="about">情報</string>
     <string name="email_dev">開発者にメール</string>
-    <string name="include_logs_title">ログを含めますか?</string>
-    <string name="include_logs_message">ログファイルをメールに添付しますか? これは発生している問題を診断する手がかりになります。</string>
     <string name="email_intent_title">メールを送信</string>
     <string name="about_title" multiapk="true">情報</string>
     <string name="about_version">バージョン %s</string>
