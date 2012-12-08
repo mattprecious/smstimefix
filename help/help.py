@@ -18,7 +18,7 @@ topics = [
 		'body': '''
 			SMS Time Fix uses the time already assigned to the message to calculate the correct time. This means that the error must be consistent. e.g. If your message time is wrong, it is always off by 5 hours. The only exception to this is if you want to ignore the provided time and always use your phone time. See <i>Adjustment Methods</i> for more information.<br /><br />
 
-			If messages sent while your phone is turned off (or disconnected) show the time that your phone was turned on (connected), SMS Time Fix is unable to accurately determine when the message was sent.
+			If messages sent while your phone is turned off (or disconnected) show the time that your phone was turned on (connected), SMS Time Fix is unable to accurately determine when the message was sent. Please contact your network provider and your device manufacturer and let them know that you are not satisfied with the way your phone and the network have been configured.
 		''',
 	},
 	{
@@ -128,6 +128,12 @@ topics = [
 		'title': "Can I contribute?",
 		'body': '''
 			You most certainly can! The source can be found on <a href="http://github.com/mattprecious/smstimefix">GitHub</a>. Feel free to fork the repo and submit any changes back to me!
+		''',
+	},
+	{
+		'title': "Can you translate SMS Time Fix to my language?",
+		'body': '''
+			I can't, but you can! Contribute translations through <a href="http://crowdin.net/project/sms-time-fix" />Crowdin</a>.
 		''',
 	},
 	{
