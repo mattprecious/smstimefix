@@ -2,7 +2,10 @@
 <resources>
 
     <string name="change_log">
-		&#8226; Fix old messages!
+        2.4 (repack):
+        \n&#8226; Fix for MMS year issue (email me if you were affected for a retroactive fix)
+        \n\n2.4:
+		\n&#8226; Fix old messages!
 		\n&#8226; Removed logging
 		\n&#8226; MMS should work&#8230;
 		\n&#8226; Minor bug fixes
