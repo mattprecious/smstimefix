@@ -155,6 +155,11 @@ public class SmsMmsDbHelper {
             // if the user wants to use the phone's time, use the current date
             if (settings.getString("offset_method", "manual").equals("phone")) {
                 date = (new Date()).getTime();
+                
+                // MMS dates are stores as seconds... not ms...
+                if (uri == SmsMmsDbHelper.getMmsUri()) {
+                    date /= 1000;
+                }
             } else {
                 date = date + TimeHelper.getOffset(context);
             }
