@@ -4,6 +4,7 @@
     <string name="change_log">
         2.4 (repack):
         \n&#8226; Fix for MMS year issue (email me if you were affected for a retroactive fix)
+        \n&#8226; Fix for force close
         \n\n2.4:
 		\n&#8226; Fix old messages!
 		\n&#8226; Removed logging

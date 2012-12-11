@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mattprecious.smsfixdonate"
-    android:versionCode="23"
+    android:versionCode="24"
     android:versionName="2.4" >
 
     <uses-sdk
@@ -54,13 +54,6 @@
                 <data
                     android:path="com.mattprecious.smsfixdonate"
                     android:scheme="package" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.mattprecious.smsfix.library.LogRolloverReceiver"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.mattprecious.smsfix.library.INTENT_LOG_ROLLOVER" />
             </intent-filter>
         </receiver>
     </application>
