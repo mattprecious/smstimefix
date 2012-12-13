@@ -197,14 +197,14 @@ public class FixService extends Service {
     // method will not be called.
     @Override
     public void onStart(Intent intent, int startId) {
-        if (settings.getBoolean("notify", false)) {
+        if (settings.getBoolean("notify", true)) {
             startNotify();
         }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (settings.getBoolean("notify", false)) {
+        if (settings.getBoolean("notify", true)) {
             startNotify();
         }
 

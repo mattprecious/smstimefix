@@ -48,7 +48,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/category_extra" >
         <CheckBoxPreference
-            android:defaultValue="0"
+            android:defaultValue="1"
             android:dependency="active"
             android:key="notify"
             android:summary="@string/notify_summary"

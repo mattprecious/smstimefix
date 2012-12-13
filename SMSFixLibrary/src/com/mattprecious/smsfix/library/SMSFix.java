@@ -391,7 +391,7 @@ public class SMSFix extends PreferenceActivity {
      * Toggle whether or not the "Icon Style" option should be enabled.
      */
     public void toggleNotify() {
-        notifyIcon.setEnabled(settings.getBoolean("notify", false));
+        notifyIcon.setEnabled(settings.getBoolean("notify", true));
     }
 
     public void sendEmailToDev() {
