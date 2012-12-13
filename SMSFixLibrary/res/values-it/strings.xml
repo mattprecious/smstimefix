@@ -39,7 +39,6 @@
     <string name="help">Aiuto</string>
     <string name="about">Info</string>
     <string name="email_dev">Scrivi al programmatore</string>
-    <string name="email_intent_title">Invia Email</string>
     <string name="about_title" multiapk="true">Info</string>
     <string name="about_version">Versione %s</string>
     <string name="about_donated">Donazioni!</string>

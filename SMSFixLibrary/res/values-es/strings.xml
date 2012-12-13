@@ -40,7 +40,6 @@
     <string name="about">Acerca de</string>
     <string name="translate">Ayudar con las traducciones</string>
     <string name="email_dev">Enviar correo al desarrollador</string>
-    <string name="email_intent_title">Enviar correo electrónico</string>
     <string name="about_title" multiapk="true">Acerca de</string>
     <string name="about_version">Versión %s  </string>
     <string name="about_donated">Ya has donado!</string>

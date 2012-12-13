@@ -39,7 +39,6 @@
     <string name="help">ヘルプ</string>
     <string name="about">情報</string>
     <string name="email_dev">開発者にメール</string>
-    <string name="email_intent_title">メールを送信</string>
     <string name="about_title" multiapk="true">情報</string>
     <string name="about_version">バージョン %s</string>
     <string name="about_donated">寄付しました!</string>
