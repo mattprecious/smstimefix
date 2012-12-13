@@ -78,7 +78,7 @@ public class SmsMmsDbHelper {
         return id;
     }
 
-    public static long fixMessages(Context context, Uri uri, long lastUpdatedId) {
+    public synchronized static long fixMessages(Context context, Uri uri, long lastUpdatedId) {
         String[] columns = { "_id", "date" };
         Cursor c = getInboxCursor(context, uri, columns, "_id DESC");
 
@@ -161,7 +161,11 @@ public class SmsMmsDbHelper {
                     date /= 1000;
                 }
             } else {
-                date = date + TimeHelper.getOffset(context);
+                long offset = TimeHelper.getOffset(context);
+                if (uri == SmsMmsDbHelper.getMmsUri()) {
+                    offset /= 1000;
+                } 
+                date = date + offset;
             }
         }
 

@@ -140,6 +140,13 @@ public class FixService extends Service {
         if (MMS_URI == null) {
             Log.w(TAG, "MMS URI is null");
         }
+        
+        // get the current last message ID
+        lastSmsId = SmsMmsDbHelper.getLastMessageId(this, SMS_URI);
+        lastMmsId = SmsMmsDbHelper.getLastMessageId(this, MMS_URI);
+        
+        Log.d(TAG, "lastSmsId initialized to " + lastSmsId);
+        Log.d(TAG, "lastMmsId initialized to " + lastMmsId);
 
         try {
             mmsSmsObserver = new FixServiceObserver(FixServiceObserver.TYPE_MMS_SMS);
@@ -156,13 +163,6 @@ public class FixService extends Service {
                 mmsCursor.registerContentObserver(mmsObserver);
             }
         }
-
-        // get the current last message ID
-        lastSmsId = SmsMmsDbHelper.getLastMessageId(this, SMS_URI);
-        lastMmsId = SmsMmsDbHelper.getLastMessageId(this, MMS_URI);
-
-        Log.d(TAG, "lastSmsId initialized to " + lastSmsId);
-        Log.d(TAG, "lastMmsId initialized to " + lastMmsId);
 
         setupForegroundVars();
 
@@ -349,7 +349,7 @@ public class FixService extends Service {
         }
 
         @Override
-        public void onChange(boolean selfChange) {
+        public synchronized void onChange(boolean selfChange) {
             super.onChange(selfChange);
 
             String typeStr;

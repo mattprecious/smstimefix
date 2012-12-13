@@ -334,6 +334,7 @@ public class FixOld extends FragmentActivity {
         Activity activity;
         ProgressDialog progressDialog;
         Uri uri;
+        long realOffset;
 
         public FixMessagesTask(Activity activity, Uri uri) {
             this.activity = activity;
@@ -341,6 +342,12 @@ public class FixOld extends FragmentActivity {
 
             if (uri == null) {
                 cancel(true);
+            }
+            
+            if (uri == MMS_URI) {
+                realOffset = offset / 1000;
+            } else {
+                realOffset = offset;
             }
         }
 
@@ -379,7 +386,7 @@ public class FixOld extends FragmentActivity {
                     long id = c.getLong(c.getColumnIndexOrThrow("_id"));
                     long longdate = c.getLong(c.getColumnIndexOrThrow("date"));
 
-                    longdate += offset;
+                    longdate += realOffset;
 
                     // update the message with the new time stamp
                     ContentValues values = new ContentValues();
