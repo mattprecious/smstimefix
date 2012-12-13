@@ -365,13 +365,21 @@ public class FixOld extends FragmentActivity {
 
         @Override
         protected Integer doInBackground(Calendar... params) {
-            String startTime = String.valueOf(params[0].getTimeInMillis());
-            String endTime = String.valueOf(params[1].getTimeInMillis());
-
+            long startTime = params[0].getTimeInMillis();
+            long endTime = params[1].getTimeInMillis();
+            
+            if (uri == MMS_URI) {
+                startTime /= 1000;
+                endTime /= 1000;
+            }
+            
+            String startTimeStr = String.valueOf(startTime);
+            String endTimeStr = String.valueOf(endTime);
+            
             String typeColumn = SmsMmsDbHelper.getTypeColumnName(uri);
             String[] columns = { "_id", "date" };
             String condition = typeColumn + " = ? AND date >= ? AND date <= ?";
-            String[] args = { "1", startTime, endTime };
+            String[] args = { "1", startTimeStr, endTimeStr };
 
             Cursor c = getContentResolver().query(uri, columns, condition, args, "date ASC");
 
