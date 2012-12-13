@@ -64,11 +64,7 @@ public class SmsMmsDbHelper {
         long id = -1;
         Cursor c = getInboxCursor(context, uri, new String[] { "_id", "date" }, "_id DESC");
 
-        // if there are any messages at our cursor
-        if (c.getCount() > 0) {
-            // get the first one
-            c.moveToFirst();
-
+        if (c.moveToFirst()) {
             // grab its ID
             id = c.getLong(c.getColumnIndexOrThrow("_id"));
         }
@@ -84,10 +80,7 @@ public class SmsMmsDbHelper {
 
         long newUpdatedId;
         // if there are any messages
-        if (c.getCount() > 0) {
-            // move to the first one
-            c.moveToFirst();
-
+        if (c.moveToFirst()) {
             // get the message's ID
             long id = c.getLong(c.getColumnIndexOrThrow("_id"));
 
