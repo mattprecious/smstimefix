@@ -113,6 +113,7 @@ public class SMSFix extends PreferenceActivity {
         emailDev = (Preference) findPreference("email_dev");
 
         adjustMethodLabels();
+        preferenceSanityCheck();
 
         roamingBox.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
@@ -249,6 +250,20 @@ public class SMSFix extends PreferenceActivity {
         Log.d(TAG, "SMSFix Activity destroy");
 
         super.onDestroy();
+    }
+    
+    /**
+     * Empty strings cause cast exceptions elsewhere, so make sure they're not empty
+     * TODO: Preferences utility class to handle the casting properly
+     */
+    private void preferenceSanityCheck() {
+        if ("".equals(settings.getString("offset_hours", "0"))) {
+            settings.edit().putString("offset_hours", "0").commit();
+        }
+        
+        if ("".equals(settings.getString("offset_minutes", "0"))) {
+            settings.edit().putString("offset_minutes", "0").commit();
+        }
     }
 
     protected void readProperties() {
