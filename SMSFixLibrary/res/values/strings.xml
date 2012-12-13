@@ -74,9 +74,7 @@
     <string name="about">About</string>
     
     <string name="translate">Contribute Translations</string>
-    
-    <string name="email_dev">Email Developer</string>
-    <string name="email_intent_title">Send email</string>
+    <string name="email_dev">Feedback</string>
     
     <string name="fix_old_title" multiapk="true">Fix Old Messages</string>
     
