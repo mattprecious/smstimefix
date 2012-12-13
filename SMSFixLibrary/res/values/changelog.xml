@@ -2,6 +2,7 @@
 <resources>
 
     <string name="change_log">
+        &#8226; MMS option
         &#8226; Bug fixes
     </string>
 
