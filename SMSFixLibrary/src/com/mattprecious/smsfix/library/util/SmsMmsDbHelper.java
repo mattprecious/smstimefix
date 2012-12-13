@@ -62,7 +62,7 @@ public class SmsMmsDbHelper {
      */
     public static long getLastMessageId(Context context, Uri uri) {
         long id = -1;
-        Cursor c = getInboxCursor(context, uri, new String[] { "_id", "date" }, "_id DESC");
+        Cursor c = getInboxCursor(context, uri, new String[] { "_id" }, "_id DESC");
 
         if (c.moveToFirst()) {
             // grab its ID
