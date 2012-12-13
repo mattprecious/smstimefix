@@ -126,4 +126,7 @@
 	<string name="nope">Nope</string>
 	
 	<string name="whats_new">What\'s New?</string>
+	
+	<string name="warning">Warning</string>
+	<string name="backup_warning_message">SMS related development on Android is inconsistent between devices and difficult to test. While I do my best to ensure the correctness of this app, things can go wrong. Please run SMS Time Fix in parallel with an SMS backup app. There are plenty available, so pick one that meets your needs and ensure that your messages are backed up regularly.</string>
 </resources>

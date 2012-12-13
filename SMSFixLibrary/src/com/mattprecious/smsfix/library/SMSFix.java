@@ -81,6 +81,7 @@ public class SMSFix extends PreferenceActivity {
     static final int DIALOG_DONATE_ID = 0;
     static final int DIALOG_ROAMING_ID = 1;
     static final int DIALOG_CHANGE_LOG_ID = 2;
+    static final int DIALOG_BACKUP_WARNING = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -234,6 +235,10 @@ public class SMSFix extends PreferenceActivity {
         // debug the change log
 //        settings.edit().putInt("version_code", 0).commit();
 
+        if (!settings.getBoolean("seen_backup_warning", false)) {
+            showDialog(DIALOG_BACKUP_WARNING);
+        }
+
         checkAndShowChangeLog();
 
         Log.d(TAG, "SMSFix Activity initialization complete");
@@ -273,6 +278,18 @@ public class SMSFix extends PreferenceActivity {
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                dialog = builder.create();
+                break;
+            case DIALOG_BACKUP_WARNING:
+                builder.setTitle(R.string.warning).setIcon(android.R.drawable.ic_dialog_alert)
+                        .setMessage(R.string.backup_warning_message)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+                                settings.edit().putBoolean("seen_backup_warning", true).commit();
                                 dialog.cancel();
                             }
                         });
@@ -383,22 +400,22 @@ public class SMSFix extends PreferenceActivity {
 
         intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "matt@mattprecious.com" });
         intent.putExtra(Intent.EXTRA_SUBJECT, "SMS Time Fix Feedback");
-        
+
         StringBuffer body = new StringBuffer("\n\n\n------------------------------");
         body.append("\nAndroid release: ").append(Build.VERSION.RELEASE);
         body.append("\nAndroid SDK: ").append(getSdkVersion());
 
         String appVersion = "";
-        
+
         try {
             PackageManager packageManager = getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
-            
+
             appVersion = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
         } catch (NameNotFoundException e) {
-            
+
         }
-        
+
         body.append("\nSMSFix package: ").append(getPackageName());
         body.append("\nSMSFix Version: ").append(appVersion);
         body.append("\nPreferences:").append(settings.getAll().toString());
@@ -410,7 +427,7 @@ public class SMSFix extends PreferenceActivity {
     @SuppressWarnings("deprecation")
     private int getSdkVersion() {
         int sdkVersion;
-        
+
         try {
             // works for level 4 and up
             Field SDK_INT_field = Build.VERSION.class.getField("SDK_INT");
@@ -418,7 +435,7 @@ public class SMSFix extends PreferenceActivity {
         } catch (Exception e) {
             sdkVersion = Integer.parseInt(Build.VERSION.SDK);
         }
-        
+
         return sdkVersion;
     }
 
@@ -469,6 +486,10 @@ public class SMSFix extends PreferenceActivity {
                 Editor editor = settings.edit();
                 editor.putInt("version_code", packageInfo.versionCode);
                 editor.commit();
+            }
+
+            if (settings.contains("log_to_sd")) {
+                settings.edit().remove("log_to_sd").commit();
             }
         } catch (NameNotFoundException e) {
 
