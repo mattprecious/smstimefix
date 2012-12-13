@@ -34,6 +34,11 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/category_conditions" >
         <CheckBoxPreference
+            android:defaultValue="1"
+            android:dependency="active"
+            android:key="mms"
+            android:title="@string/mms" />
+        <CheckBoxPreference
             android:defaultValue="0"
             android:dependency="active"
             android:key="cdma"

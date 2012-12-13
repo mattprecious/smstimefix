@@ -157,7 +157,7 @@ public class FixService extends Service {
             smsCursor = SmsMmsDbHelper.getInboxCursor(this, SMS_URI, null, null);
             smsCursor.registerContentObserver(smsObserver);
 
-            if (MMS_URI != null) {
+            if (MMS_URI != null && settings.getBoolean("mms", true)) {
                 mmsObserver = new FixServiceObserver(FixServiceObserver.TYPE_MMS);
                 mmsCursor = SmsMmsDbHelper.getInboxCursor(this, MMS_URI, null, null);
                 mmsCursor.registerContentObserver(mmsObserver);
@@ -371,6 +371,7 @@ public class FixService extends Service {
             Log.d(TAG, typeStr + " database altered, checking...");
 
             boolean roamingConditionMet = roamingConditionMet();
+            boolean adjustMms = settings.getBoolean("mms", true);
 
             Log.d(TAG, "selfChange: " + Boolean.toString(selfChange));
             Log.d(TAG, "roamingConditionMet: " + Boolean.toString(roamingConditionMet));
@@ -385,7 +386,7 @@ public class FixService extends Service {
                             lastSmsId);
                 }
 
-                if (type == TYPE_MMS || type == TYPE_MMS_SMS) {
+                if (adjustMms && type == TYPE_MMS || type == TYPE_MMS_SMS) {
                     lastMmsId = SmsMmsDbHelper.fixMessages(getApplicationContext(), MMS_URI,
                             lastMmsId);
                 }
