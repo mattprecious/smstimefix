@@ -70,9 +70,6 @@ public class SMSFix extends PreferenceActivity {
     private CheckBoxPreference roamingBox;
     private ListPreference notifyIcon;
 
-    private Preference addNote;
-    private Preference clearLog;
-
     private PreferenceCategory more;
     private Preference donate;
     private Preference fixOld;
@@ -86,7 +83,6 @@ public class SMSFix extends PreferenceActivity {
     static final int DIALOG_DONATE_ID = 0;
     static final int DIALOG_ROAMING_ID = 1;
     static final int DIALOG_CHANGE_LOG_ID = 2;
-    static final int DIALOG_CONFIRM_LOG_CLEAR_ID = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +104,6 @@ public class SMSFix extends PreferenceActivity {
         roamingBox = (CheckBoxPreference) findPreference("roaming");
 
         notifyIcon = (ListPreference) findPreference("notify_icon");
-
-        addNote = (Preference) findPreference("add_note");
-        clearLog = (Preference) findPreference("clear_log");
 
         more = (PreferenceCategory) findPreference("more");
         donate = (Preference) findPreference("donate");
