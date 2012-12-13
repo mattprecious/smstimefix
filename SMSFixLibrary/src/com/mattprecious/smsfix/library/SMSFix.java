@@ -21,8 +21,6 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.TimeZone;
 
-import com.mattprecious.smsfix.library.util.LoggerHelper;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -475,10 +473,6 @@ public class SMSFix extends PreferenceActivity {
         } catch (NameNotFoundException e) {
 
         }
-        
-        // remove the old log files
-        // TODO: remove in the next release
-        LoggerHelper.clearLog(this);
     }
 
 }

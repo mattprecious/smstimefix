@@ -10,7 +10,6 @@
 
     <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-feature
@@ -30,9 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.mattprecious.smsfix.library.LogNote"
-            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name="com.mattprecious.smsfix.library.FixOld"
             android:label="@string/fix_old_title" >
