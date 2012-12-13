@@ -139,14 +139,14 @@ public class FixService extends Service {
         // MMS URI is null, but this isn't vital... log it.
         if (MMS_URI == null) {
             Log.w(TAG, "MMS URI is null");
+        } else {
+            lastMmsId = SmsMmsDbHelper.getLastMessageId(this, MMS_URI);
+            Log.d(TAG, "lastMmsId initialized to " + lastMmsId);
         }
         
         // get the current last message ID
         lastSmsId = SmsMmsDbHelper.getLastMessageId(this, SMS_URI);
-        lastMmsId = SmsMmsDbHelper.getLastMessageId(this, MMS_URI);
-        
         Log.d(TAG, "lastSmsId initialized to " + lastSmsId);
-        Log.d(TAG, "lastMmsId initialized to " + lastMmsId);
 
         try {
             mmsSmsObserver = new FixServiceObserver(FixServiceObserver.TYPE_MMS_SMS);
