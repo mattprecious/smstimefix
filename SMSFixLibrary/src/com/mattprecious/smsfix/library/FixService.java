@@ -386,7 +386,7 @@ public class FixService extends Service {
                             lastSmsId);
                 }
 
-                if (adjustMms && type == TYPE_MMS || type == TYPE_MMS_SMS) {
+                if (adjustMms && (type == TYPE_MMS || type == TYPE_MMS_SMS)) {
                     lastMmsId = SmsMmsDbHelper.fixMessages(getApplicationContext(), MMS_URI,
                             lastMmsId);
                 }
